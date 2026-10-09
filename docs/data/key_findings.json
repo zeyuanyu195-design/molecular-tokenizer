@@ -2,10 +2,6 @@
   "scope": "In-corpus descriptive analysis; not held-out evaluation",
   "models": {
     "npe_safe": {
-      "exact": 2897778,
-      "mismatch": 19,
-      "error": 0,
-      "invalid_input": 22,
       "mean_tokens": 19.662382349510555,
       "median_tokens": 15,
       "p95_tokens": 40,
@@ -17,10 +13,6 @@
       "vocabulary_entries": 3000
     },
     "brics_safe": {
-      "exact": 2897778,
-      "mismatch": 19,
-      "error": 0,
-      "invalid_input": 22,
       "mean_tokens": 19.942431062697004,
       "median_tokens": 17,
       "p95_tokens": 37,

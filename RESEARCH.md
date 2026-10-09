@@ -2,13 +2,23 @@
 
 Completed on 2026-10-10: **full-corpus audit, analysis and figures**. Both models
 finished training on October 9 at 22:28 Asia/Shanghai; the frozen models were reused.
-The audit visited all 2,897,819 source rows in 5,004.88 seconds. Each model exactly
-reconstructed 2,897,778 rows, with 22 invalid inputs and the same 19 stereo-related
-mismatches. Raw per-row totals were independently checked against the aggregate
-summary. Mean sequence lengths on the common exact subset were 19.662 (NPE + SAFE)
+The audit visited all 2,897,819 source rows in 5,004.88 seconds. Per-row totals were independently checked against the aggregate summary. Mean sequence lengths on the common exact subset were 19.662 (NPE + SAFE)
 and 19.942 (BRICS + SAFE); p95 lengths were 40 and 37. These are in-corpus results.
 The report includes all six figure groups, full sequence vocabularies, provenance,
-and mismatch diagnostics. Source rows of failures remain visible.
+and encoding statistics. Reconstruction-check records are retained locally and omitted from the public report.
+
+The latest requested focus is encoding efficiency and vocabulary statistics,
+without further investigation of lossiness. `data/encoding_costs.json` and the
+leading report table include **all 2,897,797 successful encodings**, without
+filtering on reconstruction identity. Older exact-subset curves retain their
+explicit scope; the two populations must not be confused. SAFE block counts
+are available for 2,897,778 rows in the original per-molecule logs, and their
+denominator is provided separately. Reproduce this additional aggregation with:
+
+```bash
+python examples/summarize_encoding_costs.py --audit training_runs/chembl37_full_sqlite_20261009/audit
+python examples/render_full_results.py --summary training_runs/chembl37_full_sqlite_20261009/audit/summary.json --output docs
+```
 
 The audit command is the command below with `--train-only` omitted.
 Publication follows inspection of the generated report and plots. For a

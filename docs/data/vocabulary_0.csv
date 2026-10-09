@@ -1,4 +1,4 @@
-id,unit,exact_reconstruction_usage,string_characters,motif_atoms
+id,unit,recorded_occurrences,string_characters,motif_atoms
 0,[UNK],0,5,
 1,!,0,1,
 2,"""",0,1,
