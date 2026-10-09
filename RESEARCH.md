@@ -1,5 +1,18 @@
 # ChEMBL 37 full-corpus experiment
 
+Current scope (2026-10-09): **training only**. Finish both NPE + SAFE and
+BRICS + SAFE models; comparison, full-model audit, figures, and result publication
+are deferred. The analysis instructions below are available for a later experiment.
+To resume the current local run without entering those later stages:
+
+```bash
+python examples/run_full_experiment.py --input ../chembl_37_smiles.smi --metadata ../dataset_metadata.json --output training_runs/chembl37_full_sqlite_20261009 --workers 8 --max-rss-gib 12 --reserve-gib 4 --resume --train-only
+```
+
+For a new training-only run, choose a fresh output directory and omit `--resume`.
+`--train-only` cannot be combined with `--publish`. It records
+`scope: training_only` in the run state and finishes after saving both models.
+
 The requested experiment uses **all 2,897,819 available ChEMBL 37 SMILES records**.
 Subset runs in the resource report are feasibility probes only. They are not the
 final tokenizer experiment. No completed full NPE model or compression result is claimed until

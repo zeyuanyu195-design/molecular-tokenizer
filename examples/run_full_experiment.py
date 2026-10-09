@@ -26,8 +26,11 @@ def main():
     parser.add_argument('--min-free-disk-gib',type=float,default=20)
     parser.add_argument('--timeout',type=float,default=7*24*3600)
     parser.add_argument('--resume',action='store_true')
+    parser.add_argument('--train-only',action='store_true',help='Finish both full-corpus models without audit, figures, or publication')
     parser.add_argument('--publish',action='store_true',help='Commit/push only the generated docs after all scientific stages succeed')
     args=parser.parse_args()
+    if args.train_only and args.publish:
+        parser.error('--train-only cannot be combined with --publish')
     root=Path(__file__).resolve().parents[1]
     args.input=args.input.resolve(); args.metadata=args.metadata.resolve(); args.output=args.output.resolve()
     if args.output.exists() and not args.resume:
@@ -45,6 +48,8 @@ def main():
         if state['source_sha256']!=checksum:
             raise ValueError('Resume input does not match run')
         state['status']='running'
+    state['scope']='training_only' if args.train_only else 'training_and_analysis'
+    state.pop('error',None)
     def save():
         state['updated_utc']=datetime.now(timezone.utc).isoformat()
         (args.output/'run_state.json').write_text(json.dumps(state,indent=2)+'\n',encoding='utf-8')
@@ -74,6 +79,10 @@ def main():
             state['steps'][name]=supervise(command,directory,args); save()
             if state['steps'][name]['exit_code']!=0:
                 raise RuntimeError(f"{name} stopped: {state['steps'][name]}")
+        if args.train_only:
+            state['status']='complete'; state['current_stage']='complete'; save()
+            print(json.dumps(state,indent=2),flush=True)
+            return
         state['current_stage']='audit'; save()
         audit=args.output/'audit'
         if not (audit/'summary.json').exists():
