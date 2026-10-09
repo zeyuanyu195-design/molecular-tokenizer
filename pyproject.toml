@@ -12,6 +12,7 @@ dependencies = ["rdkit==2025.9.6", "numpy>=1.26,<3", "tqdm>=4.66", "tokenizers==
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
+analysis = ["psutil>=5.9", "matplotlib>=3.8"]
 
 [tool.setuptools.packages.find]
 include = ["molecular_tokenizer*"]

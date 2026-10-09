@@ -1,0 +1,14 @@
+{
+  "status": "running",
+  "source_rows": 2897819,
+  "source_sha256": "87d10f64ed147c6371ff6d385f46762ef77df6368cc68768de58df134a05cbfb",
+  "updated_utc": "2026-10-09T08:25:25.845624+00:00",
+  "current_stage": "npe_safe",
+  "last_npe_event": {
+    "event": "initialize",
+    "utc": "2026-10-09T08:33:32.849092+00:00",
+    "source_rows": 788480,
+    "accepted": 788475,
+    "total": 2897819
+  }
+}

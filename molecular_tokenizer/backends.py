@@ -166,11 +166,15 @@ class SAFEBackend(TokenizerBackend):
             # Rust BPE trainer in the parent process and stream ordered worker
             # results so training remains memory-bounded and rejection records
             # preserve their source row association.
-            with mp.Pool(num_workers, initializer=_init_safe_worker, initargs=(self.slicer,)) as pool:
+            initializer, initargs = self.worker_setup()
+            with mp.Pool(num_workers, initializer=initializer, initargs=initargs) as pool:
                 self.tokenizer.train_from_iterator(parallel_representations(pool), trainer=trainer)
         if count == 0:
             raise TokenizerError('Training corpus is empty')
         return TrainingReport(self.name, count, self.vocab_size, rejected_molecules=rejected)
+
+    def worker_setup(self):
+        return _init_safe_worker, (self.slicer,)
 
     def encode(self, smiles):
         result = self.tokenizer.encode(self.representation(smiles), add_special_tokens=False)

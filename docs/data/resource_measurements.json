@@ -1,0 +1,206 @@
+{
+  "scope": "Resource assessment only; no final full-corpus model",
+  "created_utc": "2026-10-09T07:57:41.057088+00:00",
+  "source_rows": 2897819,
+  "source_sha256": "87d10f64ed147c6371ff6d385f46762ef77df6368cc68768de58df134a05cbfb",
+  "seed": 20261009,
+  "workers": 4,
+  "sample_method": "nested uniform sample without replacement; restored to source order",
+  "hardware": {
+    "platform": "Windows-10-10.0.22000-SP0",
+    "logical_cpus": 24,
+    "physical_cpus": 24,
+    "total_ram_gib": 31.269367218017578,
+    "available_ram_gib": 17.486461639404297,
+    "free_disk_gib": 655.117546081543
+  },
+  "limits": {
+    "max_tree_rss_gib": 10,
+    "reserve_gib": 5,
+    "timeout_seconds": 1200
+  },
+  "cases": [
+    {
+      "fragmentation": "npe",
+      "rows": 5000,
+      "motifs": 350,
+      "directory": "npe_5000_motifs350",
+      "resources": {
+        "exit_code": 0,
+        "stop_reason": null,
+        "peak_tree_rss_gib": 0.5418891906738281,
+        "peak_parent_rss_gib": 0.003185272216796875,
+        "elapsed_seconds": 48.44609520000006
+      },
+      "training": {
+        "report": {
+          "backend": "safe",
+          "molecules": 5000,
+          "vocab_size": 3000,
+          "ring_vocab_size": 300,
+          "edge_vocab_size": 0,
+          "rejected_molecules": 0,
+          "fragmentation": "npe",
+          "representation": "safe",
+          "motif_vocab_size": 350,
+          "bpe_scope": "fragment"
+        },
+        "train_seconds": 44.065622899999994,
+        "total_seconds": 47.08740349999994,
+        "rejected": [],
+        "smoke_test": {
+          "scope": "first 100 training rows; not held out",
+          "passed": 100,
+          "errors": []
+        }
+      }
+    },
+    {
+      "fragmentation": "npe",
+      "rows": 20000,
+      "motifs": 350,
+      "directory": "npe_20000_motifs350",
+      "resources": {
+        "exit_code": 0,
+        "stop_reason": null,
+        "peak_tree_rss_gib": 1.2256889343261719,
+        "peak_parent_rss_gib": 0.003185272216796875,
+        "elapsed_seconds": 198.91034939999997
+      },
+      "training": {
+        "report": {
+          "backend": "safe",
+          "molecules": 20000,
+          "vocab_size": 3000,
+          "ring_vocab_size": 300,
+          "edge_vocab_size": 0,
+          "rejected_molecules": 0,
+          "fragmentation": "npe",
+          "representation": "safe",
+          "motif_vocab_size": 350,
+          "bpe_scope": "fragment"
+        },
+        "train_seconds": 196.6948625,
+        "total_seconds": 198.25989800000002,
+        "rejected": [],
+        "smoke_test": {
+          "scope": "first 100 training rows; not held out",
+          "passed": 100,
+          "errors": []
+        }
+      }
+    },
+    {
+      "fragmentation": "npe",
+      "rows": 50000,
+      "motifs": 350,
+      "directory": "npe_50000_motifs350",
+      "resources": {
+        "exit_code": 0,
+        "stop_reason": null,
+        "peak_tree_rss_gib": 2.550128936767578,
+        "peak_parent_rss_gib": 0.003185272216796875,
+        "elapsed_seconds": 493.8952478
+      },
+      "training": {
+        "report": {
+          "backend": "safe",
+          "molecules": 49999,
+          "vocab_size": 3000,
+          "ring_vocab_size": 300,
+          "edge_vocab_size": 0,
+          "rejected_molecules": 1,
+          "fragmentation": "npe",
+          "representation": "safe",
+          "motif_vocab_size": 350,
+          "bpe_scope": "fragment"
+        },
+        "train_seconds": 487.1515376000001,
+        "total_seconds": 492.261582,
+        "rejected": [
+          {
+            "row": 21043,
+            "reason": "TokenizerError: Invalid SMILES: 'F[PH](F)(F)(F)(F)F.Nc1cc2cccnc2c2ncccc12'"
+          }
+        ],
+        "smoke_test": {
+          "scope": "first 100 training rows; not held out",
+          "passed": 100,
+          "errors": []
+        }
+      }
+    },
+    {
+      "fragmentation": "npe",
+      "rows": 5000,
+      "motifs": 3000,
+      "directory": "npe_5000_motifs3000",
+      "resources": {
+        "exit_code": 0,
+        "stop_reason": null,
+        "peak_tree_rss_gib": 0.5426025390625,
+        "peak_parent_rss_gib": 0.003185272216796875,
+        "elapsed_seconds": 76.47259099999997
+      },
+      "training": {
+        "report": {
+          "backend": "safe",
+          "molecules": 5000,
+          "vocab_size": 3000,
+          "ring_vocab_size": 300,
+          "edge_vocab_size": 0,
+          "rejected_molecules": 0,
+          "fragmentation": "npe",
+          "representation": "safe",
+          "motif_vocab_size": 3000,
+          "bpe_scope": "fragment"
+        },
+        "train_seconds": 75.00459060000003,
+        "total_seconds": 76.21522449999998,
+        "rejected": [],
+        "smoke_test": {
+          "scope": "first 100 training rows; not held out",
+          "passed": 100,
+          "errors": []
+        }
+      }
+    },
+    {
+      "fragmentation": "brics",
+      "rows": 20000,
+      "motifs": 0,
+      "directory": "brics_20000_motifs0",
+      "resources": {
+        "exit_code": 0,
+        "stop_reason": null,
+        "peak_tree_rss_gib": 0.6344528198242188,
+        "peak_parent_rss_gib": 0.003185272216796875,
+        "elapsed_seconds": 11.751912800000127
+      },
+      "training": {
+        "report": {
+          "backend": "safe",
+          "molecules": 20000,
+          "vocab_size": 3000,
+          "ring_vocab_size": 0,
+          "edge_vocab_size": 0,
+          "rejected_molecules": 0,
+          "fragmentation": "brics",
+          "representation": "safe",
+          "motif_vocab_size": 0,
+          "bpe_scope": "fragment"
+        },
+        "train_seconds": 10.626162000000022,
+        "total_seconds": 11.382614699999976,
+        "rejected": [],
+        "smoke_test": {
+          "scope": "first 100 training rows; not held out",
+          "passed": 100,
+          "errors": []
+        }
+      }
+    }
+  ],
+  "implementation_note": "Measured before disk NPE and parallel learned-SAFE conversion were added; learned SAFE conversion was serial.",
+  "core_base_commit": "3ce45be1b1eff49d94f8d51f5f9ab31f06b558ea"
+}

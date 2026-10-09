@@ -1,0 +1,14 @@
+{
+  "input_identical": true,
+  "npe_state_identical": true,
+  "complete_model_fingerprint_identical": true,
+  "old_fingerprint": "277b07b47ccc994f6e79d947258c54ad39f80911ed578292d7a97b7f756714f4",
+  "new_fingerprint": "277b07b47ccc994f6e79d947258c54ad39f80911ed578292d7a97b7f756714f4",
+  "new_resources": {
+    "exit_code": 0,
+    "stop_reason": null,
+    "peak_tree_rss_gib": 0.6533622741699219,
+    "peak_parent_rss_gib": 0.003208160400390625,
+    "elapsed_seconds": 51.5643677999999
+  }
+}

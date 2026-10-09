@@ -14,6 +14,16 @@ from .types import TokenizerError, UnsupportedMoleculeError, TrainingReport
 from ._vendor.graphbpe_utils import get_indexed_smiles, smiles_to_molecule
 
 
+def _init_learned_safe_worker(engine):
+    from rdkit import RDLogger
+    from . import backends
+    RDLogger.DisableLog('rdApp.*')
+    worker = FragmentSAFEBackend(fragmentation='npe')
+    worker.npe.engine = engine
+    worker._configure()
+    backends._SAFE_WORKER = worker
+
+
 def collect_samples(smiles, *, skip_invalid=False, on_reject=None, on_reject_with_index=None,
                     reject_dummy=False):
     samples, indices, rejected = [], [], 0
@@ -75,11 +85,45 @@ class FragmentSAFEBackend(SAFEBackend):
 
     def train(self, smiles, vocab_size, *, motif_vocab_size=350, ring_vocab_size=300,
               npe_model=None, num_workers=1, skip_invalid=False, on_reject=None,
-              on_reject_with_index=None, min_frequency=2):
+              on_reject_with_index=None, min_frequency=2, npe_storage='memory',
+              work_dir=None, resume=False, batch_size=256, progress=None):
         if type(num_workers) is not int or num_workers < 1:
             raise TokenizerError('num_workers must be >= 1')
         if vocab_size < 95 or type(min_frequency) is not int or min_frequency < 1:
             raise TokenizerError('SAFE requires vocab_size >= 95 and min_frequency >= 1')
+        if npe_storage not in {'memory', 'sqlite'}:
+            raise TokenizerError('npe_storage must be memory or sqlite')
+        if npe_storage == 'sqlite':
+            if self.npe is None or npe_model is not None or work_dir is None:
+                raise TokenizerError('SQLite training requires NPE+SAFE, work_dir, and no npe_model')
+            from .disk_npe import DiskNPETrainer
+            with DiskNPETrainer(work_dir, motif_vocab_size, ring_vocab_size,
+                    workers=num_workers, batch_size=batch_size, resume=resume,
+                    skip_invalid=skip_invalid, progress=progress) as trainer:
+                trainer.train(self.npe.engine, smiles)
+                self._configure()
+                rejected = 0
+                for row, sample, reason in trainer.rejections():
+                    rejected += 1
+                    if on_reject_with_index:
+                        on_reject_with_index(sample, reason, row)
+                    elif on_reject:
+                        on_reject(sample, reason)
+
+                def reject_disk(sample, reason, accepted_index):
+                    if on_reject_with_index:
+                        on_reject_with_index(sample, reason, trainer.source_row(accepted_index))
+                    elif on_reject:
+                        on_reject(sample, reason)
+
+                report = super().train(trainer.accepted_samples(), vocab_size,
+                    num_workers=num_workers, min_frequency=min_frequency, skip_invalid=skip_invalid,
+                    on_reject_with_index=reject_disk)
+            return replace(report, fragmentation='npe', representation='safe', bpe_scope=self.bpe_scope,
+                           rejected_molecules=report.rejected_molecules+rejected,
+                           ring_vocab_size=len(self.npe.engine.initial_rings), motif_vocab_size=self.npe.vocab_size)
+        if work_dir is not None or resume:
+            raise TokenizerError('work_dir/resume require npe_storage=sqlite')
         if self.npe is None:
             if npe_model is not None:
                 raise TokenizerError('npe_model requires NPE fragmentation')
@@ -118,9 +162,8 @@ class FragmentSAFEBackend(SAFEBackend):
                 elif on_reject:
                     on_reject(sample, reason)
 
-            # Sequence conversion is serial for the learned callback; num_workers
-            # controls NPE graph training. Never build an untrained worker slicer.
-            report = super().train(samples, vocab_size, num_workers=1,
+            # Each worker gets the frozen learned engine, not an untrained slicer.
+            report = super().train(samples, vocab_size, num_workers=num_workers,
                                    min_frequency=min_frequency, skip_invalid=skip_invalid,
                                    on_reject_with_index=reject)
             report = replace(report, rejected_molecules=report.rejected_molecules + rejected,
@@ -128,6 +171,11 @@ class FragmentSAFEBackend(SAFEBackend):
                              motif_vocab_size=self.npe.vocab_size)
         return replace(report, fragmentation=self.fragmentation, representation='safe',
                        bpe_scope=self.bpe_scope)
+
+    def worker_setup(self):
+        if self.npe is not None:
+            return _init_learned_safe_worker, (self.npe.engine,)
+        return super().worker_setup()
 
     def state(self):
         state = {'sequence': SAFEBackend.state(self)}

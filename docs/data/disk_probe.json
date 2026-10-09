@@ -1,0 +1,60 @@
+{
+  "scope": "Resource assessment only; no final full-corpus model",
+  "created_utc": "2026-10-09T08:22:02.174761+00:00",
+  "storage": "sqlite",
+  "source_rows": 2897819,
+  "source_sha256": "87d10f64ed147c6371ff6d385f46762ef77df6368cc68768de58df134a05cbfb",
+  "seed": 20261009,
+  "workers": 4,
+  "sample_method": "nested uniform sample without replacement; restored to source order",
+  "hardware": {
+    "platform": "Windows-10-10.0.22000-SP0",
+    "logical_cpus": 24,
+    "physical_cpus": 24,
+    "total_ram_gib": 31.269367218017578,
+    "available_ram_gib": 16.9873046875,
+    "free_disk_gib": 655.093994140625
+  },
+  "limits": {
+    "max_tree_rss_gib": 10,
+    "reserve_gib": 5,
+    "timeout_seconds": 1200
+  },
+  "cases": [
+    {
+      "fragmentation": "npe",
+      "rows": 5000,
+      "motifs": 3000,
+      "directory": "npe_5000_motifs3000",
+      "resources": {
+        "exit_code": 0,
+        "stop_reason": null,
+        "peak_tree_rss_gib": 0.6533622741699219,
+        "peak_parent_rss_gib": 0.003208160400390625,
+        "elapsed_seconds": 51.5643677999999
+      },
+      "training": {
+        "report": {
+          "backend": "safe",
+          "molecules": 5000,
+          "vocab_size": 3000,
+          "ring_vocab_size": 300,
+          "edge_vocab_size": 0,
+          "rejected_molecules": 0,
+          "fragmentation": "npe",
+          "representation": "safe",
+          "motif_vocab_size": 3000,
+          "bpe_scope": "fragment"
+        },
+        "train_seconds": 49.77080480000018,
+        "total_seconds": 50.94771549999996,
+        "rejected": [],
+        "smoke_test": {
+          "scope": "first 100 training rows; not held out",
+          "passed": 100,
+          "errors": []
+        }
+      }
+    }
+  ]
+}

@@ -31,6 +31,10 @@ def main(argv=None):
     train.add_argument('--motif-vocab-size',type=int,default=350)
     train.add_argument('--ring-vocab-size',type=int,default=300)
     train.add_argument('--npe-model',type=Path)
+    train.add_argument('--npe-storage',choices=['memory','sqlite'],default='memory')
+    train.add_argument('--work-dir',type=Path)
+    train.add_argument('--resume',action='store_true')
+    train.add_argument('--batch-size',type=int,default=256)
     train.add_argument('--num-workers',type=int,default=1)
     train.add_argument('--max-molecules',type=int)
     train.add_argument('--skip-invalid',action='store_true')
@@ -49,6 +53,8 @@ def main(argv=None):
         if args.output.exists(): parser.error('Output directory already exists')
         if args.npe_model is not None and (args.fragmentation,args.representation)!=('npe','safe'):
             parser.error('--npe-model requires --fragmentation npe --representation safe')
+        if (args.npe_storage!='memory' or args.work_dir is not None or args.resume) and (args.fragmentation,args.representation)!=('npe','safe'):
+            parser.error('Disk training requires --fragmentation npe --representation safe')
         model=MolecularTokenizer(fragmentation=args.fragmentation,representation=args.representation,
                                   bpe_scope=args.bpe_scope)
         rejected=[]
@@ -58,7 +64,9 @@ def main(argv=None):
         if args.fragmentation=='npe':
             options['ring_vocab_size']=args.ring_vocab_size
             if args.representation=='safe':
-                options.update(motif_vocab_size=args.motif_vocab_size,npe_model=args.npe_model)
+                options.update(motif_vocab_size=args.motif_vocab_size,npe_model=args.npe_model,
+                    npe_storage=args.npe_storage,work_dir=args.work_dir,resume=args.resume,batch_size=args.batch_size,
+                    progress=lambda event:print(json.dumps(event),file=sys.stderr,flush=True))
         with redirect_stdout(sys.stderr):
             report=model.train(samples(args.input,args.max_molecules),args.vocab_size,**options)
         model.save(args.output)

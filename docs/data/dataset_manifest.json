@@ -1,0 +1,38 @@
+{
+  "dataset": "All available official canonical SMILES in ChEMBL 37 chemical representations export",
+  "chembl_release": 37,
+  "prepared_at_utc": "2026-10-07T14:10:18.034460+00:00",
+  "source_url": "https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_37/chembl_37_chemreps.txt.gz",
+  "source_bytes": 292540141,
+  "source_sha256": "ea6181ce8dc7af41974e35b92e1febb0c9dcbe2c62f7ccc4a5d983ac19f696e7",
+  "source_sha256_verified": true,
+  "source_rows": 2897819,
+  "source_unique_chembl_ids": 2897819,
+  "source_rows_without_smiles": 0,
+  "exported_rows": 2897819,
+  "unique_smiles_strings": 2897657,
+  "duplicate_smiles_rows_beyond_first": 162,
+  "distinct_smiles_strings_with_multiple_ids": 156,
+  "rows_with_disconnected_components": 120725,
+  "rows_with_stereochemical_markers": 1093590,
+  "maximum_smiles_length_characters": 2401,
+  "release_total_compounds": 2921148,
+  "release_compounds_with_mol_files": 2897819,
+  "release_compounds_minus_exported_rows": 23329,
+  "export_verified_against_every_source_row": true,
+  "chemistry_parser_validation_performed": false,
+  "transformations": "Retained official canonical_smiles exactly; selected chembl_id and canonical_smiles; excluded only missing SMILES; preserved source order; no deduplication or molecular filtering.",
+  "encoding": "UTF-8",
+  "line_ending": "LF",
+  "license": "CC BY-SA 3.0 Unported",
+  "outputs": {
+    "chembl_37_smiles.csv": {
+      "bytes": 213467174,
+      "sha256": "390feb3d86376361f89d20a5c5207181ae2f5a947ed083e212af5841d74f8573"
+    },
+    "chembl_37_smiles.smi": {
+      "bytes": 173537069,
+      "sha256": "87d10f64ed147c6371ff6d385f46762ef77df6368cc68768de58df134a05cbfb"
+    }
+  }
+}

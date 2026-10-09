@@ -9,6 +9,7 @@ trained_models/
 training_runs/
 validation/
 analysis_units/
+analysis_runs/
 *.log
 .env
 .env.*

@@ -105,9 +105,11 @@ python -m molecular_tokenizer evaluate --model model_npe_safe --input test.smi -
 记录错误，成功样本的平均长度与失败数同时输出。train 写入输入 SHA256、选取规则和拒绝源行。
 不要用在训练数据上测得的结果声称泛化性能。
 
-NPE+SAFE 的 num_workers 用于 NPE 图训练；带学习切分回调的 SAFE 转换当前按序执行。
+NPE+SAFE 的 num_workers 用于 NPE 图训练及 SAFE 转换；转换工作进程获得同一份冻结的 NPE 词表。
 BRICS+SAFE 支持并行字符串转换；BRICS+DemoDiff 当前要求 num_workers=1。
-NPE 图训练需要反复访问分子图，内存随训练集增长；新接口不意味着全量训练的内存问题已经解决。
+NPE 默认内存模式随训练集增长。全量 NPE+SAFE 可选择 `--npe-storage sqlite --work-dir training_runs/npe_checkpoint`，
+将图状态、全局候选频率和倒排索引保存在磁盘，分批训练；中断后加 `--resume` 使用同一目录续训。
+断点会验证数据内容、顺序及配置，不接受不同输入；图训练可以续训，未完成的序列 BPE 阶段会重新运行。
 
 ## 保真策略与已知限制
 
@@ -127,7 +129,7 @@ SAFE 暂不支持开放 dummy/polymer 输入；增强 CXSMILES 立体组等需�
 
 本地 Windows Python 3.11 下 100 项测试通过；覆盖四种组合、片段内跨原子合并、特殊化学属性、
 模型保存加载、复用词表、文件损坏检测、失败训练保留旧状态、拒绝源行和 CLI。已成功构建 wheel。
-CI 工作流尚未在 GitHub 运行，不将本地结果等同于跨平台结果。
+初始版本的 GitHub Actions Windows/Linux 测试已通过（[运行记录](https://github.com/zeyuanyu195-design/molecular-tokenizer/actions/runs/37889695528)）。
 
 在已有 ChEMBL 随机样本中按规范化 SMILES 去重，seed=20261009 划分为 1,600 个训练分子和 400 个
 测试分子，重新训练两种 SAFE 组合。二者序列词表目标均为 1,024，NPE 另用 350 个 motif / 100 个 ring：
@@ -154,3 +156,10 @@ backends.py 与 _vendor/ 管兼容的原后端；types.py 管结构化输出；_
 [molecular-tokenizer](https://github.com/zeyuanyu195-design/molecular-tokenizer)。虚拟环境、ChEMBL 数据、
 训练模型、分析结果和日志不纳入 Git。GitHub Actions 会在推送和拉取请求时运行测试；实际状态以仓库 Actions 页面为准。
 第三方出处及许可见 THIRD_PARTY_NOTICES.txt；旧 README_zh.txt 保留历史实验说明。
+
+## 全量实验与结果页面
+
+全量 ChEMBL 实验的资源评估、可复现命令和分析口径见 [RESEARCH.md](RESEARCH.md)。
+资源测试的抽样模型不等同于全量训练结果。磁盘版在同一批 5,000 条 ChEMBL 数据上训练至 3,000 个 NPE 单元后，
+与原内存版的完整模型指纹相同。全量流程已在本机启动，最终结果以运行清单及研究页面为准。
+静态研究页面源文件位于 `docs/index.html`；GitHub Pages 发布需要仓库账号满足其托管条件。

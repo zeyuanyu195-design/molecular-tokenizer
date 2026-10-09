@@ -1,0 +1,58 @@
+{
+  "scope": "Extrapolation only; not a measured full training run or confidence interval",
+  "full_rows": 2897819,
+  "memory_fit_gib": 129.44930044871742,
+  "memory_pairwise_slope_range_gib": [
+    128.27564238052366,
+    132.37265574798585
+  ],
+  "extrapolation_factor_from_largest_probe": 57.95638,
+  "memory_budget_measured": "350 NPE motifs, 300 rings, 3000 SAFE sequence tokens",
+  "hardware": {
+    "platform": "Windows-10-10.0.22000-SP0",
+    "logical_cpus": 24,
+    "physical_cpus": 24,
+    "total_ram_gib": 31.269367218017578,
+    "available_ram_gib": 17.486461639404297,
+    "free_disk_gib": 655.117546081543
+  },
+  "linear_time_scenarios": [
+    {
+      "fragmentation": "npe",
+      "motifs": 350,
+      "probe_rows": 5000,
+      "full_hours_linear": 7.094122182580838
+    },
+    {
+      "fragmentation": "npe",
+      "motifs": 350,
+      "probe_rows": 20000,
+      "full_hours_linear": 7.916473746595659
+    },
+    {
+      "fragmentation": "npe",
+      "motifs": 350,
+      "probe_rows": 50000,
+      "full_hours_linear": 7.8426498974249705
+    },
+    {
+      "fragmentation": "npe",
+      "motifs": 3000,
+      "probe_rows": 5000,
+      "full_hours_linear": 12.074984873772305
+    },
+    {
+      "fragmentation": "brics",
+      "motifs": 0,
+      "probe_rows": 20000,
+      "full_hours_linear": 0.42767630750941754
+    }
+  ],
+  "caveats": [
+    "3000-motif training has only a small resource probe, not a full-scale memory measurement.",
+    "Peak RSS sums child processes and can count shared pages more than once.",
+    "RAM scaling, rare-motif diversity, disk paging and CPU contention can change the extrapolation.",
+    "This is CPU tokenizer training; no GPU model training is included.",
+    "No bootstrap or inferential confidence intervals are claimed from single-run timings."
+  ]
+}
