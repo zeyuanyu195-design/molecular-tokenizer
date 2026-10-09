@@ -1,9 +1,11 @@
 # ChEMBL 37 full-corpus experiment
 
-Current scope (2026-10-09): **training only**. Finish both NPE + SAFE and
-BRICS + SAFE models; comparison, full-model audit, figures, and result publication
-are deferred. The analysis instructions below are available for a later experiment.
-To resume the current local run without entering those later stages:
+Current scope (2026-10-09, resumed after training): **full-corpus audit, analysis,
+figures, and GitHub Pages publication**. Both NPE + SAFE and BRICS + SAFE training
+finished at 22:28 Asia/Shanghai; the models are reused without retraining.
+The current audit command is the command below with `--train-only` omitted.
+Publication follows inspection of the generated report and plots. For a
+training-only run that deliberately skips analysis:
 
 ```bash
 python examples/run_full_experiment.py --input ../chembl_37_smiles.smi --metadata ../dataset_metadata.json --output training_runs/chembl37_full_sqlite_20261009 --workers 8 --max-rss-gib 12 --reserve-gib 4 --resume --train-only

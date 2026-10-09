@@ -10,6 +10,10 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
+try:
+    from .result_insights import summarize
+except ImportError:
+    from result_insights import summarize
 
 
 def distribution(histogram):
@@ -35,6 +39,8 @@ def render(args):
         shutil.copyfile(output/'index.html',output/'preflight.html')
     shutil.copyfile(args.summary,output/'data/full_analysis.json')
     labels=list(data['models'])
+    insights=summarize(data,args.summary.parent)
+    (output/'data/key_findings.json').write_text(json.dumps(insights,indent=2)+'\n',encoding='utf-8')
     names={k:k.replace('_',' + ').upper() for k in labels}
     colors=dict(zip(labels,['#087f8c','#bd5b32','#754fa1','#559047']))
     plt.rcParams.update({'font.family':'DejaVu Sans','font.size':11,'axes.spines.top':False,
@@ -88,7 +94,9 @@ def render(args):
     pairs=[data['models'][k]['common_exact_subset'] for k in labels]
     for ax,key,title in zip(axs,['tokens','payload_bytes'],['Mean representation units','Mean compact JSON bytes']):
         means=[p[key]/p['n'] if p['n'] else float('nan') for p in pairs]
-        ax.bar([names[k] for k in labels],means,color=[colors[k] for k in labels])
+        bars=ax.bar([names[k] for k in labels],means,color=[colors[k] for k in labels])
+        ax.bar_label(bars,fmt='%.2f',padding=4)
+        ax.margins(y=.15)
         ax.set(title=title,ylabel='Per molecule, common exact subset')
     fig.suptitle(f"Paired comparison | {pairs[0]['n']:,} molecules reconstructed exactly by every model",fontsize=12)
     save(fig,'full_paired_costs')
@@ -121,6 +129,29 @@ def render(args):
     for k in labels:
         rows=''.join(f"<tr><td>{html.escape(g)}</td><td>{counts.get('exact',0):,}</td><td>{sum(counts.values()):,}</td><td>{counts.get('mismatch',0):,}</td><td>{counts.get('error',0):,}</td></tr>" for g,counts in data['models'][k]['groups'].items())
         groups+=f'<h3>{html.escape(names[k])}</h3><table><tr><th>Overlapping subset</th><th>Exact</th><th>Valid inputs</th><th>Changed</th><th>Error</th></tr>{rows}</table>'
+    findings=[]
+    paired=insights['paired_comparison']
+    if paired:
+        delta=paired['npe_token_reduction_percent']
+        direction='fewer' if delta>=0 else 'more'
+        findings.append(f"On {paired['molecules']:,} molecules reconstructed exactly by both models, NPE + SAFE uses {paired['npe_mean_tokens']:.3f} tokens per molecule versus {paired['brics_mean_tokens']:.3f} for BRICS + SAFE: {abs(delta):.2f}% {direction} tokens. This comparison includes the connection syntax inside SAFE strings.")
+        findings.append('This result measures the complete partition-to-SAFE-to-BPE pipeline. It does not isolate the effect of partitioning alone, because the two sequence vocabularies are learned separately.')
+    for k, m in insights['models'].items():
+        findings.append(f"{names[k]}: {m['exact']:,} exact reconstructions, {m['mismatch']:,} changed molecules, {m['error']:,} encoding/decoding errors, and {m['invalid_input']:,} invalid inputs. Median / p95 / p99 token lengths on exact reconstructions: {m['median_tokens']} / {m['p95_tokens']} / {m['p99_tokens']}.")
+    findings.append('Shorter sequences can reduce the number of positions processed by a downstream model. No downstream training-speed, generation-quality, or property-prediction improvement has been measured here.')
+    findings_html=''.join(f'<p>{html.escape(x)}</p>' for x in findings)
+    vocab_detail=''
+    overlap=insights['vocabulary_comparison']
+    if overlap:
+        vocab_detail+=f"<p>The dictionaries share {overlap['shared_string_units']:,} exact string units; union size {overlap['union_string_units']:,}, Jaccard overlap {overlap['jaccard']:.3f}. This includes special tokens and compares text, not token IDs or chemical equivalence.</p>"
+        for k, entries in overlap['exclusive_most_used'].items():
+            items=''.join(f"<tr><td><code>{html.escape(r['unit'])}</code></td><td>{r['occurrences']:,}</td></tr>" for r in entries)
+            vocab_detail+=f'<h3>Frequent units exclusive to {html.escape(names[k])}</h3><table><tr><th>String unit</th><th>Occurrences</th></tr>{items}</table>'
+    diagnostics=''
+    for k, m in data['models'].items():
+        if m['failure_examples']:
+            examples=''.join(f"<li>Source row {r['source_row']:,}: {html.escape(r.get('reason',r['status']))}</li>" for r in m['failure_examples'])
+            diagnostics+=f'<details><summary>{html.escape(names[k])}: first failure examples</summary><ul>{examples}</ul></details>'
     page=f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Full ChEMBL tokenizer results</title><style>body{{margin:0;color:#18323f;background:#f4f7f8;font:16px/1.65 system-ui,sans-serif}}header{{background:#142f3c;color:white;padding:48px max(24px,calc((100vw - 1060px)/2))}}h1{{font-size:38px;line-height:1.2}}main{{max-width:1060px;margin:auto;padding:24px}}section{{background:white;border:1px solid #dce5e8;border-radius:12px;padding:26px;margin:24px 0}}a{{color:#087f8c}}header a{{color:#86dfdb}}img{{width:100%;height:auto}}figure{{margin:28px 0}}figcaption{{font-size:14px;color:#536975}}table{{width:100%;border-collapse:collapse;font-size:14px}}td,th{{padding:10px;border-bottom:1px solid #dce5e8;text-align:left}}.scroll{{overflow:auto}}code{{overflow-wrap:anywhere}}.notice{{background:#e6f3f2;padding:20px;border-radius:8px}}@media(max-width:600px){{main{{padding:12px}}section{{padding:16px}}h1{{font-size:28px}}}}</style></head><body>
     <header><p>MOLECULAR TOKENIZER · COMPLETED FULL-CORPUS AUDIT</p><h1>BRICS and NPE on all ChEMBL 37 records</h1>
@@ -128,12 +159,13 @@ def render(args):
     <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">Code and reproduction instructions</a></header><main>
     <div class="notice">This is an in-corpus descriptive experiment. Every available source SMILES was submitted to training;
     rejected records are logged. The same database is then audited. These results do not establish held-out generalization or molecule-generation quality.</div>
+    <section><h2>What the experiment shows</h2>{findings_html}<p><a href="data/key_findings.json">Download descriptive statistics</a></p></section>
     <section><h2>Measured results</h2><div class="scroll"><table><tr><th>Pipeline</th><th>Exact / all rows</th><th>Sequence vocabulary</th><th>Additional NPE motifs</th><th>Paired mean units</th><th>Paired mean JSON bytes</th><th>Model bytes</th></tr>{''.join(table)}</table></div>
     <p>NPE has an additional learned motif dictionary. A matched sequence vocabulary is not matched total model capacity.
     Means are computed over the common exact-reconstruction subset; coverage is reported over all source records.</p></section>
     <section><h2>Distributions, fidelity and representation cost</h2>{figures}</section>
-    <section><h2>Chemical-information audit</h2><p>Subsets overlap. Charge means any formally charged atom; stereo means specified atom or bond stereochemistry. SAFE does not reconstruct atoms through the DemoDiff graph decoder.</p>{groups}</section>
-    <section><h2>Most-used vocabulary units</h2><p>SAFE sequence units are BPE string pieces. They need not be independently valid molecules or complete chemical fragments.</p>{''.join(vocab_blocks)}</section>
+    <section><h2>Chemical-information audit</h2><p>Subsets overlap. Charge means any formally charged atom; stereo means specified atom or bond stereochemistry. SAFE does not reconstruct atoms through the DemoDiff graph decoder.</p>{groups}{diagnostics}</section>
+    <section><h2>Vocabulary units and their differences</h2><p>SAFE sequence units are BPE string pieces. They need not be independently valid molecules or complete chemical fragments. BRICS uses fixed chemistry rules for partitioning; NPE learns frequent adjacent subgraphs. Both are then serialized as SAFE and receive fragment-scoped sequence BPE. SAFE stores connections inside its string, so an empty external edge table does not mean connections cost nothing.</p>{vocab_detail}<h3>Most-used units overall</h3>{''.join(vocab_blocks)}</section>
     <section><h2>Reproducibility and scope</h2><p><a href="data/full_analysis.json">All aggregate measurements, model fingerprints, training manifests and metric definitions (JSON)</a> · <a href="preflight.html">Resource assessment and corpus census</a></p>
     <p>Source SHA-256: <code>{html.escape(data['source_sha256'])}</code>. Original ChEMBL 37 records are retained, including duplicates. Dataset: CC BY-SA 3.0, ChEMBL/EMBL-EBI.
     Figure design references <a href="https://arxiv.org/html/2510.08744v1">DemoDiff, Section 3.1 / Appendix B.2</a>; plots show our measurements, not copied paper results.
