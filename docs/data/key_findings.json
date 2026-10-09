@@ -1,0 +1,151 @@
+{
+  "scope": "In-corpus descriptive analysis; not held-out evaluation",
+  "models": {
+    "npe_safe": {
+      "exact": 2897778,
+      "mismatch": 19,
+      "error": 0,
+      "invalid_input": 22,
+      "mean_tokens": 19.662382349510555,
+      "median_tokens": 15,
+      "p95_tokens": 40,
+      "p99_tokens": 96,
+      "maximum_tokens": 1720,
+      "used_vocabulary_entries": 2955,
+      "unused_vocabulary_entries": 45,
+      "top100_occurrence_fraction": 0.4710355203541963,
+      "vocabulary_entries": 3000
+    },
+    "brics_safe": {
+      "exact": 2897778,
+      "mismatch": 19,
+      "error": 0,
+      "invalid_input": 22,
+      "mean_tokens": 19.942431062697004,
+      "median_tokens": 17,
+      "p95_tokens": 37,
+      "p99_tokens": 85,
+      "maximum_tokens": 1490,
+      "used_vocabulary_entries": 2954,
+      "unused_vocabulary_entries": 46,
+      "top100_occurrence_fraction": 0.4650999819376571,
+      "vocabulary_entries": 3000
+    }
+  },
+  "vocabulary_comparison": {
+    "shared_string_units": 1665,
+    "union_string_units": 4335,
+    "jaccard": 0.38408304498269896,
+    "exclusive_most_used": {
+      "npe_safe": [
+        {
+          "unit": "O=6",
+          "occurrences": 98296
+        },
+        {
+          "unit": "O=7",
+          "occurrences": 90001
+        },
+        {
+          "unit": "O=5",
+          "occurrences": 84288
+        },
+        {
+          "unit": "(=O)N",
+          "occurrences": 81307
+        },
+        {
+          "unit": "O=8",
+          "occurrences": 73209
+        },
+        {
+          "unit": "O=4",
+          "occurrences": 57061
+        },
+        {
+          "unit": ")CC1",
+          "occurrences": 54910
+        },
+        {
+          "unit": "O=9",
+          "occurrences": 52149
+        },
+        {
+          "unit": "CCNC(=N)N",
+          "occurrences": 48495
+        },
+        {
+          "unit": "C(C)=O",
+          "occurrences": 44721
+        },
+        {
+          "unit": "Cl5",
+          "occurrences": 43000
+        },
+        {
+          "unit": "NC=",
+          "occurrences": 42578
+        }
+      ],
+      "brics_safe": [
+        {
+          "unit": "N46",
+          "occurrences": 117425
+        },
+        {
+          "unit": "O34",
+          "occurrences": 103159
+        },
+        {
+          "unit": "N35",
+          "occurrences": 100654
+        },
+        {
+          "unit": "N47",
+          "occurrences": 85671
+        },
+        {
+          "unit": "N57",
+          "occurrences": 80824
+        },
+        {
+          "unit": "N36",
+          "occurrences": 68177
+        },
+        {
+          "unit": ")C",
+          "occurrences": 68056
+        },
+        {
+          "unit": "C46=O",
+          "occurrences": 60739
+        },
+        {
+          "unit": "C57",
+          "occurrences": 59883
+        },
+        {
+          "unit": "C46",
+          "occurrences": 59524
+        },
+        {
+          "unit": "C47=O",
+          "occurrences": 56460
+        },
+        {
+          "unit": "N58",
+          "occurrences": 55891
+        }
+      ]
+    },
+    "definition": "Exact string equality, including special tokens. Shared text need not have the same token ID or usage context. Usage counts include exact reconstructions only."
+  },
+  "paired_comparison": {
+    "molecules": 2897778,
+    "npe_mean_tokens": 19.662382349510555,
+    "brics_mean_tokens": 19.942431062697004,
+    "npe_token_reduction_percent": 1.40428572778315,
+    "npe_json_byte_reduction_percent": 0.667248483899241,
+    "definition": "Positive reduction means NPE is shorter; ratio of aggregate totals on the common exact subset."
+  }
+}

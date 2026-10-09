@@ -1,9 +1,16 @@
 # ChEMBL 37 full-corpus experiment
 
-Current scope (2026-10-09, resumed after training): **full-corpus audit, analysis,
-figures, and GitHub Pages publication**. Both NPE + SAFE and BRICS + SAFE training
-finished at 22:28 Asia/Shanghai; the models are reused without retraining.
-The current audit command is the command below with `--train-only` omitted.
+Completed on 2026-10-10: **full-corpus audit, analysis and figures**. Both models
+finished training on October 9 at 22:28 Asia/Shanghai; the frozen models were reused.
+The audit visited all 2,897,819 source rows in 5,004.88 seconds. Each model exactly
+reconstructed 2,897,778 rows, with 22 invalid inputs and the same 19 stereo-related
+mismatches. Raw per-row totals were independently checked against the aggregate
+summary. Mean sequence lengths on the common exact subset were 19.662 (NPE + SAFE)
+and 19.942 (BRICS + SAFE); p95 lengths were 40 and 37. These are in-corpus results.
+The report includes all six figure groups, full sequence vocabularies, provenance,
+and mismatch diagnostics. Source rows of failures remain visible.
+
+The audit command is the command below with `--train-only` omitted.
 Publication follows inspection of the generated report and plots. For a
 training-only run that deliberately skips analysis:
 

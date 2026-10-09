@@ -1,0 +1,66 @@
+{
+  "verified_source_rows": 2897819,
+  "model_status_counts": {
+    "npe_safe": {
+      "exact": 2897778,
+      "invalid_input": 22,
+      "mismatch": 19
+    },
+    "brics_safe": {
+      "exact": 2897778,
+      "invalid_input": 22,
+      "mismatch": 19
+    }
+  },
+  "paired_length_outcomes": {
+    "equal": 263696,
+    "brics_shorter": 1068121,
+    "npe_shorter": 1565961
+  },
+  "mismatch_source_rows": {
+    "npe_safe": [
+      266962,
+      403430,
+      440233,
+      448947,
+      515404,
+      613774,
+      686303,
+      689453,
+      767250,
+      844322,
+      923221,
+      964598,
+      1878337,
+      2151761,
+      2153553,
+      2332424,
+      2332425,
+      2332427,
+      2336158
+    ],
+    "brics_safe": [
+      266962,
+      403430,
+      440233,
+      448947,
+      515404,
+      613774,
+      686303,
+      689453,
+      767250,
+      844322,
+      923221,
+      964598,
+      1878337,
+      2151761,
+      2153553,
+      2332424,
+      2332425,
+      2332427,
+      2336158
+    ]
+  },
+  "source_sha256": "87d10f64ed147c6371ff6d385f46762ef77df6368cc68768de58df134a05cbfb",
+  "raw_csv_totals_match_summary": true
+}

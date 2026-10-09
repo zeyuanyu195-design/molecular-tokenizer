@@ -65,17 +65,21 @@ def render(args):
     save(fig,'full_length_distributions')
     fig,ax=plt.subplots(figsize=(10,4.5),layout='constrained')
     for k in labels:
-        x,y=distribution(data['models'][k]['atom_token_ratio_histogram_tenths'])
-        if len(x): ax.step(x/10,y/sum(y),where='post',color=colors[k],label=names[k])
+        hist=data['models'][k]['atom_token_ratio_histogram_tenths']
+        filled={i:hist.get(str(i),0) for i in range(max(map(int,hist),default=0)+1)}
+        x,y=distribution(filled)
+        if len(x) and sum(y): ax.step(x/10,y/sum(y),where='post',color=colors[k],label=names[k])
     ax.axvline(1,color='#788',ls=':',label='One atom per representation unit')
     ax.set(yscale='log',xlabel='Atom count / representation-unit count (bins of 0.1)',ylabel='Fraction of exact reconstructions',title='Length ratio, not byte compression')
     ax.legend(frameon=False); ax.grid(alpha=.15)
     save(fig,'full_length_ratios')
     fig,axs=plt.subplots(1,len(labels),figsize=(6*len(labels),4.8),layout='constrained',squeeze=False)
+    all_bins=[b for k in labels for b in data['models'][k]['atom_token_joint_bins5']]
+    color_max=max(1,np.ceil(np.log10(max((b[2] for b in all_bins),default=1))))
     for ax,k in zip(axs.flat,labels):
         pairs=np.array(data['models'][k]['atom_token_joint_bins5'])
         if pairs.size:
-            dots=ax.scatter(pairs[:,0]*5+2.5,pairs[:,1]*5+2.5,c=np.log10(pairs[:,2]),s=12,cmap='viridis',rasterized=True)
+            dots=ax.scatter(pairs[:,0]*5+2.5,pairs[:,1]*5+2.5,c=np.log10(pairs[:,2]),s=12,cmap='viridis',vmin=0,vmax=color_max,rasterized=True)
             fig.colorbar(dots,ax=ax,label='log10(molecules per 5 × 5 bin)')
         ax.set(xscale='log',yscale='log',xlabel='Atom nodes (bin centers)',ylabel='Representation units (bin centers)',title=names[k])
     save(fig,'full_size_vs_length')
@@ -107,7 +111,7 @@ def render(args):
         ax.bar([names[k] for k in labels],values,bottom=bottom,label=status,color=color)
         bottom+=values
     ax.set(ylabel='Percent of ALL source rows',title='Reconstruction outcome, with failures in the denominator',ylim=(0,103))
-    ax.legend(frameon=False,ncol=4,loc='lower center',bbox_to_anchor=(.5,1.01))
+    ax.legend(frameon=False,ncol=4,loc='upper center',bbox_to_anchor=(.5,-.10))
     save(fig,'full_fidelity')
     table=[]; vocab_blocks=[]
     for k in labels:
@@ -136,9 +140,17 @@ def render(args):
         direction='fewer' if delta>=0 else 'more'
         findings.append(f"On {paired['molecules']:,} molecules reconstructed exactly by both models, NPE + SAFE uses {paired['npe_mean_tokens']:.3f} tokens per molecule versus {paired['brics_mean_tokens']:.3f} for BRICS + SAFE: {abs(delta):.2f}% {direction} tokens. This comparison includes the connection syntax inside SAFE strings.")
         findings.append('This result measures the complete partition-to-SAFE-to-BPE pipeline. It does not isolate the effect of partitioning alone, because the two sequence vocabularies are learned separately.')
+        n=insights['models']['npe_safe']; b=insights['models']['brics_safe']
+        if n['p95_tokens']>b['p95_tokens']:
+            findings.append(f"The average advantage is not uniform: the NPE + SAFE p95 length is {n['p95_tokens']} tokens versus {b['p95_tokens']} for BRICS + SAFE, and p99 is {n['p99_tokens']} versus {b['p99_tokens']}. NPE has a longer high-length tail in this experiment.")
     for k, m in insights['models'].items():
         findings.append(f"{names[k]}: {m['exact']:,} exact reconstructions, {m['mismatch']:,} changed molecules, {m['error']:,} encoding/decoding errors, and {m['invalid_input']:,} invalid inputs. Median / p95 / p99 token lengths on exact reconstructions: {m['median_tokens']} / {m['p95_tokens']} / {m['p99_tokens']}.")
     findings.append('Shorter sequences can reduce the number of positions processed by a downstream model. No downstream training-speed, generation-quality, or property-prediction improvement has been measured here.')
+    verification_path=args.summary.parent/'verification.json'
+    if verification_path.exists():
+        verified=json.loads(verification_path.read_text())
+        outcomes=verified['paired_length_outcomes']; total=sum(outcomes.values())
+        findings.append(f"A separate pass over the per-molecule audit CSV verified all {verified['verified_source_rows']:,} source rows and the aggregate counts. On the common exact subset, NPE is shorter for {100*outcomes.get('npe_shorter',0)/total:.2f}% of molecules, BRICS is shorter for {100*outcomes.get('brics_shorter',0)/total:.2f}%, and {100*outcomes.get('equal',0)/total:.2f}% tie.")
     findings_html=''.join(f'<p>{html.escape(x)}</p>' for x in findings)
     vocab_detail=''
     overlap=insights['vocabulary_comparison']
@@ -148,6 +160,18 @@ def render(args):
             items=''.join(f"<tr><td><code>{html.escape(r['unit'])}</code></td><td>{r['occurrences']:,}</td></tr>" for r in entries)
             vocab_detail+=f'<h3>Frequent units exclusive to {html.escape(names[k])}</h3><table><tr><th>String unit</th><th>Occurrences</th></tr>{items}</table>'
     diagnostics=''
+    for file in ('verification.json','fidelity_diagnostics.json'):
+        source=args.summary.parent/file
+        if source.exists():
+            shutil.copyfile(source,output/'data'/file)
+            diagnostics+=f'<p><a href="data/{file}">{file}</a></p>'
+    diag_path=args.summary.parent/'fidelity_diagnostics.json'
+    if diag_path.exists():
+        diag=json.loads(diag_path.read_text())
+        if diag.get('all_match_after_removing_stereochemistry'):
+            diagnostics+='<p>Diagnostic re-encoding of every mismatch recovered matching canonical structures after stereochemistry was removed while retaining isotope and charge information. These are stereo-related mismatches under the stated identity test. Both methods fail on the same source records; this does not establish that NPE fragmentation caused the discrepancy. The evaluated models have not been modified.</p>'
+        if diag.get('bpe_strings_all_exact') and diag.get('direct_safe_mismatch_count_on_canonical_inputs')==len(diag['records']):
+            diagnostics+='<p>For all diagnostic cases, BPE preserved the SAFE string exactly. Bypassing BPE and directly round-tripping the canonical input through the configured SAFE converter still reproduced the molecular mismatch. This localizes the observed issue to the SAFE conversion path in this implementation; it is not evidence of a universal limitation of SAFE or a new NPE-specific failure.</p>'
     for k, m in data['models'].items():
         if m['failure_examples']:
             examples=''.join(f"<li>Source row {r['source_row']:,}: {html.escape(r.get('reason',r['status']))}</li>" for r in m['failure_examples'])

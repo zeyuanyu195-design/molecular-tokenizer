@@ -1,0 +1,101 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Molecular Tokenizer · ChEMBL research report</title><style>
+    :root{--ink:#172c36;--muted:#526873;--teal:#087f8c;--line:#dce5e8;--paper:#f4f7f8}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,sans-serif}
+    header{background:#142f3c;color:white;padding:54px max(24px,calc((100vw - 1050px)/2)) 40px}
+    header p{max-width:760px;color:#c8dce2}h1{font-size:clamp(28px,4vw,46px);line-height:1.15;margin:12px 0 20px;letter-spacing:-.02em}
+    .eyebrow{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#7bddda}nav{display:flex;flex-wrap:wrap;gap:20px}nav a{color:#b6f0ed}
+    main{max-width:1100px;margin:auto;padding:28px 24px 60px}section{padding:28px;margin:24px 0;background:white;border:1px solid var(--line);border-radius:12px}
+    h2{font-size:25px;line-height:1.25;margin:0 0 18px}h3{margin:24px 0 8px}a{color:#096b79}.notice{background:#fff4db;border-left:5px solid #b87818;padding:22px;border-radius:6px}
+    .notice p{margin-bottom:0}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.card{background:white;border:1px solid var(--line);border-radius:10px;padding:20px}.number{display:block;font-size:29px;font-weight:700;color:var(--teal)}.small{font-size:14px;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}th{background:#eef4f5}
+    .scroll{overflow:auto}figure{margin:24px 0}img{width:100%;height:auto;display:block}figcaption{font-size:14px;color:var(--muted);margin-top:10px}
+    pre{overflow:auto;background:#142f3c;color:#e0f1f5;padding:20px;border-radius:8px;font-size:13px}code{font-family:ui-monospace,monospace;overflow-wrap:anywhere}li{margin:8px 0}footer{font-size:13px;color:var(--muted)}
+    @media(max-width:640px){.cards{grid-template-columns:1fr}section{padding:20px}main{padding:20px 14px}th,td{padding:8px}}
+    </style></head><body><header><span class="eyebrow">Molecular Tokenizer / Research notebook / 09 October 2026</span>
+    <h1>ChEMBL, from molecular graphs<br>to reusable token vocabularies.</h1>
+    <p>BRICS and NPE fragmentation, paired with SAFE strings or DemoDiff graph encoding.
+    Reproducible measurements, explicit reconstruction checks, and transparent resource limits.</p>
+    <nav><a href="#status">Experiment status</a><a href="#resources">Resource assessment</a><a href="#design">Analysis design</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">Source code</a></nav></header>
+    <main><div id="status"><div class="notice"><strong>Full ChEMBL training launched with disk-backed NPE. Final tokenizer results are pending.</strong>
+        <p>Run status at the published snapshot: running; stage: npe_safe.
+        Corpus and resource figures below are measured; full tokenizer-comparison figures will only appear after training and the full audit finish.
+        <a href="data/full_run_snapshot.json">Timestamped run snapshot</a> (not a live monitor).</p></div></div>
+    <div class="cards"><div class="card"><span class="number">2,897,819</span>ChEMBL 37 source records</div>
+    <div class="card"><span class="number">31.3 GiB</span>Installed system memory</div>
+    <div class="card"><span class="number">129 GiB*</span>Original in-memory NPE estimate<br><span class="small">*Not the new SQLite trainer</span></div></div>
+    <section><h2>Disk-backed NPE: implemented and validated</h2>
+        <p>Graph states, candidate frequencies and the inverted index now live in SQLite. Each batch is committed
+        atomically; interrupted initialization or either phase of a merge can resume. Global frequency selection and tie-breaking retain the in-memory implementation's ordering.</p>
+        <p>On the same 5,000 ChEMBL records, with 3,000 NPE motifs and 300 rings, the complete model fingerprint matches the original implementation:
+        <strong>verified identical</strong>.
+        This probe took 49.8 seconds and peaked at 0.65 GiB.
+        SAFE conversion also uses workers with a frozen copy of the learned NPE engine, so its time is not directly comparable to the earlier serial-conversion probes.</p>
+        <p><a href="data/disk_probe.json">Disk probe measurements</a> · <a href="data/disk_parity.json">Model parity evidence</a></p></section>
+    <section><h2>What has actually been run?</h2><p>The original ChEMBL 37 SMILES file has been verified against its SHA-256 manifest.
+    The following models were trained on nested uniform random subsets selected from the entire source, seed 20261009.
+    Each run uses 4 workers, 300 ring types, a 3,000-token SAFE vocabulary target, and the requested NPE motif budget.
+    BRICS uses fixed rules and has no motif-training budget.</p><div class="scroll"><table><thead><tr><th>Pipeline</th><th>Probe records</th><th>NPE motifs</th><th>Training seconds</th><th>Peak RSS / GiB</th></tr></thead><tbody><tr><td>NPE + SAFE</td><td>5,000</td><td>350</td><td>44.1</td><td>0.54</td></tr><tr><td>NPE + SAFE</td><td>20,000</td><td>350</td><td>196.7</td><td>1.23</td></tr><tr><td>NPE + SAFE</td><td>50,000</td><td>350</td><td>487.2</td><td>2.55</td></tr><tr><td>NPE + SAFE</td><td>5,000</td><td>3000</td><td>75.0</td><td>0.54</td></tr><tr><td>BRICS + SAFE</td><td>20,000</td><td>Fixed rules</td><td>10.6</td><td>0.63</td></tr></tbody></table></div>
+    <p class="small">Single-run wall times; end-to-end training includes SAFE conversion and sequence BPE. Sampling, imports, model saving, and smoke checks are excluded from training seconds.
+    Peak RSS includes the training process and descendants. It is sampled every 0.5 seconds and can double-count shared pages.
+    The first 100 training rows are used only as a smoke check, never as held-out accuracy evidence.</p></section>
+    <section id="corpus"><h2>Full-corpus chemistry census</h2>
+        <p>Every one of the 2,897,819 input records was visited. RDKit parsed 2,897,797;
+        22 failed parsing. No tokenizer model is required for this census.
+        Explicit atom nodes are counted; implicit hydrogens are excluded. Records are not deduplicated.</p>
+        <p><strong>Observed molecule sizes:</strong> mean 31.23 atom nodes, median 29,
+        95th percentile 50, 99th percentile 99, maximum 855.
+        There are 28,130 molecules with more than 100 atoms. This long tail motivates reporting both typical lengths and tail behavior.</p>
+        <figure><img src="figures/corpus_atom_distribution.png" alt="Full ChEMBL atom-count frequency and complementary cumulative distribution on logarithmic axes">
+        <figcaption>Original corpus-level plots inspired by the distribution analyses in DemoDiff Fig. 9.
+        These show atom counts only; motif/token curves will be added after full training.</figcaption></figure>
+        <table><thead><tr><th>Overlapping molecular subset</th><th>Records</th></tr></thead><tbody><tr><td>stereo</td><td>1,093,588</td></tr><tr><td>charge</td><td>174,279</td></tr><tr><td>disconnected</td><td>120,710</td></tr><tr><td>isotope</td><td>3,255</td></tr></tbody></table>
+        <p>Subsets overlap. “Stereo” means specified atom chirality or bond stereochemistry;
+        “charge” means at least one formally charged atom, including net-neutral zwitterions.</p>
+        <p>37.74% of readable molecules contain specified stereochemistry.
+        Fidelity on these molecules is therefore a substantial part of the evaluation, rather than just a few edge cases.
+        These input statistics do not establish a compression advantage for either tokenizer.</p>
+        <a href="data/corpus_census.json">Download the complete census aggregates</a></section>
+    <section id="resources"><h2>Full training: resource feasibility</h2>
+    <figure><img src="figures/resource_scaling.png" alt="Measured NPE SAFE peak memory and training time against resource probe size"><figcaption>Measured resource scaling at 350 motifs. These are completed subset runs, not full-corpus results.</figcaption></figure>
+    <figure><img src="figures/full_memory_projection.png" alt="Linear memory extrapolation to the full ChEMBL corpus against installed and available RAM"><figcaption>Dashed line: extrapolation over 58× beyond the largest probe.
+    The pairwise-slope scenarios give 128–132 GiB; this range is not a confidence interval.
+    A 3,000-motif full run can require more memory. The current graph corpus and inverted indexes are kept in RAM.</figcaption></figure>
+    <p>The original in-memory implementation exceeds this machine's available RAM at the extrapolated scale.
+    The disk-backed replacement avoids retaining the complete graph corpus in Python memory and has separate measurements above when available.
+    A smaller motif vocabulary or subset would change the requested experiment and is not silently substituted.</p>
+    <p>Linear time scenarios for the original implementation are provided in <a href="data/resource_forecast.json">the forecast JSON</a>. They are planning estimates, not completion promises or estimates for the SQLite replacement.
+    A GPU does not directly accelerate the current Python/RDKit tokenizer implementation.</p></section>
+    <section id="design"><h2>Analysis design after full training</h2><div class="scroll"><table><thead><tr><th>Question</th><th>Measurements</th><th>Reference / boundary</th></tr></thead><tbody>
+    <tr><td>How much shorter?</td><td>Atom nodes, graph motifs, SAFE sequence lengths; mean, median, maximum and CCDF.</td><td>DemoDiff Fig. 3(b), 9. Graph nodes and string tokens are distinct units.</td></tr>
+    <tr><td>Does a larger vocabulary help?</td><td>Vocabulary-budget sweep and sequence/graph length curves.</td><td>DemoDiff Fig. 8. Each budget requires a specified training configuration.</td></tr>
+    <tr><td>Which molecules compress?</td><td>Per-molecule atom-to-unit ratio and atom-count versus unit-count density.</td><td>DemoDiff Fig. 10–11. Not a byte compression claim.</td></tr>
+    <tr><td>What is the connection cost?</td><td>Edge records, SAFE block counts, compact JSON payload bytes.</td><td>SAFE stores connectivity in its string; no claim of zero connection cost.</td></tr>
+    <tr><td>Is the molecule preserved?</td><td>Canonical isomeric-SMILES identity; all errors and mismatches; isotope, charge, stereo subsets.</td><td>Failures remain in the denominator. Common-success subsets support paired length comparisons.</td></tr>
+    <tr><td>What is learned?</td><td>Vocabulary usage, rank-frequency, entropy and token examples.</td><td>A SAFE BPE token need not be an independently valid molecular fragment.</td></tr></tbody></table></div>
+    <p>With all ChEMBL records used for training, evaluation on the same database is an <strong>in-corpus descriptive analysis</strong>, not a held-out generalization experiment.
+    Neural generation quality and downstream task performance are outside this tokenizer-only experiment.</p></section>
+    <section><h2>Reproduce the resource assessment</h2><p>Python 3.11, Git, and the separately downloaded ChEMBL corpus are required.
+    Commands below use a POSIX shell; on the existing Windows environment use <code>.\.venv\Scripts\python.exe</code> instead of <code>python</code>.</p>
+    <pre>python -m pip install -e ".[test,analysis]"
+python examples/profile_full_training.py \
+  --input ../chembl_37_smiles.smi --metadata ../dataset_metadata.json \
+  --output training_runs/resource_probe --workers 4
+
+# Census visits every source record; no tokenizer model is required.
+python examples/analyze_corpus.py \
+  --input ../chembl_37_smiles.smi --metadata ../dataset_metadata.json \
+  --output analysis_runs/census --workers 4</pre>
+    <p>Full-training and analysis commands, resource assumptions, and publication instructions are in
+    <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/RESEARCH.md">RESEARCH.md</a>.</p>
+    <p><a href="data/resource_measurements.csv">Resource table (CSV)</a> · <a href="data/resource_measurements.json">Measured runs (JSON)</a> ·
+    <a href="data/resource_forecast.json">Forecast assumptions (JSON)</a> · <a href="data/dataset_manifest.json">Dataset provenance (JSON)</a> ·
+    <a href="figures/resource_scaling.svg">Resource figure (SVG)</a></p></section>
+    <section><h2>Sources and attribution</h2><p>Liu et al., <a href="https://arxiv.org/html/2510.08744v1">Graph Diffusion Transformers are In-Context Molecular Designers</a>,
+    Section 3.1 and Appendix B.2, arXiv v1 (2025). The requested <a href="https://openreview.net/pdf?id=lJ87GN5zJc">OpenReview PDF</a>
+    was access-gated during review; the accessible author preprint was used. This is an adapted analysis plan, not a reproduction of their reported dataset or results.</p>
+    <p>ChEMBL 37 chemical representations: <a href="https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/releases/chembl_37/chembl_37_chemreps.txt.gz">official EBI release</a>,
+    CC BY-SA 3.0. Source records are preserved, including duplicates. No raw SMILES corpus or trained model is embedded in this page.
+    All figures on this page were generated from the measured local data.</p></section>
+    <footer>Preflight status is explicit. Full training, full tokenizer comparison, and final performance conclusions remain pending.
+    Source hash: <code>87d10f64ed147c6371ff6d385f46762ef77df6368cc68768de58df134a05cbfb</code>.</footer></main></body></html>
