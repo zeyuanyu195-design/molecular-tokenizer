@@ -13,6 +13,56 @@ SAFE 表示不需要在每条编码旁保存额外边表，但连接信息仍包
 BRICS 不训练切分规则；SAFE 组合训练序列词表，BRICS+DemoDiff 收集节点/边词表。
 本项目不包含分子生成神经网络。
 
+## ChEMBL 37 全量分析结果
+
+**[打开完整分析报告与图表](https://zeyuanyu195-design.github.io/molecular-tokenizer/)**
+ · [复现实验说明](RESEARCH.md)
+ · [统计数据下载](docs/data/encoding_costs.json)
+
+2026-10-10 完成全量实验：训练及评估遍历 **2,897,819 条 ChEMBL 37 SMILES**，
+以下长度和编码开销统计包含全部 **2,897,797 个成功编码分子**，保留源数据中的重复记录。
+
+| 指标 | NPE + SAFE | BRICS + SAFE |
+|---|---:|---:|
+| 序列词表大小 | 3,000 | 3,000 |
+| 额外 NPE 子图词表大小 | 3,000 | — |
+| 平均 token 数 | **19.663** | 19.943 |
+| token 数中位数 | **15** | 17 |
+| token 数第 95 百分位（p95） | 40 | **37** |
+| token 数第 99 百分位（p99） | 96 | **85** |
+| 平均紧凑 JSON 编码大小（字节） | **96.23** | 96.87 |
+| 保存的模型大小（字节） | 445,788 | **95,245** |
+
+NPE + SAFE 的平均序列长度减少约 **1.40%**，平均 JSON 编码大小减少约 **0.67%**；
+但其长序列尾部更长，且需要额外的子图词表。JSON 大小不包括模型文件和元数据，
+也不等同于最优二进制压缩。这是**训练集内的描述性分析**，尚不能证明独立数据上的泛化能力或下游性能提升。
+
+![全部成功编码分子的平均序列长度和 p95](docs/figures/full_encoding_costs.png)
+
+<details>
+<summary>展开查看序列长度分布和词表使用图</summary>
+
+![分子原子数与编码序列长度分布](docs/figures/full_length_distributions.png)
+
+![词表使用频率及累计覆盖率](docs/figures/full_vocabulary_usage.png)
+
+</details>
+
+两份序列词表共有 **1,665 个相同字符串单元**，Jaccard 重叠率为 **0.384**。
+词表使用频率及 SAFE 片段数的日志覆盖 2,897,778 个分子，分母与上面的全量长度统计分别注明；
+其中平均 SAFE 块数为 NPE **5.856**、BRICS **6.330**。SAFE 块是以点分隔的字符串片段，包含不连通组分。
+
+| 可下载内容 | 文件 |
+|---|---|
+| NPE + SAFE 完整序列词表 | [CSV](docs/data/vocabulary_0.csv) |
+| BRICS + SAFE 完整序列词表 | [CSV](docs/data/vocabulary_1.csv) |
+| 全部成功编码分子的长度、片段数与存储统计 | [JSON](docs/data/encoding_costs.json) |
+| 词表使用、模型配置及其他统计 | [JSON](docs/data/full_analysis.json) |
+| 全部 PNG / SVG 图表 | [图表目录](docs/figures) |
+
+网页与上述文件均维护在本仓库的 [`docs/`](docs) 中，通过 GitHub Pages 发布。
+原始数据、模型及逐行实验日志保留在本地。
+
 ## 安装与测试
 
 推荐 Python 3.11。Windows PowerShell：
@@ -154,7 +204,8 @@ backends.py 与 _vendor/ 管兼容的原后端；types.py 管结构化输出；_
 
 源码、测试、参考词表 fixtures 和 CI 配置统一维护在
 [molecular-tokenizer](https://github.com/zeyuanyu195-design/molecular-tokenizer)。虚拟环境、ChEMBL 数据、
-训练模型、分析结果和日志不纳入 Git。GitHub Actions 会在推送和拉取请求时运行测试；实际状态以仓库 Actions 页面为准。
+训练模型、逐行分析结果和日志不纳入 Git；汇总统计及图表维护在 `docs/` 中。
+GitHub Actions 会在推送和拉取请求时运行测试；实际状态以仓库 Actions 页面为准。
 第三方出处及许可见 THIRD_PARTY_NOTICES.txt；旧 README_zh.txt 保留历史实验说明。
 
 ## 全量实验与结果页面
@@ -163,11 +214,5 @@ backends.py 与 _vendor/ 管兼容的原后端；types.py 管结构化输出；_
 资源测试的抽样模型不等同于全量训练结果。磁盘版在同一批 5,000 条 ChEMBL 数据上训练至 3,000 个 NPE 单元后，
 与原内存版的完整模型指纹相同。
 
-2026-10-10 已完成全量训练和全部 2,897,819 条记录的评估。全部成功编码的 2,897,797 个分子均纳入新增长度统计。
-NPE+SAFE 平均 19.662 个 token，BRICS+SAFE 为 19.942，
-NPE 少约 1.40%；但 p95 长度为 40 对 37，说明长序列尾部并未改善。
-每种方法的序列词表均为 3,000；NPE 另有 3,000 个子图单元，模型容量并不相等。
-这是训练集内描述性分析，不是独立测试泛化或下游性能结论。
-
-[完整图表、词表和分析报告](https://zeyuanyu195-design.github.io/molecular-tokenizer/)
-的静态源文件位于 `docs/index.html`。网页聚焦序列长度、词表使用、片段数量和存储开销；原始实验记录仅保留在本地。
+全量结果摘要、关键图表和下载入口见本 README 顶部的“ChEMBL 37 全量分析结果”。
+完整网页的静态源文件为 [`docs/index.html`](docs/index.html)。
