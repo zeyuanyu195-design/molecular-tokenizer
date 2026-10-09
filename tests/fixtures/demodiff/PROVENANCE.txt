@@ -1,0 +1,10 @@
+These three reference tokenizer files come from liugangcode/DemoDiff:
+https://github.com/liugangcode/DemoDiff/tree/0acb85ef446c175a3e3a60bbad43de97d97ca76f/data/tokenizer/vocab3000ring300
+They are unmodified regression fixtures, not models trained by this package.
+The source repository is MIT licensed; its copyright notice is retained in
+molecular_tokenizer/_vendor/LICENSE_DemoDiff.txt.
+
+SHA256:
+pretrain-token.edge 0db950f24a6ad5847cf38ce966493c02074685b142768f9adeaff1240d853544
+pretrain-token.node b37223d79e884e2e612a8f8e7e3550cfd1975fcbf4e8bc9aeb0020d68116ec8e
+pretrain-token.ring dda8b903240eed132f561419121a6f934f11c9c93c2972b098ebc0bae5506df1

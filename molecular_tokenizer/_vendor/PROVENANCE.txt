@@ -1,0 +1,20 @@
+graphbpe.py and graphbpe_utils.py are from liugangcode/DemoDiff, MIT licensed.
+Source commit: 0acb85ef446c175a3e3a60bbad43de97d97ca76f
+https://github.com/liugangcode/DemoDiff/tree/0acb85ef446c175a3e3a60bbad43de97d97ca76f
+Original paths: downstream/graphbpe.py and downstream/utils/token.py
+Local modifications to graphbpe.py:
+1. Use a package-relative utils import to avoid global sys.path/module collisions.
+2. Clamp the default multiprocessing worker count to at least one.
+3. Avoid division by zero in the ring-frequency report for ring-free training data.
+4. Treat empty .edge and .ring files as empty vocabularies during load.
+5. Add optional return_edge_existence to encode (default behavior unchanged).
+   The adapter uses this matrix to reject unseen bonds instead of dropping them.
+6. Build the atom-to-subgraph index in linear rather than quadratic time.
+7. Stream training results and maintain a motif-to-molecules inverted index.
+8. Cache motif ID lookup, join workers after training, and quiet RDKit workers.
+9. Optional partition_processor hook bypasses NPE merging for BRICS+DemoDiff
+   while reusing upstream node/attachment encoding and decoding.
+The NPE learning/merging policy is otherwise retained. Upstream atom-property
+and stereochemistry fidelity limitations remain in the DemoDiff codec; the
+facade rejects mismatches in strict mode. NPE+SAFE uses only atom partitions
+and original molecule properties, not the DemoDiff decoder.

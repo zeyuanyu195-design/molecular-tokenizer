@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+trained_models/
+training_runs/
+validation/
+analysis_units/
+*.log
+.env
+.env.*
+requirements.lock.txt
+# This historical local inventory has machine-specific paths; install pyproject.toml.

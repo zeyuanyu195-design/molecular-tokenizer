@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "generic-molecular-tokenizer"
+version = "0.2.0"
+description = "Composable BRICS/NPE fragmentation with SAFE/DemoDiff representation"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["rdkit==2025.9.6", "numpy>=1.26,<3", "tqdm>=4.66", "tokenizers==0.23.2", "safe-mol @ git+https://github.com/datamol-io/safe.git@d162d23e3e8c8a77b54c559e88a35d08b3b1d1b5"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+include = ["molecular_tokenizer*"]
+
+[tool.setuptools.package-data]
+"molecular_tokenizer._vendor" = ["*.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

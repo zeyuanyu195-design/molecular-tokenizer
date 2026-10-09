@@ -1,0 +1,20 @@
+DemoDiff
+Source: https://github.com/liugangcode/DemoDiff
+Commit: 0acb85ef446c175a3e3a60bbad43de97d97ca76f
+Vendored graphbpe.py and graphbpe_utils.py derive from downstream/graphbpe.py
+and downstream/utils/token.py. MIT notice is preserved in
+molecular_tokenizer/_vendor/LICENSE_DemoDiff.txt. Local changes are recorded in
+molecular_tokenizer/_vendor/PROVENANCE.txt. Reference model fixtures and source
+hashes are documented in tests/fixtures/demodiff/PROVENANCE.txt.
+
+SAFE
+Source: https://github.com/datamol-io/safe
+Pinned dependency: d162d23e3e8c8a77b54c559e88a35d08b3b1d1b5
+Installed as the safe-mol dependency, not copied into this codebase. Its custom
+SAFEConverter slicer API is used to serialize cuts on the original molecule.
+Dependency licensing remains governed by its own distribution.
+
+minbpe
+Source: https://github.com/karpathy/minbpe
+Used as a conceptual BPE reference in the earlier investigation; no minbpe code
+is incorporated here. Sequence BPE uses Hugging Face tokenizers.

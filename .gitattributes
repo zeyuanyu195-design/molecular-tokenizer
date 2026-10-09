@@ -1,0 +1,3 @@
+* text=auto eol=lf
+*.ps1 text eol=crlf
+tests/fixtures/demodiff/pretrain-token.* -text whitespace=cr-at-eol
