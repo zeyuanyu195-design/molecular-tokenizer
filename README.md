@@ -1,218 +1,271 @@
-# MolecularTokenizer
+# GraphBPE 与 BRICS：ChEMBL 批量切分及 token 长度比较
 
-一个代码库，分别选择**分子切分方法**和**编码表示**。当前版本为 0.2.0。
+本说明针对 `E:\GraphBpe+SAFE\SAFE-main` 当前项目，使用已有的 Conda 环境 `graphbpe-safe`。运行顺序为：准备环境 → BRICS 切分 → GraphBPE 切分 → 比较 SAFE 文本的平均 token 长度。
 
-| fragmentation | representation | 实现与边界 |
-|---|---|---|
-| `brics` | `safe` | BRICS 切分 + SAFE 字符串 + 序列 BPE |
-| `npe` | `safe` | NPE 学习原子分组 + 保留原始属性的 SAFE 字符串 + 序列 BPE，主要新增功能 |
-| `npe` | `demodiff` | DemoDiff 原有 NPE 节点/连接表示，保留严格保真检查 |
-| `brics` | `demodiff` | 固定 BRICS 分组，收集片段词表，复用 DemoDiff 节点/连接编解码 |
+本文命令使用 Windows CMD / Anaconda Prompt。Python 命令均为单行，终端自动折行不影响执行；不要添加 PowerShell 的反引号。所有数据和脚本参数使用绝对路径，因此无需先 `cd` 到项目目录。
 
-SAFE 表示不需要在每条编码旁保存额外边表，但连接信息仍包含在字符串中，不能视为零开销。
-BRICS 不训练切分规则；SAFE 组合训练序列词表，BRICS+DemoDiff 收集节点/边词表。
-本项目不包含分子生成神经网络。
+## 1. 脚本与数据位置
 
-## ChEMBL 37 全量分析结果
+| 用途 | 完整路径 |
+| --- | --- |
+| BRICS 批处理脚本 | `E:\GraphBpe+SAFE\SAFE-main\safe\batch_chembl_brics.py` |
+| GraphBPE 批处理脚本 | `E:\GraphBpe+SAFE\SAFE-main\safe\batch_chembl.py` |
+| token 长度比较脚本 | `E:\GraphBpe+SAFE\SAFE-main\safe\compare_safe_token_lengths.py` |
+| ChEMBL 输入数据 | `E:\GraphBpe+SAFE\SAFE-main\safe\data\chembl_37_chemreps.txt` |
+| GraphBPE 切分词表目录 | `E:\GraphBpe+SAFE\SAFE-main\safe\data\tokenizer\vocab3000ring300` |
+| SAFE 文本 tokenizer | `E:\GraphBpe+SAFE\SAFE-main\expts\tokenizer\tokenizer-custom.json` |
+| 依赖列表 | `E:\GraphBpe+SAFE\SAFE-main\requirements.txt` |
 
-**[打开完整分析报告与图表](https://zeyuanyu195-design.github.io/molecular-tokenizer/)**
- · [复现实验说明](RESEARCH.md)
- · [统计数据下载](docs/data/encoding_costs.json)
+当前 `.txt` 输入文件实际上是带表头的 TSV（制表符分隔）。脚本至少要求 `chembl_id` 和 `canonical_smiles` 两列；当前文件还包含 `standard_inchi` 和 `standard_inchi_key`。脚本根据表头而非扩展名识别分隔符。
 
-2026-10-10 完成全量实验：训练及评估遍历 **2,897,819 条 ChEMBL 37 SMILES**，
-以下长度和编码开销统计包含全部 **2,897,797 个成功编码分子**，保留源数据中的重复记录。
+## 2. 激活环境
 
-| 指标 | NPE + SAFE | BRICS + SAFE |
-|---|---:|---:|
-| 序列词表大小 | 3,000 | 3,000 |
-| 额外 NPE 子图词表大小 | 3,000 | — |
-| 平均 token 数 | **19.663** | 19.943 |
-| token 数中位数 | **15** | 17 |
-| token 数第 95 百分位（p95） | 40 | **37** |
-| token 数第 99 百分位（p99） | 96 | **85** |
-| 平均紧凑 JSON 编码大小（字节） | **96.23** | 96.87 |
-| 保存的模型大小（字节） | 445,788 | **95,245** |
+在 Anaconda Prompt 中执行：
 
-NPE + SAFE 的平均序列长度减少约 **1.40%**，平均 JSON 编码大小减少约 **0.67%**；
-但其长序列尾部更长，且需要额外的子图词表。JSON 大小不包括模型文件和元数据，
-也不等同于最优二进制压缩。这是**训练集内的描述性分析**，尚不能证明独立数据上的泛化能力或下游性能提升。
-
-![全部成功编码分子的平均序列长度和 p95](docs/figures/full_encoding_costs.png)
-
-<details>
-<summary>展开查看序列长度分布和词表使用图</summary>
-
-![分子原子数与编码序列长度分布](docs/figures/full_length_distributions.png)
-
-![词表使用频率及累计覆盖率](docs/figures/full_vocabulary_usage.png)
-
-</details>
-
-两份序列词表共有 **1,665 个相同字符串单元**，Jaccard 重叠率为 **0.384**。
-词表使用频率及 SAFE 片段数的日志覆盖 2,897,778 个分子，分母与上面的全量长度统计分别注明；
-其中平均 SAFE 块数为 NPE **5.856**、BRICS **6.330**。SAFE 块是以点分隔的字符串片段，包含不连通组分。
-
-| 可下载内容 | 文件 |
-|---|---|
-| NPE + SAFE 完整序列词表 | [CSV](docs/data/vocabulary_0.csv) |
-| BRICS + SAFE 完整序列词表 | [CSV](docs/data/vocabulary_1.csv) |
-| 全部成功编码分子的长度、片段数与存储统计 | [JSON](docs/data/encoding_costs.json) |
-| 词表使用、模型配置及其他统计 | [JSON](docs/data/full_analysis.json) |
-| 全部 PNG / SVG 图表 | [图表目录](docs/figures) |
-
-网页与上述文件均维护在本仓库的 [`docs/`](docs) 中，通过 GitHub Pages 发布。
-原始数据、模型及逐行实验日志保留在本地。
-
-## 安装与测试
-
-推荐 Python 3.11。Windows PowerShell：
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e ".[test]"
-.\.venv\Scripts\python.exe -m pytest -q
+```cmd
+conda activate graphbpe-safe
+python -c "import sys; print(sys.executable)"
 ```
 
-Linux/macOS 将 Python 路径换成 `.venv/bin/python`。安装固定提交的 SAFE 需要 Git 和网络。
-核心验证环境为 RDKit 2025.9.6、tokenizers 0.23.2；依赖在 pyproject.toml 中固定。
-旧 requirements.lock.txt 是本机历史环境清单，包含本地路径，不用于新环境安装，也不纳入 Git。
-GitHub Actions 已配置 Windows/Linux Python 3.11；远程任务需要推送后才会运行。
-
-## 快速使用：NPE + SAFE
-
-```python
-from molecular_tokenizer import MolecularTokenizer
-
-def main():
-    model = MolecularTokenizer(
-        fragmentation="npe",
-        representation="safe",
-        bpe_scope="fragment",
-        strict=True,
-    )
-    corpus = ["CCO", "CCN", "CCC", "CCCl", "CCOC(=O)C", "c1ccccc1"]
-    report = model.train(
-        corpus,
-        vocab_size=256,       # 序列 BPE 的目标词表大小
-        motif_vocab_size=16,  # NPE 图单元的目标词表大小，与上面分开
-        ring_vocab_size=1,
-        num_workers=1,
-    )
-    encoded = model.encode("[13CH3]CO")
-    print(model.to_safe("[13CH3]CO"))
-    print(encoded.token_ids, encoded.connections)  # SAFE 的 connections 为 ()
-    print(model.decode(encoded))                  # [13CH3]CO
-    model.save("my_npe_safe_model")              # 目标目录必须不存在
-    restored = MolecularTokenizer.load("my_npe_safe_model")
-    assert restored.encode("[13CH3]CO") == encoded
-
-if __name__ == "__main__":
-    main()  # Windows 上的多进程训练需要 main 保护
-```
-
-`examples/train_options.py` 是不依赖 ChEMBL 或外部仓库的四种组合示例。
-
-## 分词范围与预算
-
-`bpe_scope="fragment"`（新接口默认）让 BPE 在 SAFE 点分块内跨原子合并；点号保持为独立单元。
-不解析 token 为独立分子：一个 BPE token 可能只是合法字符串的一部分。解码时先拼回完整串。
-`bpe_scope="lexical"` 保留旧的原子/语法词素边界。DemoDiff 表示不接受 bpe_scope。
-
-SAFE 的 vocab_size 是序列词表目标（至少 95，含完整基础字符表与 UNK）；实际大小可能小于目标。
-NPE+SAFE 的 motif_vocab_size 控制图单元预算，ring_vocab_size 控制初始环系预算，二者独立于序列预算。
-NPE+DemoDiff 的 vocab_size 直接控制图节点词表；BRICS+DemoDiff 将 vocab_size 作为上限，若观察到的
-片段数超过上限会明确报错，不会静默丢弃片段。BRICS 图单元不是保留 dummy 标签的 BRICS 片段袋，
-而是原子分组转换为 DemoDiff 模板，并用显式连接位置连接。
-
-## 复用已有 NPE 词表
-
-```python
-model = MolecularTokenizer(fragmentation="npe", representation="safe")
-report = model.train(
-    smiles_list,
-    vocab_size=3000,
-    npe_model="path/to/saved_npe_model_directory",
-)
-```
-
-npe_model 必须是通用类保存的、具有清单和校验值的 NPE 模型目录，也可以是之前保存的 NPE+SAFE。
-直接的 `.node/.edge/.ring` 文件先用 `MolecularTokenizer.from_graphbpe(prefix).save(directory)` 导入。
-导入时检查源模型，保存新模型时将 NPE 状态一并保存；加载新模型不依赖原路径。
-SAFE 输出没有逐分子边表；如果复用旧模型，模型目录中的 graph.edge 可能仍保留其历史边词表，
-这些边词表不用于 NPE+SAFE 编解码。
-
-## 命令行
-
-输入文件每行一条 SMILES；空行也会作为无效样本报告，不会悄悄改变源行编号。
+当前机器应显示：
 
 ```text
-python -m molecular_tokenizer train --input train.smi --output model_npe_safe --fragmentation npe --representation safe --vocab-size 3000 --motif-vocab-size 350 --ring-vocab-size 100 --num-workers 4 --skip-invalid
-python -m molecular_tokenizer encode --model model_npe_safe --smiles "[13CH3]CO"
-python -m molecular_tokenizer evaluate --model model_npe_safe --input test.smi --output evaluation.json
+E:\programming\conda\envs\graphbpe-safe\python.exe
 ```
 
-用 `--max-molecules 10000` 只读取前 10,000 行（不是随机采样）。CLI 使用严格模式，evaluate 会逐条
-记录错误，成功样本的平均长度与失败数同时输出。train 写入输入 SHA256、选取规则和拒绝源行。
-不要用在训练数据上测得的结果声称泛化性能。
+如果需要按项目依赖文件安装或补齐依赖，执行：
 
-NPE+SAFE 的 num_workers 用于 NPE 图训练及 SAFE 转换；转换工作进程获得同一份冻结的 NPE 词表。
-BRICS+SAFE 支持并行字符串转换；BRICS+DemoDiff 当前要求 num_workers=1。
-NPE 默认内存模式随训练集增长。全量 NPE+SAFE 可选择 `--npe-storage sqlite --work-dir training_runs/npe_checkpoint`，
-将图状态、全局候选频率和倒排索引保存在磁盘，分批训练；中断后加 `--resume` 使用同一目录续训。
-断点会验证数据内容、顺序及配置，不接受不同输入；图训练可以续训，未完成的序列 BPE 阶段会重新运行。
+```cmd
+python -m pip install -r "E:\GraphBpe+SAFE\SAFE-main\requirements.txt"
+```
 
-## 保真策略与已知限制
+已配置好的环境无需每次运行前重复安装。当前依赖文件内容为：
 
-NPE+SAFE 只使用 NPE 的原子分组，不调用 DemoDiff 的解码器。SAFE 从原始分子上切分，保留原子属性；
-映射过程不重新编号原始分子。环内键不切断，包括 NPE 词表外的芳香环，避免产生无法解析的断环片段。
-SAFE 的 ignore_stereo=False 还会保护不安全的立体切分。因此最终 SAFE 块可能不同于原始 NPE 分组。
+```txt
+safe-mol==0.2.0
+rdkit==2025.9.1
+datamol==0.13.0
+numpy==2.5.2
+networkx==3.6.1
+loguru==0.7.3
+tqdm==4.70.1
+torch==2.14.1
+tokenizers==0.23.3
+transformers==5.20.1
+huggingface-hub==1.33.0
+fsspec==2026.9.0
+```
 
-strict=True 默认执行编码—解码后的规范化异构 SMILES 比较，不一致直接拒绝；不是自动修复。
-MoleculeEncoding 只含 ID、连接和模型指纹，不存原始 SMILES。解码必须使用同一模型。
-strict=False 仅关闭往返检查，不能解释为支持无损处理。
+## 3. 运行 BRICS 切分
 
-DemoDiff 表示仍继承上游的电荷、同位素和立体信息限制，BRICS 分组不会自动修好该解码器。
-冻结图词表遇到未知单元或未知边会报错，不随机替换。平行片段连接当前不支持。
-SAFE 暂不支持开放 dummy/polymer 输入；增强 CXSMILES 立体组等需要专门处理的输入可能被拒绝。
+先处理输入文件前 1000 条数据记录：
 
-## 验证结果（2026-10-09）
+```cmd
+python -B "E:\GraphBpe+SAFE\SAFE-main\safe\batch_chembl_brics.py" --input "E:\GraphBpe+SAFE\SAFE-main\safe\data\chembl_37_chemreps.txt" --output-dir "E:\GraphBpe+SAFE\SAFE-main\safe\data\output_brics" --workers 1 --batch-size 256 --limit 1000 --delimiter auto --allow-stereo-coarsening
+```
 
-本地 Windows Python 3.11 下 100 项测试通过；覆盖四种组合、片段内跨原子合并、特殊化学属性、
-模型保存加载、复用词表、文件损坏检测、失败训练保留旧状态、拒绝源行和 CLI。已成功构建 wheel。
-初始版本的 GitHub Actions Windows/Linux 测试已通过（[运行记录](https://github.com/zeyuanyu195-design/molecular-tokenizer/actions/runs/37889695528)）。
+该脚本使用 RDKit BRICS 规则提出切分边，再由 SAFE 转换器生成 SAFE 字符串，并检查切分分区和分子重建结果。
 
-在已有 ChEMBL 随机样本中按规范化 SMILES 去重，seed=20261009 划分为 1,600 个训练分子和 400 个
-测试分子，重新训练两种 SAFE 组合。二者序列词表目标均为 1,024，NPE 另用 350 个 motif / 100 个 ring：
+输出目录会自动创建：
 
-| 组合 | 测试往返一致 | 测试平均 token 数 | 中位数 |
-|---|---:|---:|---:|
-| BRICS + SAFE + 片段内 BPE | 400/400 | 22.2875 | 20 |
-| NPE + SAFE + 片段内 BPE | 400/400 | 25.27 | 21 |
+```text
+E:\GraphBpe+SAFE\SAFE-main\safe\data\output_brics
+```
 
-这轮验证证明代码可运行且在该样本上保真，没有证明 NPE+SAFE 压缩更优；也不代表全量数据或下游表现。
-复现实验脚本为 examples/validate_composable.py，需要历史 ChEMBL sample_selection.json；
-其输入与生成模型属于本地数据，未放入 Git。历史 0.1 版全量/抽样模型没有覆盖或重新训练。
+## 4. 运行 GraphBPE 切分
 
-## 兼容性、文件与 GitHub
+使用同一输入文件的前 1000 条数据记录：
 
-`MolecularTokenizer("safe")` 保持原 BRICS+SAFE 词法配置；`MolecularTokenizer("npe")` 保持原
-NPE+DemoDiff。旧 schema=1 模型继续可加载。新代码将配置和 NPE 状态纳入指纹。
-序列编码中的 backend 标签仍为 safe，DemoDiff 图编码仍为 npe，具体切分选择保存在模型配置里。
+```cmd
+python -B "E:\GraphBpe+SAFE\SAFE-main\safe\batch_chembl.py" --input "E:\GraphBpe+SAFE\SAFE-main\safe\data\chembl_37_chemreps.txt" --output-dir "E:\GraphBpe+SAFE\SAFE-main\safe\data\output" --vocab-prefix "E:\GraphBpe+SAFE\SAFE-main\safe\data\tokenizer\vocab3000ring300\pretrain-token" --workers 1 --batch-size 256 --limit 1000 --delimiter auto --allow-stereo-coarsening
+```
 
-核心代码：tokenizer.py 管生命周期；fragmentation.py 管原子分组；pipelines.py 组合配置；
-backends.py 与 _vendor/ 管兼容的原后端；types.py 管结构化输出；__main__.py 提供 CLI。
+该脚本加载已有的 在前5万条数据中训练的GraphBPE 词表，由 BPE 子图边界提出切分边，再调用 SAFE 转换器生成 SAFE 字符串。运行此命令不会训练新的 GraphBPE 词表。
 
-源码、测试、参考词表 fixtures 和 CI 配置统一维护在
-[molecular-tokenizer](https://github.com/zeyuanyu195-design/molecular-tokenizer)。虚拟环境、ChEMBL 数据、
-训练模型、逐行分析结果和日志不纳入 Git；汇总统计及图表维护在 `docs/` 中。
-GitHub Actions 会在推送和拉取请求时运行测试；实际状态以仓库 Actions 页面为准。
-第三方出处及许可见 THIRD_PARTY_NOTICES.txt；旧 README_zh.txt 保留历史实验说明。
+`--vocab-prefix` 是三个文件共有的路径前缀，不加扩展名。当前所需文件为：
 
-## 全量实验与结果页面
+```text
+E:\GraphBpe+SAFE\SAFE-main\safe\data\tokenizer\vocab3000ring300\pretrain-token.node
+E:\GraphBpe+SAFE\SAFE-main\safe\data\tokenizer\vocab3000ring300\pretrain-token.edge
+E:\GraphBpe+SAFE\SAFE-main\safe\data\tokenizer\vocab3000ring300\pretrain-token.ring
+```
 
-全量 ChEMBL 实验的资源评估、可复现命令和分析口径见 [RESEARCH.md](RESEARCH.md)。
-资源测试的抽样模型不等同于全量训练结果。磁盘版在同一批 5,000 条 ChEMBL 数据上训练至 3,000 个 NPE 单元后，
-与原内存版的完整模型指纹相同。
+当前 `batch_chembl.py` 默认指向项目根目录下的 `data\tokenizer`，而实际词表位于 `safe\data\tokenizer`，因此应保留命令中的显式 `--vocab-prefix`。
 
-全量结果摘要、关键图表和下载入口见本 README 顶部的“ChEMBL 37 全量分析结果”。
-完整网页的静态源文件为 [`docs/index.html`](docs/index.html)。
+输出目录会自动创建：
+
+```text
+E:\GraphBpe+SAFE\SAFE-main\safe\data\output
+```
+
+## 5. 批处理参数说明
+
+| 参数 | 适用脚本 | 默认值 / 是否必填 | 含义 |
+| --- | --- | --- | --- |
+| `--input` | 两者 | 必填 | 带表头的 CSV/TSV 数据文件路径。至少包含 `chembl_id`、`canonical_smiles`。 |
+| `--output-dir` | 两者 | 必填 | 结果保存目录；不存在时自动创建。 |
+| `--vocab-prefix` | 仅 GraphBPE | 默认指向项目根目录的 `data\tokenizer\vocab3000ring300\pretrain-token` | GraphBPE 词表公共前缀；代码在后面追加 `.node`、`.edge`、`.ring`。本文命令显式指定实际路径。 |
+| `--workers` | 两者 | `1` | 转换工作进程数，必须大于等于 1。`1` 表示串行处理；例如 `4` 使用 4 个工作进程。各工作进程持有自己的转换器，多进程会增加内存占用。 |
+| `--batch-size` | 两者 | `256` | 主进程每次读取并提交处理的输入记录数，必须大于等于 1。它是数据处理批量大小，不是模型训练 batch size。 |
+| `--limit` | 两者 | `0` | 最多读取多少条数据记录，不含表头。`1000` 为前 1000 条；`0` 为处理全部。失败记录也占用这个限额。 |
+| `--delimiter` | 两者 | `auto` | `auto` 根据表头判断：含制表符则按 TSV，否则按逗号分隔。`tab` 强制 TSV，`comma` 强制 CSV。 |
+| `--allow-stereo-coarsening` | 两者 | 默认关闭 | 无需填写值的开关。允许 SAFE 的立体保护调整原切分边界；仍要求最终分子重建及分区检查通过。 |
+| `-h` / `--help` | 两者 | 可选 | 打印参数列表并退出，不执行切分。 |
+
+命令中的 `-B` 是 Python 参数，用于禁止写入 `.pyc` 字节码缓存，与切分结果无关。
+
+### 立体保护开关如何选择
+
+本文两条命令均加入 `--allow-stereo-coarsening`，与当前已生成结果的设置一致。
+
+- 不加该参数：要求算法提出的切分边与 SAFE 实际使用的切分边完全一致。若 SAFE 因立体保护改变切分边，该记录写入 `failed.jsonl`。
+- 加上该参数：允许这种边界变化，可能使最终 SAFE 片段比原切分更粗；仍检查重建后的分子是否保持立体、荷电和同位素信息。该参数不等于忽略立体化学，也不保证每条记录都成功。
+- 比较两种方法时，两条命令应采用相同的开关设置。若研究严格保留算法边界的结果，应从两条命令中同时删除该参数。
+
+### 如何处理全量数据
+
+将两条命令中的 `--limit 1000` 都改成 `--limit 0` 即可。需要并行时，可把 `--workers 1` 改成适合机器资源的进程数，例如 `--workers 4`。
+
+同一个输出目录会被重复使用，`safe.txt`、`records.jsonl`、`failed.jsonl` 会在运行时重新写入，`summary.json` 在正常完成后重新写入。保留试验结果时，请给新运行设置不同的 `--output-dir`；中断运行后不要将目录中旧的 `summary.json` 当成本次完成标志。
+
+## 6. 切分结果保存在哪里
+
+按本文命令运行后，两组结果分别保存在：
+
+```text
+E:\GraphBpe+SAFE\SAFE-main\safe\data\output\
+    safe.txt
+    records.jsonl
+    failed.jsonl
+    summary.json
+
+E:\GraphBpe+SAFE\SAFE-main\safe\data\output_brics\
+    safe.txt
+    records.jsonl
+    failed.jsonl
+    summary.json
+```
+
+| 文件 | 内容及用途 |
+| --- | --- |
+| `safe.txt` | 每行一条成功生成的 SAFE 字符串，可作为语料，也供后续 token 长度比较使用。失败记录不会写入。 |
+| `records.jsonl` | 每行一个成功记录的 JSON 对象，包含原始记录编号、ChEMBL ID、原始 SMILES、SAFE 编码、切分边、片段分组及检查结果。 |
+| `failed.jsonl` | 每行一个失败记录，包含原始标识、`error_type` 和 `error`。没有失败时文件可为空。 |
+| `summary.json` | 整次运行的统计，包括处理/成功/失败数量、边界完全一致数量、错误类型、耗时、输入路径和版本。GraphBPE 还保存词表哈希。某些零计数字段可能不出现。 |
+
+`safe.txt` 第 n 行对应同一目录 `records.jsonl` 第 n 条成功记录；如果存在失败，它不一定对应原始输入的第 n 条记录。追溯输入时使用 `record_index`（从 1 开始，不含表头）和 `chembl_id`。
+
+成功记录中的主要切分字段：
+
+| 字段 | 含义 |
+| --- | --- |
+| `safe` | 最终 SAFE 编码字符串。 |
+| `requested_cuts` / `used_cuts` | 原算法提出的切分边 / SAFE 实际接受的切分边。 |
+| `safe_groups` / `num_safe_fragments` | 实际 SAFE 片段的原子分组 / 片段数量。 |
+| `bpe_groups` / `num_bpe_fragments` | GraphBPE 原始子图分组 / 子图数量，仅 GraphBPE 输出。 |
+| `bpe_node_ids` | GraphBPE 子图的词表 ID，仅 GraphBPE 输出；不等于 SAFE 文本 tokenizer 的 ID 序列。 |
+| `brics_groups` / `num_brics_fragments` | 原始 BRICS 切分分组 / 片段数量，仅 BRICS 输出。 |
+| `bpe_boundary_exact` / `brics_boundary_exact` | 相应算法的提出切分边与实际切分边是否完全一致。 |
+| `roundtrip_ok` | 是否通过分子重建一致性检查；写入成功记录时为 `true`。 |
+
+## 7. 比较平均 token 长度
+
+两种方法的切分都结束后，直接读取生成的两份 `safe.txt`：
+
+```cmd
+python -B "E:\GraphBpe+SAFE\SAFE-main\safe\compare_safe_token_lengths.py" --project-root "E:\GraphBpe+SAFE\SAFE-main" --tokenizer "E:\GraphBpe+SAFE\SAFE-main\expts\tokenizer\tokenizer-custom.json" --graphbpe "E:\GraphBpe+SAFE\SAFE-main\safe\data\output\safe.txt" --brics "E:\GraphBpe+SAFE\SAFE-main\safe\data\output_brics\safe.txt"
+```
+
+当前比较脚本已包含自动保存逻辑：会创建 `comparison` 目录、覆盖写入下列文件，并在终端打印结果和保存位置。无需手动添加 `>`，也没有 `--output` 参数。
+
+```text
+E:\GraphBpe+SAFE\SAFE-main\safe\data\comparison\results.json
+```
+
+若修改了切分命令的输出目录，也要相应修改比较命令中的 `--graphbpe` 和 `--brics`。比较结果仍保存到 `--project-root` 下的 `safe\data\comparison\results.json`。
+
+| 比较参数 | 默认值 / 是否必填 | 含义 |
+| --- | --- | --- |
+| `--project-root` | 默认 `E:\GraphBpe+SAFE\SAFE-main` | 本地项目根目录，用于导入项目代码并确定比较结果保存位置。 |
+| `--tokenizer` | 必填 | 两份语料共同使用的已训练 tokenizer JSON 文件，也可指定包含 `tokenizer.json` 的目录。 |
+| `--graphbpe` | 必填 | GraphBPE 输出的 `safe.txt` 路径。 |
+| `--brics` | 必填 | BRICS 输出的 `safe.txt` 路径。 |
+| `--add-special-tokens` | 默认关闭 | 无需填写值的开关；添加后计入 tokenizer 配置的特殊 token，例如 `[CLS]`、`[SEP]`。 |
+| `-h` / `--help` | 可选 | 查看参数帮助并退出。 |
+
+统计逻辑：对每条非空 SAFE 文本使用同一个 tokenizer 编码，以 ID 列表长度为 token 数，最后计算 `mean_tokens = total_tokens / num_sequences`。默认不计特殊 token、不 padding、不截断，并关闭 BPE dropout。空行被计数后跳过；编码失败会报错终止，不会悄悄丢弃。
+
+GraphBPE 的 `.node/.edge/.ring` 用于分子切分，`tokenizer-custom.json` 用于 SAFE 文本的 tokenization，两类词表不能互相替代。
+
+## 8. 如何读比较结果
+
+| JSON 字段 | 含义 |
+| --- | --- |
+| `graphbpe.mean_tokens` / `brics.mean_tokens` | 两种 SAFE 表示的平均 token 长度。 |
+| `num_sequences` / `total_tokens` | 纳入统计的非空序列数量 / token 总数。 |
+| `min_tokens` / `max_tokens` | 单条序列 token 数的最小值 / 最大值。 |
+| `unk_tokens` / `sequences_with_unk` | 未知 token 总数 / 含未知 token 的序列数量。 |
+| `comparison.graphbpe_minus_brics` | GraphBPE 均值减去 BRICS 均值；负值表示 GraphBPE 更短。 |
+| `comparison.graphbpe_reduction_percent` | `(BRICS均值 - GraphBPE均值) / BRICS均值 × 100`；正值表示 GraphBPE 更短，负值表示更长。 |
+| `comparison.same_sequence_count` | 两份文件的非空序列数是否相同，不证明分子集合相同。 |
+| `comparison.same_molecule_set_verified` | 当前脚本固定写为 `false`，因为它没有读取分子标识进行匹配。 |
+| `tokenizer_sha256` | 文本 tokenizer 文件的哈希，用于标识所用词表文件。 |
+
+两种切分方法可能有不同的失败记录。正式比较应使用共同成功的同一批分子；针对同一个输入文件，可按两份 `records.jsonl` 的 `record_index` 对齐并核对分子标识，再统计对应的 `safe` 字段。当前比较脚本不会自动求交集。
+
+平均 token 长度也依赖 tokenizer 的训练语料与词表。报告结果时应说明 tokenizer 来源及特殊 token 设置，不能将某个文本 tokenizer 下的长度直接等同于 GraphBPE 子图数量。
+
+### 已有结果快照
+
+2026-10-19 读取当前 `comparison\results.json` 得到以下结果。这是已有文件的快照，不代表本文重新执行了切分；重新运行会更新结果。
+
+| 指标 | GraphBPE | BRICS |
+| --- | ---: | ---: |
+| 序列数量 | 1000 | 1000 |
+| token 总数 | 150439 | 133623 |
+| 平均 token 长度 | 150.439 | 133.623 |
+| 未知 token 数 | 0 | 0 |
+
+在这份 tokenizer 和语料下，GraphBPE 的 SAFE 文本平均多 16.816 个 token，约长 12.58%。
+
+## 9. 常见问题
+
+### CMD 报 `unrecognized arguments: ` 后跟反引号
+
+这是把 PowerShell 换行符粘贴到了 CMD。使用本文提供的单行命令即可；CMD 若要手动换行，应使用 `^`，不要使用反引号。
+
+### 找不到 GraphBPE 词表
+
+确认 `--vocab-prefix` 指向 `E:\GraphBpe+SAFE\SAFE-main\safe\data\tokenizer\vocab3000ring300\pretrain-token`，不带扩展名，并确认三个词表文件均存在。
+
+### `cannot import name 'attr_as' from 'safe.utils'`
+
+项目同时包含 `safe\utils.py` 和 `safe\utils\` 包。当前修复是在 `E:\GraphBpe+SAFE\SAFE-main\safe\utils\__init__.py` 中提供 `attr_as`。复制项目时应保留这项修复；把函数添加到 `safe\__init__.py` 无法解决该导入错误。
+
+### 切分进度结束但有失败记录
+
+查看对应输出目录的 `failed.jsonl` 和 `summary.json`。非法或空 SMILES、带原子映射或通配原子的输入、严格模式下切分边界发生变化、分区或重建检查失败等，都会导致记录失败。不能仅凭进度到达 100% 判断所有分子都成功。
+
+## 10. 本说明的核对范围
+
+本文依据当前本地脚本与数据路径编写；两个批处理脚本的 `--help` 均已成功执行，输入表头、三个 GraphBPE 词表文件、自动保存比较结果的代码及已有结果文件均已核对。本次文档编写未重新运行批量切分，也未覆盖原有切分结果。
+
+## 从 GitHub 下载完整数据（Git LFS）
+
+本仓库使用 Git LFS 保存两份 ChEMBL 原始文件，以及 GraphBPE、BRICS 各自的 `records.jsonl` 和 `safe.txt`，共 6 个文件，约 1.70 GB。其余代码、词表、摘要和比较结果使用普通 Git 保存。
+
+安装 Git LFS 后，在 CMD / Anaconda Prompt 中执行：
+
+```cmd
+git lfs install
+git clone https://github.com/zeyuanyu195-design/molecular-tokenizer.git
+cd molecular-tokenizer
+git lfs pull
+git lfs ls-files
+```
+
+如果已经克隆仓库，在仓库目录中运行 `git lfs pull` 即可补齐数据。建议使用 Git + Git LFS 获取项目；网页上的文件预览或 ZIP 下载是否包含完整 LFS 对象取决于仓库设置。
+
+LFS 下载后的文件仍在 `safe/data/` 原目录中，批处理命令无需改变文件格式。本文前面的绝对路径针对原始本机目录；如果克隆到了其他位置，请将命令中的项目根目录替换为实际克隆位置。原始数据和切分结果可在本地继续使用，勿把只有几行内容的 LFS 指针文件当成完整数据。
+
+重复上传修改后的大文件会增加 LFS 存储用量；下载完整数据会消耗仓库所有者的 LFS 下载额度。GitHub 的用量和计费说明见 https://docs.github.com/en/billing/concepts/product-billing/git-lfs 。

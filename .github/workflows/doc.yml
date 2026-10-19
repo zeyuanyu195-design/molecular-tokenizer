@@ -1,0 +1,73 @@
+name: documentation
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: documentation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up uv and Python
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.8"
+          python-version: "3.14"
+          activate-environment: true
+          enable-cache: true
+
+      - name: Install documentation dependencies
+        run: uv pip install --editable ".[docs,model]"
+
+      - name: Build documentation
+        run: mkdocs build --strict
+
+  deploy:
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    needs: build
+    concurrency:
+      group: documentation-deploy
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up uv and Python
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.8"
+          python-version: "3.14"
+          activate-environment: true
+          enable-cache: true
+
+      - name: Install documentation dependencies
+        run: uv pip install --editable ".[docs,model]"
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy development documentation
+        if: github.event_name == 'push'
+        run: mike deploy --push main

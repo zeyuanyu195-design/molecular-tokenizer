@@ -1,0 +1,97 @@
+site_name: "SAFE"
+site_description: "Gotta be SAFE: a new framework for molecular design"
+site_url: "https://safe-docs.datamol.io/"
+repo_url: "https://github.com/datamol-io/safe"
+repo_name: "datamol-io/safe"
+copyright: Copyright 2026 Valence Labs
+
+remote_branch: "gh-pages"
+docs_dir: "docs"
+use_directory_urls: false
+strict: true
+
+nav:
+  - Overview: index.md
+  - Migrating to 1.0: migration.md
+  - Releasing: releasing.md
+  - Tutorials:
+      - Getting Started: tutorials/getting-started.ipynb
+      - Molecular design: tutorials/design-with-safe.ipynb
+      - How it works: tutorials/how-it-works.ipynb
+      - Extracting representation (molfeat): tutorials/extracting-representation-molfeat.ipynb
+      - Loading from Weights & Biases: tutorials/load-from-wandb.ipynb
+  - API:
+      - SAFE: api/safe.md
+      - Visualization: api/safe.viz.md
+      - Model training: api/safe.models.md
+  - CLI: cli.md
+  - License: license.md
+  - Data License: data_license.md
+
+theme:
+  name: material
+  features:
+    - navigation.expand
+
+extra_javascript:
+  - assets/js/google-analytics.js
+
+markdown_extensions:
+  - admonition
+  - markdown_include.include
+  - pymdownx.emoji
+  - pymdownx.highlight
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist
+  - pymdownx.details
+  # For `tab_length=2` in the markdown extension
+  # See https://github.com/mkdocs/mkdocs/issues/545
+  - mdx_truly_sane_lists
+  - toc:
+      permalink: true
+
+watch:
+  - safe/
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_options:
+              ignore_init_summary: false
+            docstring_section_style: list
+            heading_level: 2
+            merge_init_into_class: true
+            show_if_no_docstring: true
+            show_root_full_path: false
+            show_root_heading: false
+            show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+
+  - mkdocs-jupyter:
+      execute: False
+      remove_tag_config:
+        remove_cell_tags: [remove_cell]
+        remove_all_outputs_tags: [remove_output]
+        remove_input_tags: [remove_input]
+
+  - mike:
+      version_selector: true
+
+extra:
+  version:
+    provider: mike
+
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/datamol-io
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/datamol_io
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/safe-mol/

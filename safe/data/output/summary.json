@@ -1,0 +1,28 @@
+{
+  "status": "complete",
+  "counts": {
+    "processed": 50000,
+    "success": 49992,
+    "boundary_exact": 44329,
+    "failed": 8
+  },
+  "errors": {
+    "ValueError": 8
+  },
+  "delimiter": "tab",
+  "limit": 50000,
+  "elapsed_seconds": 72.808,
+  "input": "E:\\GraphBpe+SAFE\\SAFE-main\\safe\\data\\chembl_37_chemreps.txt",
+  "input_size_bytes": 773781908,
+  "allow_stereo_coarsening": true,
+  "versions": {
+    "safe-mol": "0.2.0",
+    "rdkit": "2025.9.1",
+    "datamol": "0.13.0"
+  },
+  "vocab_sha256": {
+    ".node": "ccfe3f8cc71aeb334a6cb02da638352ec2ed36a0482a46806d19d687d1adfe19",
+    ".edge": "d6973045cd7f5f1eb2b5e4699a68af6e39bc3e30f3e0835baee4d1b4c5b1d4be",
+    ".ring": "3b8019983227681680fe79a3b2ec8aa95f085e51e43706c4207bac536aa80a4c"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "tokenizer": "E:\\GraphBpe+SAFE\\SAFE-main\\expts\\tokenizer\\tokenizer-custom.json",
+  "tokenizer_sha256": "64654d0cbfde431fd8fe3c7cd728536437714e3db06cb1ed4a378a68190d37a9",
+  "add_special_tokens": false,
+  "padding": false,
+  "truncation": false,
+  "graphbpe": {
+    "file": "E:\\GraphBpe+SAFE\\SAFE-main\\safe\\data\\output\\safe.txt",
+    "num_sequences": 49992,
+    "blank_lines_skipped": 0,
+    "total_tokens": 3435594,
+    "mean_tokens": 68.72287566010561,
+    "min_tokens": 1,
+    "max_tokens": 2779,
+    "unk_tokens": 0,
+    "sequences_with_unk": 0
+  },
+  "brics": {
+    "file": "E:\\GraphBpe+SAFE\\SAFE-main\\safe\\data\\output_brics\\safe.txt",
+    "num_sequences": 49997,
+    "blank_lines_skipped": 0,
+    "total_tokens": 3024042,
+    "mean_tokens": 60.48446906814409,
+    "min_tokens": 1,
+    "max_tokens": 1487,
+    "unk_tokens": 0,
+    "sequences_with_unk": 0
+  },
+  "comparison": {
+    "graphbpe_minus_brics": 8.238406591961528,
+    "graphbpe_reduction_percent": -13.620697542504386,
+    "same_sequence_count": false,
+    "same_molecule_set_verified": false
+  }
+}

@@ -1,3 +1,6 @@
-* text=auto eol=lf
-*.ps1 text eol=crlf
-tests/fixtures/demodiff/pretrain-token.* -text whitespace=cr-at-eol
+safe/data/chembl_37_chemreps.csv filter=lfs diff=lfs merge=lfs -text
+safe/data/chembl_37_chemreps.txt filter=lfs diff=lfs merge=lfs -text
+safe/data/output/records.jsonl filter=lfs diff=lfs merge=lfs -text
+safe/data/output/safe.txt filter=lfs diff=lfs merge=lfs -text
+safe/data/output_brics/records.jsonl filter=lfs diff=lfs merge=lfs -text
+safe/data/output_brics/safe.txt filter=lfs diff=lfs merge=lfs -text

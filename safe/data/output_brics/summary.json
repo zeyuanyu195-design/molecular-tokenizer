@@ -1,0 +1,24 @@
+{
+  "slicer": "brics",
+  "status": "complete",
+  "counts": {
+    "processed": 50000,
+    "success": 49997,
+    "boundary_exact": 46005,
+    "failed": 3
+  },
+  "errors": {
+    "ValueError": 3
+  },
+  "delimiter": "tab",
+  "limit": 50000,
+  "elapsed_seconds": 15.533,
+  "input": "E:\\GraphBpe+SAFE\\SAFE-main\\safe\\data\\chembl_37_chemreps.txt",
+  "input_size_bytes": 773781908,
+  "allow_stereo_coarsening": true,
+  "versions": {
+    "safe-mol": "0.2.0",
+    "rdkit": "2025.9.1",
+    "datamol": "0.13.0"
+  }
+}
