@@ -254,11 +254,6 @@ GraphBPE 的 `.node/.edge/.ring` 用于分子切分，`tokenizer-custom.json` �
 
 减少比例 =（BRICS token 数 − GraphBPE token 数）/ BRICS token 数 × 100%。
 
-### Token 减少比例最高的前 10 个分子
-
-在 GraphBPE 和 BRICS 均成功编码的 49,991 条分子记录中，按 token 减少比例降序排列，包含稀有环分子。
-
-减少比例 =（BRICS token 数 − GraphBPE token 数）/ BRICS token 数 × 100%。
 
 | 排名 | 分子 ID | 原始 SMILES | GraphBPE SAFE | BRICS SAFE | GraphBPE token 数 | BRICS token 数 | token 减少量 | 减少比例 |
 | ---: | --- | --- | --- | --- | ---: | ---: | ---: | ---: |
