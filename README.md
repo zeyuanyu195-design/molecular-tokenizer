@@ -309,7 +309,7 @@ GraphBPE 和 BRICS 分别有 8 条和 3 条编码失败记录，其 SAFE 长度�
 
 ### 全部分子的 token 长度分布
 
-![全部分子的 token 长度分布](images/all_molecules_token_distribution.png)
+![全部分子的 token 长度分布](images/nonrare_molecules_token_distribution.png)
 
 GraphBPE+SAFE 和 BRICS+SAFE 的中位数分别为 56 和 52 token，95% 分位数分别为 135 和 109 token。图中展示 0–250 token 的主要分布区间，纵轴为分子记录数。
 
@@ -321,7 +321,7 @@ GraphBPE+SAFE 和 BRICS+SAFE 的中位数分别为 56 和 52 token，95% 分位�
 
 ### 排除稀有环分子后的 token 长度分布
 
-![排除稀有环分子后的 token 长度分布](images/nonrare_molecules_token_distribution.png)
+![排除稀有环分子后的 token 长度分布](images/all_molecules_token_distribution.png)
 
 GraphBPE+SAFE 和 BRICS+SAFE 的中位数分别为 49 和 52 token，95% 分位数分别为 91 和 102 token。图中展示 0–200 token 的主要分布区间，纵轴为分子记录数。
 
