@@ -307,6 +307,26 @@ GraphBPE 和 BRICS 分别有 8 条和 3 条编码失败记录，其 SAFE 长度�
 
 完整的top100分子数据存放于"SAFE-main\safe\data\comparison\top100_token_savings.json"
 
+### 全部分子的 token 长度分布
+
+![全部分子的 token 长度分布](images/all_molecules_token_distribution.png)
+
+GraphBPE+SAFE 和 BRICS+SAFE 的中位数分别为 56 和 52 token，95% 分位数分别为 135 和 109 token。图中展示 0–250 token 的主要分布区间，纵轴为分子记录数。
+
+### GraphBPE+SAFE：含稀有环与不含稀有环分子的比较
+
+![含稀有环与不含稀有环分子的 token 长度分布](images/graphbpe_rare_vs_nonrare_distribution.png)
+
+不含稀有环组和含稀有环组的中位数分别为 49 和 93 token，95% 分位数分别为 91 和 195 token。由于两组样本量不同，纵轴按各组样本总数归一化为百分比。
+
+### 排除稀有环分子后的 token 长度分布
+
+![排除稀有环分子后的 token 长度分布](images/nonrare_molecules_token_distribution.png)
+
+GraphBPE+SAFE 和 BRICS+SAFE 的中位数分别为 49 和 52 token，95% 分位数分别为 91 和 102 token。图中展示 0–200 token 的主要分布区间，纵轴为分子记录数。
+
+三张图的分箱宽度均为 5 token。稀有环按当前代码对环表进行字符串精确匹配定义，不含稀有环组也包含无环分子。图中仅放大展示主要区间，统计时未截断长序列。
+
 ## 9. 常见问题
 
 ### CMD 报 `unrecognized arguments: ` 后跟反引号
