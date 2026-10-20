@@ -267,7 +267,7 @@ GraphBPE 的 `.node/.edge/.ring` 用于分子切分，`tokenizer-custom.json` �
 | 9 | CHEMBL14013 | 23 | 14 | 9 | 39.13% |
 | 10 | CHEMBL540483 | 180 | 110 | 70 | 38.89% |
 
-在这份 tokenizer 和语料下，GraphBPE 的 SAFE 文本平均多 16.816 个 token，约长 12.58%。
+完整的top100分子数据存放于"SAFE-main\safe\data\comparison\top100_token_savings.json"
 
 ## 9. 常见问题
 
