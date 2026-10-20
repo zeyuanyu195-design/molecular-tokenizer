@@ -1,20 +1,22 @@
 import re
 from rdkit import Chem
-from typing import Union
 from rdkit import RDLogger
-RDLogger.DisableLog('rdApp.*')
+from rdkit.Chem.rdchem import BondType
+
+RDLogger.DisableLog("rdApp.*")
 
 ptable = Chem.GetPeriodicTable()
-ELEMENTS = [ptable.GetElementSymbol(i) for i in range(0, 119)] # 0 -> * for polymerization point
+ELEMENTS = [ptable.GetElementSymbol(i) for i in range(0, 119)]  # 0 -> * for polymerization point
 ATOM_VALENCY = {Z: Chem.GetPeriodicTable().GetDefaultValence(Z) for Z in range(1, 119)}
 
-from rdkit.Chem.rdchem import BondType
+
 bond_type_map = {
     # None: 0,
     BondType.SINGLE: 0,
     BondType.DOUBLE: 1,
     BondType.TRIPLE: 2,
 }
+
 
 def smiles_to_molecule(smiles, kekulize=False, sanitize=True):
     mol = Chem.MolFromSmiles(smiles, sanitize=sanitize)
@@ -24,17 +26,19 @@ def smiles_to_molecule(smiles, kekulize=False, sanitize=True):
             mol = Chem.RWMol()
             mol.AddAtom(atom)
             mol = mol.GetMol()
-        except:
+        except Exception:
             raise ValueError(f"Invalid SMILES string: {smiles}")
     if kekulize:
         Chem.Kekulize(mol, True)
     return mol
+
 
 def molecule_to_smiles(mol, canonical=True, kekulize=False):
     if mol.GetNumAtoms() == 1:
         atom = mol.GetAtomWithIdx(0)
         return atom.GetSymbol()
     return Chem.MolToSmiles(mol, canonical=canonical, kekuleSmiles=kekulize)
+
 
 def canonicalize(mol_input, kekulize=False, remove_isolated_h=True):
     input_is_smiles = isinstance(mol_input, str)
@@ -47,7 +51,7 @@ def canonicalize(mol_input, kekulize=False, remove_isolated_h=True):
         if not isinstance(mol_input, Chem.rdchem.Mol):
             raise ValueError("Input must be either a SMILES string or RDKit molecule")
         mol = mol_input
-    
+
     canonical_smiles = molecule_to_smiles(mol)
     if input_is_smiles:
         if kekulize and mol.GetNumAtoms() > 1:
@@ -57,6 +61,7 @@ def canonicalize(mol_input, kekulize=False, remove_isolated_h=True):
     else:
         canonical_mol = smiles_to_molecule(canonical_smiles, kekulize=kekulize)
         return canonical_mol
+
 
 def get_indexed_smiles(mol_input, kekulize=False):
     if isinstance(mol_input, str):
@@ -71,7 +76,7 @@ def get_indexed_smiles(mol_input, kekulize=False):
     # Add atom indices as mapping numbers
     for i, atom in enumerate(mol.GetAtoms()):
         atom.SetProp("molAtomMapNumber", str(i))
-    
+
     if mol.GetNumAtoms() == 1:
         atom = mol.GetAtomWithIdx(0)
         symbol = atom.GetSymbol()
@@ -79,6 +84,7 @@ def get_indexed_smiles(mol_input, kekulize=False):
     else:
         indexed_smiles = Chem.MolToSmiles(mol, canonical=True, kekuleSmiles=kekulize)
         return indexed_smiles
+
 
 def get_sub_molecule(mol, atom_indices, kekulize=False):
     if len(atom_indices) == 1:
@@ -95,6 +101,7 @@ def get_sub_molecule(mol, atom_indices, kekulize=False):
     mol = Chem.PathToSubmol(mol, edge_indices)
     return mol
 
+
 def count_atom(smiles, return_dict=False):
     # Initialize dictionary to count atoms in ELEMENTS
     atom_dict = {atom: 0 for atom in ELEMENTS}
@@ -103,7 +110,7 @@ def count_atom(smiles, return_dict=False):
         # Get the current character (potential atom symbol)
         symbol = smiles[i].upper()
         next_char = smiles[i + 1] if i + 1 < len(smiles) else None
-        
+
         if next_char:
             combined = symbol + next_char
             # Check if either combination exists in atom_dict
@@ -129,7 +136,6 @@ def count_atom(smiles, return_dict=False):
         return sum(atom_dict.values())
 
 
-
 def check_valency(mol):
     """
     Check if any atom in the molecule violates expected valency.
@@ -143,10 +149,11 @@ def check_valency(mol):
     except ValueError as e:
         e = str(e)
         # print('e', e)
-        p = e.find('#')
+        p = e.find("#")
         e_sub = e[p:]
-        atomid_valence = list(map(int, re.findall(r'\d+', e_sub)))
+        atomid_valence = list(map(int, re.findall(r"\d+", e_sub)))
         return False, atomid_valence
+
 
 def correct_charge(mol_edit):
     """
@@ -154,7 +161,7 @@ def correct_charge(mol_edit):
     Returns:
     - Corrected RDKit molecule object.
     """
-    is_valid, atomid_valence = check_valency(mol_edit)    
+    is_valid, atomid_valence = check_valency(mol_edit)
     if is_valid:
         return mol_edit  # No correction needed
 
@@ -169,9 +176,9 @@ def correct_charge(mol_edit):
             expected_valency = ATOM_VALENCY[atomic_num]
             valency_diff = valency - expected_valency
 
-            if valency_diff == 1 and atomic_num in [6, 7, 8, 16]: # C, N, O, S
+            if valency_diff == 1 and atomic_num in [6, 7, 8, 16]:  # C, N, O, S
                 atom.SetFormalCharge(1)
-            elif valency_diff == 1 and atomic_num == 5: # B
+            elif valency_diff == 1 and atomic_num == 5:  # B
                 atom.SetFormalCharge(-1)
             else:
                 # print(f'Unsupported valency correction: Atom {atom.GetSymbol()} (atomic number {atomic_num}) has valency {valency}, expected {expected_valency}')
@@ -183,5 +190,5 @@ def correct_charge(mol_edit):
         idx += 1
         if idx > 10:
             break
-    
+
     return mol_edit

@@ -25,6 +25,7 @@ _LAZY_IMPORTS = {
     "upload_to_wandb": (".io", "upload_to_wandb", "safe-mol[model]"),
 }
 
+
 @contextmanager
 def attr_as(obj, field, value):
     """临时替换对象属性，退出上下文时恢复原值。"""
@@ -34,6 +35,8 @@ def attr_as(obj, field, value):
         yield
     finally:
         setattr(obj, field, old_value)
+
+
 def __getattr__(name):
     if name == "trainer":
         try:

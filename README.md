@@ -240,7 +240,7 @@ GraphBPE 的 `.node/.edge/.ring` 用于分子切分，`tokenizer-custom.json` �
 
 ### `cannot import name 'attr_as' from 'safe.utils'`
 
-项目同时包含 `safe\utils.py` 和 `safe\utils\` 包。当前修复是在 `E:\GraphBpe+SAFE\SAFE-main\safe\utils\__init__.py` 中提供 `attr_as`。复制项目时应保留这项修复；把函数添加到 `safe\__init__.py` 无法解决该导入错误。
+工具函数现已统一到 `safe\utils\__init__.py`，避免同名的 `safe\utils.py` 被 `safe\utils\` 包遮蔽。`attr_as`、`MolSlicer` 等原有 API 均通过 `safe.utils` 访问，GraphBPE 的 `safe.utils.token` 子模块也保留在同一包中。复制项目时请保留完整的 `safe\utils\` 文件夹。
 
 ### 切分进度结束但有失败记录
 
