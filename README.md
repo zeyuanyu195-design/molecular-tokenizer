@@ -226,6 +226,25 @@ GraphBPE 的 `.node/.edge/.ring` 用于分子切分，`tokenizer-custom.json` �
 | 平均 token 长度 | 150.439 | 133.623 |
 | 未知 token 数 | 0 | 0 |
 
+### Token 减少比例最高的前 10 个分子
+
+在 GraphBPE 和 BRICS 均成功编码的 49,991 条分子记录中，按 token 减少比例降序排列，包含稀有环分子。
+
+减少比例 =（BRICS token 数 − GraphBPE token 数）/ BRICS token 数 × 100%。
+
+| 排名 | 分子 ID | BRICS token 数 | GraphBPE token 数 | token 减少量 | 减少比例 |
+| ---: | --- | ---: | ---: | ---: | ---: |
+| 1 | CHEMBL16264 | 11 | 5 | 6 | 54.55% |
+| 2 | CHEMBL503858 | 238 | 109 | 129 | 54.20% |
+| 3 | CHEMBL1077246 | 571 | 286 | 285 | 49.91% |
+| 4 | CHEMBL54723 | 20 | 11 | 9 | 45.00% |
+| 5 | CHEMBL609 | 22 | 13 | 9 | 40.91% |
+| 6 | CHEMBL47248 | 22 | 13 | 9 | 40.91% |
+| 7 | CHEMBL18610 | 52 | 31 | 21 | 40.38% |
+| 8 | CHEMBL14152 | 15 | 9 | 6 | 40.00% |
+| 9 | CHEMBL14013 | 23 | 14 | 9 | 39.13% |
+| 10 | CHEMBL540483 | 180 | 110 | 70 | 38.89% |
+
 在这份 tokenizer 和语料下，GraphBPE 的 SAFE 文本平均多 16.816 个 token，约长 12.58%。
 
 ## 9. 常见问题
