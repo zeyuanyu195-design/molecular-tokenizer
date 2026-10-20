@@ -14,9 +14,7 @@ def load_tokenizer(project_root, tokenizer_path):
         tokenizer_path = tokenizer_path / "tokenizer.json"
 
     if not (project_root / "safe" / "tokenizer.py").is_file():
-        raise FileNotFoundError(
-            f"找不到项目中的 safe/tokenizer.py：{project_root}"
-        )
+        raise FileNotFoundError(f"找不到项目中的 safe/tokenizer.py：{project_root}")
     if not tokenizer_path.is_file():
         raise FileNotFoundError(f"找不到 tokenizer：{tokenizer_path}")
 
@@ -75,24 +73,16 @@ def analyze_safe_file(file_path, tokenizer, add_special_tokens=False):
                 )
             except Exception as exc:
                 # 不悄悄丢弃失败行，以免统计样本发生变化。
-                raise RuntimeError(
-                    f"{file_path} 第 {line_number} 行 tokenization 失败"
-                ) from exc
+                raise RuntimeError(f"{file_path} 第 {line_number} 行 tokenization 失败") from exc
 
             length = len(token_ids)
             if length == 0:
-                raise ValueError(
-                    f"{file_path} 第 {line_number} 行非空，但 token 数为 0"
-                )
+                raise ValueError(f"{file_path} 第 {line_number} 行非空，但 token 数为 0")
 
             count += 1
             total_tokens += length
-            min_tokens = (
-                length if min_tokens is None else min(min_tokens, length)
-            )
-            max_tokens = (
-                length if max_tokens is None else max(max_tokens, length)
-            )
+            min_tokens = length if min_tokens is None else min(min_tokens, length)
+            max_tokens = length if max_tokens is None else max(max_tokens, length)
 
             if unk_id is not None:
                 unk_count = token_ids.count(unk_id)
@@ -116,9 +106,7 @@ def analyze_safe_file(file_path, tokenizer, add_special_tokens=False):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="比较 GraphBPE 与 BRICS 的 SAFE 平均 token 长度"
-    )
+    parser = argparse.ArgumentParser(description="比较 GraphBPE 与 BRICS 的 SAFE 平均 token 长度")
     parser.add_argument(
         "--project-root",
         type=Path,
@@ -132,11 +120,15 @@ def main():
         help="已训练的 tokenizer JSON 文件，或包含 tokenizer.json 的目录",
     )
     parser.add_argument(
-        "--graphbpe", type=Path, required=True,
+        "--graphbpe",
+        type=Path,
+        required=True,
         help="GraphBPE 生成的 safe.txt",
     )
     parser.add_argument(
-        "--brics", type=Path, required=True,
+        "--brics",
+        type=Path,
+        required=True,
         help="BRICS 生成的 safe.txt",
     )
     parser.add_argument(
@@ -146,25 +138,17 @@ def main():
     )
     args = parser.parse_args()
 
-    tokenizer, tokenizer_path = load_tokenizer(
-        args.project_root, args.tokenizer
-    )
+    tokenizer, tokenizer_path = load_tokenizer(args.project_root, args.tokenizer)
 
-    graphbpe = analyze_safe_file(
-        args.graphbpe, tokenizer, args.add_special_tokens
-    )
-    brics = analyze_safe_file(
-        args.brics, tokenizer, args.add_special_tokens
-    )
+    graphbpe = analyze_safe_file(args.graphbpe, tokenizer, args.add_special_tokens)
+    brics = analyze_safe_file(args.brics, tokenizer, args.add_special_tokens)
 
     graphbpe_mean = graphbpe["mean_tokens"]
     brics_mean = brics["mean_tokens"]
 
     report = {
         "tokenizer": str(tokenizer_path),
-        "tokenizer_sha256": hashlib.sha256(
-            tokenizer_path.read_bytes()
-        ).hexdigest(),
+        "tokenizer_sha256": hashlib.sha256(tokenizer_path.read_bytes()).hexdigest(),
         "add_special_tokens": args.add_special_tokens,
         "padding": False,
         "truncation": False,
@@ -173,16 +157,10 @@ def main():
         "comparison": {
             # 负数表示 GraphBPE 平均序列更短。
             "graphbpe_minus_brics": graphbpe_mean - brics_mean,
-
             # 正数表示 GraphBPE 相对 BRICS 的平均长度缩短比例。
-            "graphbpe_reduction_percent": (
-                (brics_mean - graphbpe_mean) / brics_mean * 100
-            ),
-
+            "graphbpe_reduction_percent": ((brics_mean - graphbpe_mean) / brics_mean * 100),
             # 数量相同也不能证明两份文件包含相同的分子。
-            "same_sequence_count": (
-                graphbpe["num_sequences"] == brics["num_sequences"]
-            ),
+            "same_sequence_count": (graphbpe["num_sequences"] == brics["num_sequences"]),
             "same_molecule_set_verified": False,
         },
     }
@@ -199,6 +177,7 @@ def main():
     # 同时在终端显示结果和保存位置
     print(result_json)
     print(f"\n结果已保存到：{output_file}")
+
 
 if __name__ == "__main__":
     main()

@@ -11,7 +11,7 @@ import numpy as np
 from rdkit import Chem
 from rdkit.Chem import BRICS
 
-from _exception import SAFEDecodeError, SAFEEncodeError, SAFEFragmentationError
+from ._exception import SAFEDecodeError, SAFEEncodeError, SAFEFragmentationError
 
 
 class SAFEConverter:
@@ -58,7 +58,9 @@ class SAFEConverter:
 
     def __init__(
         self,
-        slicer: Optional[Union[str, List[str], Callable[[dm.Mol], Iterable[tuple[int, int]]]]] = "brics",
+        slicer: Optional[
+            Union[str, List[str], Callable[[dm.Mol], Iterable[tuple[int, int]]]]
+        ] = "brics",
         require_hs: Optional[bool] = None,
         use_original_opener_for_attach: bool = True,
         ignore_stereo: bool = False,
@@ -79,12 +81,13 @@ class SAFEConverter:
                 stereochemistry-changing cuts are skipped and the encoded graph is verified.
 
         """
-                # Local extension: use DemoDiff NPE to choose atom-pair cut boundaries.
+        # Local extension: use DemoDiff NPE to choose atom-pair cut boundaries.
         # The adapter receives SAFE's actual working molecule, not stale indices.
         if isinstance(slicer, str) and slicer.lower() == "bpe":
             if require_hs:
                 raise ValueError("BPE slicer does not support require_hs=True")
-            from graphbpe_slicer import BPESlicer
+            from .graphbpe_slicer import BPESlicer
+
             # Turn the string option into a reusable callable object once.
             # Later _fragment() will call it through the existing callable path.
             slicer = BPESlicer(bpe_vocab_path)
@@ -608,7 +611,7 @@ def encode(
     constraints: Optional[List[dm.Mol]] = None,
     ignore_stereo: Optional[bool] = False,
     allow_empty: bool = False,
-    bpe_vocab_path: str | Path |None = None,
+    bpe_vocab_path: str | Path | None = None,
 ):
     """
     Convert input smiles to SAFE representation
@@ -631,7 +634,12 @@ def encode(
     if slicer is None:
         slicer = "brics"
     with dm.without_rdkit_log():
-        safe_obj = SAFEConverter(slicer=slicer, require_hs=require_hs, ignore_stereo=ignore_stereo, bpe_vocab_path=bpe_vocab_path)
+        safe_obj = SAFEConverter(
+            slicer=slicer,
+            require_hs=require_hs,
+            ignore_stereo=ignore_stereo,
+            bpe_vocab_path=bpe_vocab_path,
+        )
         try:
             encoded = safe_obj.encoder(
                 inp,
