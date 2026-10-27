@@ -1,3 +1,53 @@
+## Proposed Algorithm: Frequency-Based Tokenization of GraphBPE+SAFE
+
+以下为拟议方案的核心伪代码：基于片段频率学习额外词表，不跨越原有 SAFE 片段边界合并，并保留全部连接信息。
+
+```text
+Algorithm: Frequency-Based Tokenization of GraphBPE+SAFE
+
+Input:
+    Training SAFE strings, target vocabulary size K
+
+Output:
+    Token vocabulary V and ordered merge rules M
+
+
+TRAIN(SAFE_strings, K):
+    fragments, frequencies ← split SAFE strings by "." and count occurrences
+    sequences ← represent each fragment as basic symbols
+    V ← basic-symbol vocabulary, including "."
+    M ← empty list
+
+    while size(V) < K:
+        pair ← most frequent adjacent symbol pair,
+                weighted by fragment frequencies
+
+        if no eligible pair exists:
+            break
+
+        merge pair within fragments only
+        add the merged token to V
+        append the merge rule to M
+
+    assign token IDs and save V, M
+
+
+ENCODE(SAFE_string, V, M):
+    split SAFE_string by "."
+    apply learned merge rules M within each fragment
+    retain "." between fragments
+    map the resulting tokens to IDs
+
+    return token IDs
+
+
+DECODE(token_IDs, V):
+    recover token contents and concatenate them
+    return the original SAFE string
+```
+
+---
+
 # GraphBPE 与 BRICS：ChEMBL 批量切分及 token 长度比较
 
 本说明针对 `E:\GraphBpe+SAFE\SAFE-main` 当前项目，使用已有的 Conda 环境 `graphbpe-safe`。运行顺序为：准备环境 → BRICS 切分 → GraphBPE 切分 → 比较 SAFE 文本的平均 token 长度。
