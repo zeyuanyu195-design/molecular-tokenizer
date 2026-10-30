@@ -297,7 +297,7 @@ DemoDiff node IDs: `[2973, 2972, 2973, 2972, 2973, 2973, 2973, 2940, 2233, 2341,
 
 ## Interpretation and implementation status
 
-GraphBPE segmentation, SAFE serialization, molecular reconstruction, and fixed-boundary motif lookup are implemented for this comparison. **A reversible model-token sequence decoded from motif IDs alone has not been implemented.** GraphBPE+SAFE reconstruction here retains the complete SAFE string; DemoDiff reconstruction uses separate edge and attachment-position information.
+GraphBPE segmentation, SAFE serialization, molecular reconstruction, and fixed-boundary motif lookup are implemented for this comparison. GraphBPE+SAFE reconstruction here retains the complete SAFE string; DemoDiff reconstruction uses separate edge and attachment-position information.
 
 The three displayed examples have verified round trips. The full DemoDiff batch has not undergone a complete molecular round-trip validation. Equal motif counts do not by themselves establish equal information content, full encoding compression, or lossless generation.
 
