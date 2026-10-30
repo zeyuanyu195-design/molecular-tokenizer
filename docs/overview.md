@@ -304,9 +304,9 @@ The three displayed examples have verified round trips. The full DemoDiff batch 
 ## Evidence
 
 - [Machine-readable results and the three examples](results.json)
-- [GraphBPE / SAFE boundary recording](../safe/batch_chembl.py)
-- [Current SAFE stereochemistry handling](../safe/converter.py)
-- [SAFE text-token counting](../safe/compare_safe_token_lengths.py)
+- [GraphBPE / SAFE boundary recording](https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/safe/batch_chembl.py)
+- [Current SAFE stereochemistry handling](https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/safe/converter.py)
+- [SAFE text-token counting](https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/safe/compare_safe_token_lengths.py)
 - [Original DemoDiff implementation](https://github.com/liugangcode/DemoDiff/blob/0acb85ef446c175a3e3a60bbad43de97d97ca76f/downstream/graphbpe.py)
 
 Source-result and tokenizer fingerprints are included in the machine-readable results. Statistics describe the local experimental outputs, not a new training or evaluation run performed by this webpage.

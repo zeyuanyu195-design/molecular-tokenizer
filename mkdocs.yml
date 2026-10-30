@@ -11,7 +11,7 @@ use_directory_urls: false
 strict: true
 
 nav:
-  - Overview: index.md
+  - Overview: overview.md
   - Migrating to 1.0: migration.md
   - Releasing: releasing.md
   - Tutorials:
