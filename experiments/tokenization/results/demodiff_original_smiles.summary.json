@@ -1,0 +1,22 @@
+{
+  "input": "safe/data/chembl_37_chemreps.txt",
+  "smiles_column": "canonical_smiles",
+  "vocab_prefix": "DemoDiff/data/tokenizer/vocab3000ring300/pretrain-token",
+  "vocab_sha256": {
+    ".node": "b37223d79e884e2e612a8f8e7e3550cfd1975fcbf4e8bc9aeb0020d68116ec8e",
+    ".edge": "0db950f24a6ad5847cf38ce966493c02074685b142768f9adeaff1240d853544",
+    ".ring": "dda8b903240eed132f561419121a6f934f11c9c93c2972b098ebc0bae5506df1"
+  },
+  "graphbpe_source_sha256": "f80dd1cecaf39aa1dcb7f319e78065ad62fb9d73c041dc525ed12f35ef4ab544",
+  "counts": {
+    "encoded": 49998,
+    "graph_tokens": 428440,
+    "rows_with_unknown_nodes": 0,
+    "processed": 50000,
+    "errors": 2
+  },
+  "mean_graph_tokens": 8.569142765710628,
+  "note": "Graph nodes, not SAFE text tokens. Encoding success does not establish lossless molecular reconstruction. Missing edges follow upstream frozen-vocabulary behavior; validate round trips before downstream use.",
+  "upstream_commit": "0acb85ef446c175a3e3a60bbad43de97d97ca76f",
+  "path_note": "Machine-specific prefixes replaced; measured statistics and hashes unchanged."
+}

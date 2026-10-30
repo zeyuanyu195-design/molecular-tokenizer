@@ -1,0 +1,47 @@
+{
+  "artifacts": [
+    {
+      "role": "original_smiles_input",
+      "path": "safe/data/chembl_37_chemreps.txt",
+      "bytes": 773781908,
+      "sha256": "c1d2679053887c08fa111c3d5fe591f44b783ede89474ac1b1491388ab9e56cb",
+      "included_in_this_commit": false
+    },
+    {
+      "role": "original_smiles_demodiff_records",
+      "path": "safe/data/demodiff_original_smiles/smiles_50000_tokens.jsonl",
+      "bytes": 106585721,
+      "sha256": "53128b2b4399a57ae3152aefdfc0b7ff116e9e32962c33d8f769cf4e8117543e",
+      "included_in_this_commit": false
+    },
+    {
+      "role": "graphbpe_safe_records",
+      "path": "safe/data/output/records.jsonl",
+      "bytes": 72158352,
+      "sha256": "1188a184688372a62e1cc9aa03a392aeae4e882143687313a3ba88ab166a97d7",
+      "included_in_this_commit": false
+    },
+    {
+      "role": "brics_safe_records",
+      "path": "safe/data/output_brics/records.jsonl",
+      "bytes": 64549881,
+      "sha256": "cec9ef1d5a8ed8b6a8fae0375f8f5f28182dd30b7e6b4d2b88afaa47181e1058",
+      "included_in_this_commit": false
+    },
+    {
+      "role": "exact_graphbpe_records",
+      "path": "safe/data/output_graphbpe_exact/records.jsonl",
+      "bytes": 74458856,
+      "sha256": "6a0cd878bba4270b7469de5804c0b1a97630796b39d896f26f1b1ef54c1450c4",
+      "included_in_this_commit": false
+    },
+    {
+      "role": "exact_graphbpe_safe_strings",
+      "path": "safe/data/output_graphbpe_exact/safe.txt",
+      "bytes": 4117296,
+      "sha256": "9f0f508cdaf2ad454277b6c928c48dc601994c535888579972fd8b67c536207a",
+      "included_in_this_commit": false
+    }
+  ],
+  "note": "Bulk artifacts are local measurements. No release download URLs are claimed; existing LFS files were not reuploaded."
+}

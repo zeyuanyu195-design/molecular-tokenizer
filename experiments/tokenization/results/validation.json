@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-30",
+  "helper_unit_tests": 4,
+  "original_smiles_smoke_successes": 3,
+  "intentional_invalid_smiles_retained": 1,
+  "example_ids_and_adjacency_match_saved_results": true,
+  "fixed_safe_example_ids_match": true,
+  "demodiff_example_roundtrips_checked": 3,
+  "missing_fragment_failure_checked": true,
+  "full_statistics_recomputed_from_saved_records": true,
+  "note": "This is not a new full 50,000-molecule tokenizer run or full-cohort round-trip validation."
+}

@@ -1,0 +1,11 @@
+{
+  "python": "3.13.2",
+  "platform": "Windows",
+  "packages": {
+    "rdkit": "2025.9.1",
+    "tokenizers": "0.23.3",
+    "numpy": "2.5.2",
+    "tqdm": "4.70.1"
+  },
+  "note": "Environment used to recompute summaries and run small verification cases on 2026-10-30; not a historical environment lockfile."
+}

@@ -1,0 +1,132 @@
+{
+  "full": {
+    "brics_safe_text": {
+      "n": 49997,
+      "total": 3024042,
+      "mean": 60.48446906814409,
+      "median": 52.0,
+      "p95": 109.0,
+      "maximum": 1487
+    },
+    "demodiff_original_smiles_nodes": {
+      "n": 49998,
+      "total": 428440,
+      "mean": 8.569142765710628,
+      "median": 5.0,
+      "p95": 23.0,
+      "maximum": 246
+    },
+    "graphbpe_safe_exact_motifs": {
+      "n": 44329,
+      "total": 372957,
+      "mean": 8.413386270838503,
+      "median": 5.0,
+      "p95": 22.0,
+      "maximum": 223
+    },
+    "graphbpe_safe_text_control": {
+      "n": 49992,
+      "total": 3435594,
+      "mean": 68.72287566010561,
+      "median": 56.0,
+      "p95": 135.0,
+      "maximum": 2779
+    }
+  },
+  "matched": {
+    "brics_safe_text": {
+      "n": 44328,
+      "total": 2669535,
+      "mean": 60.22231997834326,
+      "median": 52.0,
+      "p95": 107.0,
+      "maximum": 1487
+    },
+    "demodiff_original_smiles_nodes": {
+      "n": 44328,
+      "total": 372924,
+      "mean": 8.412831618841365,
+      "median": 5.0,
+      "p95": 22.0,
+      "maximum": 223
+    },
+    "graphbpe_safe_exact_motifs": {
+      "n": 44328,
+      "total": 372924,
+      "mean": 8.412831618841365,
+      "median": 5.0,
+      "p95": 22.0,
+      "maximum": 223
+    },
+    "graphbpe_safe_text_control": {
+      "n": 44328,
+      "total": 3051888,
+      "mean": 68.84786139685977,
+      "median": 56.0,
+      "p95": 133.0,
+      "maximum": 2779
+    }
+  },
+  "counts": {
+    "demodiff_processed": 50000,
+    "demodiff_errors": 2,
+    "demodiff_rows_with_unknown_nodes": 0,
+    "graph_records": 49992,
+    "boundary_changed": 5663,
+    "exact_records": 44329,
+    "matched_records": 44328
+  },
+  "matched_length_disagreements": 0,
+  "exact_excluded_from_matched": [
+    {
+      "record_index": 3081,
+      "chembl_id": "CHEMBL1213498"
+    }
+  ],
+  "errors": [
+    {
+      "record_index": 2403,
+      "chembl_id": "CHEMBL1185048",
+      "smiles": "COCCOCCOCCOC(=O)C1(C(=O)OCCOCCOCCOC)C23C4=c5c6c7c8c9c%10c%11c%12c%13c9c9c%14c%15c%16c%17c%18c%19c%20c%21c%22c%23c%24c(c-%11c(c2c%24c2c%11c%24c%25c(c5c5c6c(c8%14)c%15c6c%17c(c%25c56)c5c%18c%21c(c%232)c%245)C%1113)C4C%107)C%12C%22C%201CN(CCOCCOCCN)CC%131C9C%19%16",
+      "status": "error",
+      "error": "ValueError: Invalid SMILES string: COCCOCCOCCOC(=O)C1(C(=O)OCCOCCOCCOC)C23C4=c5c6c7c8c9c%10c%11c%12c%13c9c9c%14c%15c%16c%17c%18c%19c%20c%21c%22c%23c%24c(c-%11c(c2c%24c2c%11c%24c%25c(c5c5c6c(c8%14)c%15c6c%17c(c%25c56)c5c%18c%21c(c%232)c%245)C%1113)C4C%107)C%12C%22C%201CN(CCOCCOCCN)CC%131C9C%19%16"
+    },
+    {
+      "record_index": 41189,
+      "chembl_id": "CHEMBL4298947",
+      "smiles": "CN(C)c1ccc(N(C)C)cc1.F[PH](F)(F)(F)(F)F",
+      "status": "error",
+      "error": "ValueError: Invalid SMILES string: CN(C)c1ccc(N(C)C)cc1.F[PH](F)(F)(F)(F)F"
+    }
+  ],
+  "units": {
+    "brics_safe_text": "Text IDs including connectivity syntax; no special tokens",
+    "demodiff_original_smiles_nodes": "Node IDs only; edge/attachment arrays excluded",
+    "graphbpe_safe_exact_motifs": "Recorded motif IDs; connectivity syntax excluded",
+    "graphbpe_safe_text_control": "Same text tokenizer as BRICS"
+  },
+  "quantile_method": "NumPy percentile, linear interpolation",
+  "sources": {
+    "graph": {
+      "filename": "records.jsonl",
+      "bytes": 72158352,
+      "sha256": "1188a184688372a62e1cc9aa03a392aeae4e882143687313a3ba88ab166a97d7"
+    },
+    "brics": {
+      "filename": "records.jsonl",
+      "bytes": 64549881,
+      "sha256": "cec9ef1d5a8ed8b6a8fae0375f8f5f28182dd30b7e6b4d2b88afaa47181e1058"
+    },
+    "demodiff": {
+      "filename": "smiles_50000_tokens.jsonl",
+      "bytes": 106585721,
+      "sha256": "53128b2b4399a57ae3152aefdfc0b7ff116e9e32962c33d8f769cf4e8117543e"
+    },
+    "text_tokenizer": {
+      "filename": "tokenizer-custom.json",
+      "bytes": 46319,
+      "sha256": "64654d0cbfde431fd8fe3c7cd728536437714e3db06cb1ed4a378a68190d37a9"
+    }
+  },
+  "note": "Length agreement does not prove lossless reconstruction from motif IDs alone."
+}
