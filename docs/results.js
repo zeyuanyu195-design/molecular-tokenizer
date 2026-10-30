@@ -11,14 +11,14 @@ function renderStats(){
 function renderMethod(){
   const m=data.methods.find(m=>m.id===method);
   $('method-title').textContent=m.name;$('method-training').textContent=m.training;$('method-decode').textContent=m.decode;
-  $('method-flow').innerHTML=m.flow.map((x,i)=>(i?'<span class="flow-arrow" aria-hidden="true">��</span>':'')+`<span class="flow-step">${esc(x)}</span>`).join('');
+  $('method-flow').innerHTML=m.flow.map((x,i)=>(i?'<span class="flow-arrow" aria-hidden="true">→</span>':'')+`<span class="flow-step">${esc(x)}</span>`).join('');
   $('pseudocode').textContent=m.code[step];document.querySelectorAll('[data-step]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.step===step));
 }
 function renderExample(){
   const e=data.examples[example];fragment=0;
-  $('original-smiles').textContent=e.smiles;$('record-label').textContent=`${e.chembl_id} �� Input record ${fmt(e.record_index)} �� Boundaries preserved`;
+  $('original-smiles').textContent=e.smiles;$('record-label').textContent=`${e.chembl_id} · Input record ${fmt(e.record_index)} · Boundaries preserved`;
   const card=(cls,title,n,unit,body,decoded)=>`<article class="method-card ${cls}"><h3>${title}</h3><div class="card-metric">${n}<span>${unit}</span></div>${body}<span class="label">DECODED SMILES</span><code>${esc(decoded)}</code><p class="check">Molecular round trip verified</p></article>`;
-  $('example-comparison').innerHTML=card('brics','BRICS+SAFE',e.brics_ids.length,'SAFE text tokens',`<p>${e.brics_safe.split('.').length} SAFE fragment(s)</p><span class="label">COMPLETE SAFE</span><code>${esc(e.brics_safe)}</code>`,e.brics_decoded)+card('demo','Original DemoDiff',e.demo_ids.length,'node tokens �� connectivity excluded',`<p>Original SMILES �� GraphBPE</p><span class="label">NODE IDS</span><code>${esc(JSON.stringify(e.demo_ids))}</code><p>Separate edge/attachment information is required for decoding.</p>`,e.demo_decoded)+card('graph','GraphBPE+SAFE',e.graph_ids.length,'motif tokens �� connectivity excluded',`<p>${e.graph_ids.length} SAFE fragments �� ${e.graph_text_length} text tokens with the SAFE text tokenizer</p><span class="label">COMPLETE SAFE</span><code>${esc(e.graph_safe)}</code><span class="label">FIXED MOTIF IDS �� SAFE ORDER</span><code>${esc(JSON.stringify(e.graph_ids))}</code>`,e.graph_decoded);
+  $('example-comparison').innerHTML=card('brics','BRICS+SAFE',e.brics_ids.length,'SAFE text tokens',`<p>${e.brics_safe.split('.').length} SAFE fragment(s)</p><span class="label">COMPLETE SAFE</span><code>${esc(e.brics_safe)}</code>`,e.brics_decoded)+card('demo','Original DemoDiff',e.demo_ids.length,'node tokens · connectivity excluded',`<p>Original SMILES → GraphBPE</p><span class="label">NODE IDS</span><code>${esc(JSON.stringify(e.demo_ids))}</code><p>Separate edge/attachment information is required for decoding.</p>`,e.demo_decoded)+card('graph','GraphBPE+SAFE',e.graph_ids.length,'motif tokens · connectivity excluded',`<p>${e.graph_ids.length} SAFE fragments · ${e.graph_text_length} text tokens with the SAFE text tokenizer</p><span class="label">COMPLETE SAFE</span><code>${esc(e.graph_safe)}</code><span class="label">FIXED MOTIF IDS · SAFE ORDER</span><code>${esc(JSON.stringify(e.graph_ids))}</code>`,e.graph_decoded);
   $('fragment-buttons').innerHTML=e.graph_safe.split('.').map((f,i)=>`<button data-fragment="${i}" aria-pressed="${i===0}" aria-label="Fragment ${i+1}: ${esc(f)}">${i+1}. ${esc(f)}</button>`).join('');
   $('fragment-table').querySelector('tbody').innerHTML=e.graph_safe.split('.').map((f,i)=>`<tr data-row="${i}"><td>${i+1}</td><td>${esc(f)}</td><td>${esc(e.graph_keys[i])}</td><td>${e.graph_ids[i]}</td></tr>`).join('');
   $('connectivity').textContent=`node_ids = ${JSON.stringify(e.demo_ids)}\n\nNode index : motif key\n${e.demo_keys.map((k,i)=>`${i}: ${k}`).join('\n')}\n\nadj_edge_ids =\n${e.adj.map(r=>JSON.stringify(r)).join('\n')}\n\nbond_adj =\n${e.bond.map(r=>JSON.stringify(r)).join('\n')}\n\nposition_adj =\n${e.pos.map(r=>JSON.stringify(r)).join('\n')}\n\n-1 = no entry; matrix indices start at 0.`;
@@ -38,7 +38,7 @@ async function start(){
     document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{step=b.dataset.step;renderMethod();}));
     $('example-select').addEventListener('change',e=>{example=Number(e.target.value);renderExample();});
     $('fragment-buttons').addEventListener('click',e=>{const b=e.target.closest('[data-fragment]');if(b){fragment=Number(b.dataset.fragment);renderFragment();}});
-    $('fingerprints').innerHTML=data.sources.map(s=>`<p><strong>${esc(s.label)}</strong> �� ${esc(s.file)}<code>SHA256 ${esc(s.sha256)}</code></p>`).join('');
+    $('fingerprints').innerHTML=data.sources.map(s=>`<p><strong>${esc(s.label)}</strong> · ${esc(s.file)}<code>SHA256 ${esc(s.sha256)}</code></p>`).join('');
     renderStats();renderMethod();renderExample();
   }catch(error){$('load-error').hidden=false;$('load-error').textContent='The result data could not be loaded. Please reload, or read the static report in the README.';console.error(error);}
 }

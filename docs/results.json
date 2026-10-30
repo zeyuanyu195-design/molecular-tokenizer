@@ -23,7 +23,7 @@
       "unit": "Node IDs; connectivity excluded"
     },
     {
-      "method": "GraphBPE+SAFE �� fixed motifs",
+      "method": "GraphBPE+SAFE · fixed motifs",
       "cohort": "shared",
       "n": 44328,
       "total": 372924,
@@ -34,7 +34,7 @@
       "unit": "Motif IDs; connectivity excluded"
     },
     {
-      "method": "GraphBPE+SAFE �� text control",
+      "method": "GraphBPE+SAFE · text control",
       "cohort": "shared",
       "n": 44328,
       "total": 3051888,
@@ -67,7 +67,7 @@
       "unit": "Node IDs; connectivity excluded"
     },
     {
-      "method": "GraphBPE+SAFE �� fixed motifs",
+      "method": "GraphBPE+SAFE · fixed motifs",
       "cohort": "full",
       "n": 44329,
       "total": 372957,
@@ -78,7 +78,7 @@
       "unit": "Motif IDs; connectivity excluded"
     },
     {
-      "method": "GraphBPE+SAFE �� text control",
+      "method": "GraphBPE+SAFE · text control",
       "cohort": "full",
       "n": 49992,
       "total": 3435594,
@@ -1494,7 +1494,7 @@
         "SAFE string",
         "Text token IDs"
       ],
-      "decode": "Text IDs �� complete SAFE string �� SMILES. Connectivity is recovered from the SAFE string.",
+      "decode": "Text IDs → complete SAFE string → SMILES. Connectivity is recovered from the SAFE string.",
       "code": {
         "train": "TRAIN(training_SAFE_strings, vocabulary_size):\n    use predefined BRICS fragmentation rules\n    learn a SAFE text-token vocabulary from training strings\n    return text_tokenizer\n\n# This experiment loads an existing text tokenizer.\n# Its original training corpus has not been verified.",
         "encode": "ENCODE(smiles, text_tokenizer):\n    safe = SAFE.encode(smiles, slicer=BRICS)\n    ids = text_tokenizer.encode(safe,\n        add_special_tokens=False, padding=False,\n        truncation=False, dropout=0)\n    return safe, ids, len(ids)",
@@ -1511,7 +1511,7 @@
         "Node IDs + edge IDs",
         "Graph representation"
       ],
-      "decode": "Node IDs + bond adjacency + attachment positions �� SMILES. Node IDs alone do not specify connectivity.",
+      "decode": "Node IDs + bond adjacency + attachment positions → SMILES. Node IDs alone do not specify connectivity.",
       "code": {
         "train": "TRAIN(training_molecular_graphs, target_size):\n    initialize graph vocabulary and ring handling\n    repeat until target_size or no eligible merge:\n        count eligible adjacent-subgraph pairs\n        merge the most frequent pair in training graphs\n        add the resulting motif to the node vocabulary\n    retain node, ring and edge/attachment vocabularies\n\n# Conceptual NPE training, not rerun for this experiment.\n# The original vocabulary training corpus is unverified.",
         "encode": "ENCODE(original_smiles, tokenizer):\n    node_ids, adj = tokenizer.encode(\n        original_smiles, update_vocab_edge=False)\n    bonds, positions = tokenizer.get_bond_position_by_vocab(adj)\n    return node_ids, bonds, positions, len(node_ids)\n\n# Input is the original canonical_smiles, not a SAFE string.",
@@ -1528,7 +1528,7 @@
         "SAFE serialization",
         "Fixed-boundary motif IDs"
       ],
-      "decode": "Complete SAFE string �� SMILES. The current motif-ID mapping is not a standalone reversible model-token sequence.",
+      "decode": "Complete SAFE string → SMILES. The current motif-ID mapping is not a standalone reversible model-token sequence.",
       "code": {
         "train": "TRAIN(training_molecular_graphs, target_size):\n    return NPE_TRAIN(training_molecular_graphs, target_size)\n\n# For the reported experiment, load the existing vocabulary.\n# No additional SAFE-fragment vocabulary is trained.",
         "encode": "ENCODE(smiles, vocabulary):\n    groups = GraphBPE.partition(smiles, vocabulary)\n    safe = SAFE.serialize(smiles, proposed_partition=groups)\n    if final_SAFE_partition(safe) != groups:\n        exclude from the boundary-preserving comparison\n    ids = []\n    for fragment in SAFE_order(safe):\n        subgraph = extract_from_complete_SAFE_graph(fragment)\n        key = DemoDiff_compatible_motif_key(subgraph)\n        ids.append(vocabulary.lookup(key))\n    return safe, ids, len(ids)\n\n# No second GraphBPE merge pass during fixed-boundary lookup.\n# Aggregate lengths reuse len(record.bpe_node_ids) after\n# exact-boundary validation; examples also verify this mapping.",

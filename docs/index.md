@@ -12,9 +12,9 @@ These are motif/node counts **excluding connectivity overhead**. They are not di
 
 | Method | Train / vocabulary used | Encode | Decode | Counted unit |
 | --- | --- | --- | --- | --- |
-| BRICS+SAFE | Fixed BRICS rules; existing SAFE text tokenizer | SMILES �� BRICS �� SAFE �� text IDs | Text IDs �� SAFE �� SMILES | SAFE text tokens |
-| Original DemoDiff | NPE/GraphBPE motif learning; existing node/ring/edge vocabulary | Original SMILES �� GraphBPE �� node IDs + edge/attachment information | Node IDs + bond adjacency + attachment positions �� SMILES | Node IDs only |
-| GraphBPE+SAFE | Same existing GraphBPE node/ring vocabulary | SMILES �� GraphBPE �� SAFE �� fixed-boundary motif lookup | Complete SAFE �� SMILES | Motif IDs only |
+| BRICS+SAFE | Fixed BRICS rules; existing SAFE text tokenizer | SMILES → BRICS → SAFE → text IDs | Text IDs → SAFE → SMILES | SAFE text tokens |
+| Original DemoDiff | NPE/GraphBPE motif learning; existing node/ring/edge vocabulary | Original SMILES → GraphBPE → node IDs + edge/attachment information | Node IDs + bond adjacency + attachment positions → SMILES | Node IDs only |
+| GraphBPE+SAFE | Same existing GraphBPE node/ring vocabulary | SMILES → GraphBPE → SAFE → fixed-boundary motif lookup | Complete SAFE → SMILES | Motif IDs only |
 
 No vocabulary is retrained in this experiment. The graph vocabulary contains 3,000 node entries and 300 ring entries; its original training corpus and that of the SAFE text tokenizer have not been verified. The additional frequency-based vocabulary previously proposed is **not** part of these results.
 
@@ -28,8 +28,8 @@ All rows below use the same **44,328 molecules**, matched by record index and ch
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | BRICS+SAFE | 44,328 | 2,669,535 | 60.222320 | 52 | 107 | 1,487 |
 | Original DemoDiff | 44,328 | 372,924 | 8.412832 | 5 | 22 | 223 |
-| GraphBPE+SAFE �� fixed motifs | 44,328 | 372,924 | 8.412832 | 5 | 22 | 223 |
-| GraphBPE+SAFE �� text control | 44,328 | 3,051,888 | 68.847861 | 56 | 133 | 2,779 |
+| GraphBPE+SAFE · fixed motifs | 44,328 | 372,924 | 8.412832 | 5 | 22 | 223 |
+| GraphBPE+SAFE · text control | 44,328 | 3,051,888 | 68.847861 | 56 | 133 | 2,779 |
 
 BRICS+SAFE and the GraphBPE+SAFE text control use the **same SAFE text tokenizer**, with no special tokens, padding or truncation, and with dropout disabled. Only these two rows measure the same text-token unit. The two motif rows exclude connectivity information.
 
@@ -41,8 +41,8 @@ These cohorts have different inclusion criteria and are not matched-sample compa
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | BRICS+SAFE | 49,997 | 3,024,042 | 60.484469 | 52 | 109 | 1,487 |
 | Original DemoDiff | 49,998 | 428,440 | 8.569143 | 5 | 23 | 246 |
-| GraphBPE+SAFE �� fixed motifs | 44,329 | 372,957 | 8.413386 | 5 | 22 | 223 |
-| GraphBPE+SAFE �� text control | 49,992 | 3,435,594 | 68.722876 | 56 | 135 | 2,779 |
+| GraphBPE+SAFE · fixed motifs | 44,329 | 372,957 | 8.413386 | 5 | 22 | 223 |
+| GraphBPE+SAFE · text control | 49,992 | 3,435,594 | 68.722876 | 56 | 135 | 2,779 |
 
 The original DemoDiff experiment processes the first **50,000 original SMILES**: **49,998 succeed**, **2 fail SMILES parsing**, and **0 successfully encoded rows report unknown nodes**.
 
@@ -159,7 +159,7 @@ DECODE(safe, motif_ids):
 
 All three examples belong to the shared cohort and pass molecular reconstruction checks for all three methods. Fixed motif IDs are listed in **SAFE fragment order**; DemoDiff node IDs follow its own graph order. The same motif may appear more than once.
 
-### 1. CHEMBL45973 �� 5 GraphBPE motifs
+### 1. CHEMBL45973 — 5 GraphBPE motifs
 
 Original SMILES:
 
@@ -201,7 +201,7 @@ DemoDiff node IDs: `[2971, 2972, 2895, 2942, 2577]`.
 
 </details>
 
-### 2. CHEMBL13214 �� 8 GraphBPE motifs
+### 2. CHEMBL13214 — 8 GraphBPE motifs
 
 Original SMILES:
 
@@ -246,7 +246,7 @@ DemoDiff node IDs: `[2682, 2895, 2722, 2905, 2945, 2945, 2509, 2855]`.
 
 </details>
 
-### 3. CHEMBL34237 �� 12 GraphBPE motifs
+### 3. CHEMBL34237 — 12 GraphBPE motifs
 
 Original SMILES:
 
