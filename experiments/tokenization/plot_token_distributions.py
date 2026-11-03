@@ -1,6 +1,7 @@
 """BRICS versus GraphBPE distributions on the existing matched molecular cohort.
 
-Layout follows DemoDiff Appendix B.2 Figure 9, arXiv:2510.08744v1.
+Single overlaid histogram, using the log-log histogram style in DemoDiff
+Appendix B.2 Figure 9, arXiv:2510.08744v1.
 Figures show this experiment's measurements, not digitized paper data.
 """
 
@@ -105,109 +106,37 @@ def plot_pair(series, title, xlabel, output):
     plt.rcParams.update(
         {
             "font.family": "DejaVu Serif",
-            "font.size": 10,
-            "axes.titlesize": 13,
-            "axes.labelsize": 11,
+            "font.size": 11,
+            "axes.titlesize": 14,
+            "axes.labelsize": 12,
             "svg.fonttype": "none",
-            "svg.hashsalt": "brics-graphbpe-20261103",
+            "svg.hashsalt": "brics-graphbpe-histogram",
             "axes.spines.top": False,
             "axes.spines.right": False,
         }
     )
     colors = ["#2e86a6", "#a8427d"]
-    fig, axs = plt.subplots(2, 2, figsize=(12, 8.7), layout="constrained")
-    fig.suptitle(title, fontsize=16)
+    fig, ax = plt.subplots(figsize=(9, 5.6), layout="constrained")
     max_count = max(max(values) for _, values in series)
-    # Identical log-spaced edges for both series, covering every observation.
-    log_bins = np.geomspace(0.9, max_count + 0.5, 55)
-    linear_bins = np.arange(0.5, max_count + 1.5, 1)
-    percentiles = []
+    # Keep the same shared bins and densities as the previous histogram.
+    bins = np.geomspace(0.9, max_count + 0.5, 55)
     for (name, values), color in zip(series, colors):
-        values = np.asarray(values)
-        n = len(values)
-        x, counts = np.unique(values, return_counts=True)
-        a = axs[0, 0]
-        density, edges = np.histogram(values, bins=log_bins, density=True)
+        density, edges = np.histogram(values, bins=bins, density=True)
         assert np.isclose(np.sum(density * np.diff(edges)), 1)
-        a.hist(
+        ax.hist(
             values,
-            bins=log_bins,
+            bins=bins,
             density=True,
-            alpha=0.60,
+            alpha=0.58,
             color=color,
             edgecolor=color,
-            linewidth=0.5,
+            linewidth=0.6,
             label=name,
         )
-        a.axvline(
-            np.median(values),
-            color=color,
-            ls="--",
-            lw=1.6,
-            label=f"{name} median: {np.median(values):g}",
-        )
-        tail = np.cumsum(counts[::-1])[::-1] / n
-        assert tail[0] == 1 and np.all(np.diff(tail) <= 0)
-        axs[0, 1].step(x, tail, where="pre", color=color, lw=1.7, label=name)
-        ranked = np.sort(counts)[::-1]
-        axs[1, 0].plot(
-            np.arange(1, len(ranked) + 1),
-            ranked,
-            ".-",
-            color=color,
-            markersize=3,
-            lw=1.2,
-            label=name,
-        )
-        axs[1, 1].hist(values, bins=linear_bins, density=True, color=color, alpha=0.55, label=name)
-        for p, style in ((95, ":"), (99, "--")):
-            q = float(np.percentile(values, p))
-            axs[1, 1].axvline(q, color=color, ls=style, lw=1.2)
-        percentiles.append(
-            f"{name}: P95={np.percentile(values,95):g}, " f"P99={np.percentile(values,99):g}"
-        )
-    axs[0, 0].set(
-        xscale="log",
-        yscale="log",
-        xlabel=xlabel,
-        ylabel="Density",
-        title="(a) Log–log scale distribution",
-    )
-    axs[0, 1].set(
-        xscale="log",
-        yscale="log",
-        xlabel=xlabel,
-        ylabel=r"Tail probability $P(X \geq x)$",
-        title="(b) Complementary CDF (log–log)",
-    )
-    axs[1, 0].set(
-        xscale="log",
-        yscale="log",
-        xlabel="Rank of token-length frequency",
-        ylabel="Molecules with that length",
-        title="(c) Rank–frequency plot",
-    )
-    axs[1, 1].set(
-        yscale="log",
-        xlabel=xlabel,
-        ylabel="Density (log scale)",
-        title="(d) Linear–log with percentiles",
-        xlim=(0, max_count + 1),
-    )
-    axs[1, 1].text(
-        0.98,
-        0.73,
-        "\n".join(percentiles),
-        transform=axs[1, 1].transAxes,
-        ha="right",
-        va="top",
-        fontsize=8,
-        bbox=dict(facecolor="white", alpha=0.9, edgecolor="none"),
-    )
-    for ax in axs.flat:
-        ax.grid(alpha=0.20)
-        ax.set_axisbelow(True)
-        ax.legend(fontsize=8, framealpha=0.95)
+    ax.set(xscale="log", yscale="log", xlabel=xlabel, ylabel="Probability density", title=title)
+    ax.grid(alpha=0.18)
+    ax.set_axisbelow(True)
+    ax.legend(framealpha=0.95)
     for ext in ("svg", "png", "pdf"):
         fig.savefig(output.with_suffix("." + ext), dpi=220, metadata={"Creator": "Matplotlib"})
     plt.close(fig)
@@ -254,11 +183,9 @@ def main():
         plotting=dict(
             log_histogram_bins=54,
             log_histogram_bin_edges=55,
-            linear_histogram_bin_width=1,
             density="bin_count / (cohort_size * bin_width)",
-            ccdf="P(X >= x)",
-            rank="Rank of distinct length values by descending frequency, not motif-vocabulary frequency",
-            percentiles="NumPy linear interpolation",
+            percentiles="NumPy linear interpolation; summary data only",
+            layout="Single overlaid histogram; logarithmic x and y axes",
             tail="Full range retained; zero-height bins omitted by log axes",
         ),
         sources={

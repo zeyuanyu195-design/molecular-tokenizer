@@ -8,9 +8,9 @@
     "n": 44328,
     "total": 270215,
     "mean": 6.095808518317993,
-    "median": 5.0,
-    "p95": 12.0,
-    "p99": 29.0,
+    "median": 5,
+    "p95": 12,
+    "p99": 29,
     "maximum": 129,
     "frequencies": [
       [
@@ -388,9 +388,9 @@
       "n": 44328,
       "total": 270530,
       "mean": 6.102914636347229,
-      "median": 5.0,
-      "p95": 12.0,
-      "p99": 29.0,
+      "median": 5,
+      "p95": 12,
+      "p99": 29,
       "maximum": 129,
       "frequencies": [
         [
@@ -767,9 +767,9 @@
       "n": 44328,
       "total": 372924,
       "mean": 8.412831618841365,
-      "median": 5.0,
-      "p95": 22.0,
-      "p99": 38.0,
+      "median": 5,
+      "p95": 22,
+      "p99": 38,
       "maximum": 223,
       "frequencies": [
         [
@@ -1224,8 +1224,8 @@
       "n": 44328,
       "total": 2669535,
       "mean": 60.22231997834326,
-      "median": 52.0,
-      "p95": 107.0,
+      "median": 52,
+      "p95": 107,
       "p99": 267.7300000000032,
       "maximum": 1487,
       "frequencies": [
@@ -3355,9 +3355,9 @@
       "n": 44328,
       "total": 3051888,
       "mean": 68.84786139685977,
-      "median": 56.0,
-      "p95": 133.0,
-      "p99": 297.0,
+      "median": 56,
+      "p95": 133,
+      "p99": 297,
       "maximum": 2779,
       "frequencies": [
         [
@@ -5537,13 +5537,11 @@
   },
   "plotting": {
     "log_histogram_bins": 54,
-    "linear_histogram_bin_width": 1,
     "density": "bin_count / (cohort_size * bin_width)",
-    "ccdf": "P(X >= x)",
-    "rank": "Rank of distinct length values by descending frequency, not motif-vocabulary frequency",
-    "percentiles": "NumPy linear interpolation",
+    "percentiles": "NumPy linear interpolation; summary data only",
     "tail": "Full range retained; zero-height bins omitted by log axes",
-    "log_histogram_bin_edges": 55
+    "log_histogram_bin_edges": 55,
+    "layout": "Single overlaid histogram; logarithmic x and y axes"
   },
   "sources": {
     "graph": {
