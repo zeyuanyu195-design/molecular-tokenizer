@@ -13,6 +13,13 @@ function renderMethod(){
   $('method-title').textContent=m.name;$('method-training').textContent=m.training;$('method-decode').textContent=m.decode;
   $('method-flow').innerHTML=m.flow.map((x,i)=>(i?'<span class="flow-arrow" aria-hidden="true">→</span>':'')+`<span class="flow-step">${esc(x)}</span>`).join('');
   $('pseudocode').textContent=m.code[step];document.querySelectorAll('[data-step]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.step===step));
+  const detailBox=$('graph-encode-details');
+  detailBox.hidden=method!=='graph'||step!=='encode';
+  if(!detailBox.hidden){
+    detailBox.innerHTML='<h3 class="expanded-heading">Expanded encode steps</h3><p>Open each step for the implementation and source links. These are explanatory algorithms for the existing code; no vocabulary is retrained.</p>'+data.graph_encode_details.map(d=>`<details class="encode-detail"><summary>${esc(d.title)}</summary><div class="detail-body"><p>${esc(d.description)}</p><pre><code>${esc(d.code)}</code></pre><p>${esc(d.notes)}</p><div class="source-links">${d.sources.map(s=>`<a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/1ae2f0db56a0b1bd8d4140ac65da74b634321ae6/${s.path}#L${s.line}">${esc(s.label)} ↗</a>`).join('')}</div></div></details>`).join('')+
+    '<aside class="note connection-note"><h3>Where does SAFE store attachment information?</h3><p><strong>SAFE serializes connectivity into the string.</strong> Dots separate fragments; matching labels identify the two endpoints. The atom carrying each label specifies the attachment position, and bond syntax specifies the bond type.</p><pre>CCO → cut C–O → CC[1*] . O[1*] → CC1.O1 → CCO</pre><p>This manually selected cut illustrates serialization, not a claim that GraphBPE always splits ethanol this way. Dummy-fragment spelling is schematic; the current converter round-trips <code>CC1.O1</code> to <code>CCO</code>.</p><p>In <code>CC1.O1</code>, the two “1” labels connect the second carbon to oxygen. The label is neither an atom index nor a token ID. Moving a label can change the molecule: <code>C1NCC.C1 → CCNCC</code>, whereas <code>CN1CC.C1 → CCN(C)C</code>. For a double-bond example, <code>CC=1.CC1 → CC=CC</code>; this example specifies bond order, not E/Z stereochemistry.</p><p><strong>No separate edge table is needed to decode complete SAFE.</strong> However, the current motif IDs omit this attachment syntax and cannot reconstruct the molecule alone. The reported motif counts exclude connectivity overhead.</p></aside>';
+  }
+
 }
 function renderExample(){
   const e=data.examples[example];fragment=0;
@@ -32,7 +39,7 @@ function renderFragment(){
 }
 async function start(){
   try{
-    const response=await fetch('results.json');if(!response.ok)throw new Error(`HTTP ${response.status}`);data=await response.json();
+    const response=await fetch('results.json?v=20261103-pseudocode');if(!response.ok)throw new Error(`HTTP ${response.status}`);data=await response.json();
     $('shared').addEventListener('click',()=>{cohort='shared';renderStats();});$('full').addEventListener('click',()=>{cohort='full';renderStats();});
     $('method-select').addEventListener('change',e=>{method=e.target.value;renderMethod();});
     document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{step=b.dataset.step;renderMethod();}));

@@ -6,8 +6,8 @@
       "n": 44328,
       "total": 2669535,
       "mean": 60.22231997834326,
-      "median": 52.0,
-      "p95": 107.0,
+      "median": 52,
+      "p95": 107,
       "maximum": 1487,
       "unit": "SAFE text tokens; connectivity symbols included"
     },
@@ -28,8 +28,8 @@
       "n": 44328,
       "total": 372924,
       "mean": 8.412831618841365,
-      "median": 5.0,
-      "p95": 22.0,
+      "median": 5,
+      "p95": 22,
       "maximum": 223,
       "unit": "Motif IDs; connectivity excluded"
     },
@@ -39,8 +39,8 @@
       "n": 44328,
       "total": 3051888,
       "mean": 68.84786139685977,
-      "median": 56.0,
-      "p95": 133.0,
+      "median": 56,
+      "p95": 133,
       "maximum": 2779,
       "unit": "SAFE text tokens; connectivity symbols included"
     },
@@ -51,7 +51,7 @@
       "total": 3024042,
       "mean": 60.48446906814409,
       "median": 52,
-      "p95": 109.0,
+      "p95": 109,
       "maximum": 1487,
       "unit": "SAFE text tokens; connectivity symbols included"
     },
@@ -73,7 +73,7 @@
       "total": 372957,
       "mean": 8.413386270838503,
       "median": 5,
-      "p95": 22.0,
+      "p95": 22,
       "maximum": 223,
       "unit": "Motif IDs; connectivity excluded"
     },
@@ -83,8 +83,8 @@
       "n": 49992,
       "total": 3435594,
       "mean": 68.72287566010561,
-      "median": 56.0,
-      "p95": 135.0,
+      "median": 56,
+      "p95": 135,
       "maximum": 2779,
       "unit": "SAFE text tokens; connectivity symbols included"
     }
@@ -1531,8 +1531,8 @@
       "decode": "Complete SAFE string → SMILES. The current motif-ID mapping is not a standalone reversible model-token sequence.",
       "code": {
         "train": "TRAIN(training_molecular_graphs, target_size):\n    return NPE_TRAIN(training_molecular_graphs, target_size)\n\n# For the reported experiment, load the existing vocabulary.\n# No additional SAFE-fragment vocabulary is trained.",
-        "encode": "ENCODE(smiles, vocabulary):\n    groups = GraphBPE.partition(smiles, vocabulary)\n    safe = SAFE.serialize(smiles, proposed_partition=groups)\n    if final_SAFE_partition(safe) != groups:\n        exclude from the boundary-preserving comparison\n    ids = []\n    for fragment in SAFE_order(safe):\n        subgraph = extract_from_complete_SAFE_graph(fragment)\n        key = DemoDiff_compatible_motif_key(subgraph)\n        ids.append(vocabulary.lookup(key))\n    return safe, ids, len(ids)\n\n# No second GraphBPE merge pass during fixed-boundary lookup.\n# Aggregate lengths reuse len(record.bpe_node_ids) after\n# exact-boundary validation; examples also verify this mapping.",
-        "decode": "DECODE(safe, motif_ids):\n    return SAFE.decode(safe)\n\n# Connectivity is retained in the complete SAFE string.\n# Decoding from motif_ids alone is not implemented."
+        "encode": "ENCODE_AND_AUDIT(smiles, vocabulary):\n    # SAFE calls BPESlicer on its own working molecule.\n    # Expanded implementation: Step 1 below.\n    record = encode_graphbpe_safe(smiles, vocabulary)\n\n    # Cohort selection is a separate analysis step.\n    # Boundary changes are not automatically decoding failures.\n    # Expanded selection rules: Step 2 below.\n\n    # Optional fixed-boundary lookup: no second GraphBPE pass.\n    # Expanded atom tracking and extraction: Step 3 below.\n    mapping = map_fixed_SAFE_fragments(record.safe, vocabulary)\n    # Unknown motif keys are reported; they are not resegmented.\n    return record, mapping\n\n# Reported aggregate counts reuse len(record.bpe_node_ids)\n# AFTER exact-boundary validation. Examples also verify mapping.\n# Full SAFE retains connectivity; motif IDs alone are not reversible.\n# Names above describe pseudocode, not new public APIs.",
+        "decode": "DECODE(safe, motif_ids):\n    # Parse the COMPLETE SAFE string with matched labels.\n    # A label identifies a pair, not an atom index or token ID.\n    mol = parse_complete_SAFE(safe, repair_missing_labels=False)\n    return write_canonical_isomeric_SMILES(mol)\n\n# Example: CC1.O1 -> CCO\n# Matching \"1\" labels connect the second C to O.\n# Dots separate fragments; labels, their atom positions,\n# and bond syntax carry connectivity.\n# motif_ids are not used to reconstruct the molecule.\n# Decoding from motif_ids alone is not implemented."
       }
     }
   ],
@@ -1573,5 +1573,59 @@
     "SAFE dots separate fragments. Paired labels, their attachment positions and bond symbols carry cross-fragment connectivity; dots alone do not specify bonds.",
     "The three examples pass molecular round-trip checks. Successful encoding of the full DemoDiff batch does not establish lossless reconstruction for every molecule.",
     "This evaluation loads existing vocabularies. It does not establish that those vocabularies were trained on these 50,000 molecules."
+  ],
+  "graph_encode_details": [
+    {
+      "id": "serialize",
+      "title": "1. SAFE serialization: proposed cuts → paired labels",
+      "description": "Actual path: SAFEConverter.encoder invokes BPESlicer on the converter's working molecule. The slicer tracks atom reordering, proposes cross-group bonds, and records GraphBPE groups and IDs. The pseudocode below describes the closed-molecule experiment with no additional constraints and ignore_stereo=False.",
+      "code": "ENCODE_GRAPHBPE_SAFE(smiles, vocabulary):\n    mol = parse_and_normalize(smiles)\n    original_mol = copy(mol)\n    original_SMILES = write_isomeric_SMILES(mol)\n    groups, motif_ids = BPESlicer.partition_with_atom_tracking(\n        mol, vocabulary)\n    owner[atom] = its GraphBPE group\n\n    requested_cuts = [\n        bond(u, v) for bond(u, v) in mol\n        if owner[u] != owner[v]\n    ]\n    used_cuts = current_stereo_filter(mol, requested_cuts)\n    safe_groups = connected_components(\n        copy(mol) with used_cuts removed)\n\n    # Aromatic cuts use the slicer's Kekule convention.\n    prepare_aromatic_bonds_if_required(mol, used_cuts)\n    fragmented = FragmentOnBonds(\n        mol, used_cuts,\n        dummyLabels=[(k, k) for k in 1..number_of_cuts])\n    # Both ends of the same cut receive the same dummy label.\n\n    fragments = sort_by_size(get_fragments(fragmented))\n    text = join(write_isomeric_SMILES(f) for f in fragments, \".\")\n    label = 1 + max_ring_label(original_SMILES, text, default=0)\n\n    for dummy_marker in sorted_distinct_dummy_markers(text):\n        replace both occurrences with format_ring_label(label)\n        label += 1\n    safe = normalize_ring_closure_syntax(text)\n\n    # The converter can return the intact input if its final\n    # specified-stereochemistry check detects a change.\n    safe = apply_converter_identity_guard(safe, original_mol)\n    require dot_fragment_count(safe) == len(safe_groups)\n    require isomeric_identity(parse(safe)) == isomeric_identity(original_mol)\n\n    return {safe, groups, safe_groups, motif_ids,\n            requested_cuts, used_cuts}",
+      "notes": "The current stereo filter is more conservative than simply forbidding stereogenic double-bond cuts: some single bonds and non-single bonds in molecules with specified E/Z information are also protected. This describes the current project implementation, not a universal ban on those bond types. Dummy atoms are temporary construction markers, not extra atoms in the reconstructed closed molecule.",
+      "sources": [
+        {
+          "label": "BPESlicer: partition and atom-index tracking",
+          "path": "safe/graphbpe_slicer.py",
+          "line": 30
+        },
+        {
+          "label": "SAFEConverter: filtering and serialization",
+          "path": "safe/converter.py",
+          "line": 264
+        }
+      ]
+    },
+    {
+      "id": "selection",
+      "title": "2. Boundary-preserving comparison: audit first, select separately",
+      "description": "The batch pipeline records requested versus accepted cut sets. AuditedConverter derives safe_groups by removing accepted cuts from a copy of the working graph, not by taking connected components after parsing the complete SAFE string.",
+      "code": "SELECT_EXACT_RECORDS(records):\n    selected = []\n    for r in records:\n        # Unordered atom pairs; endpoint ordering is irrelevant.\n        exact = undirected_set(r.requested_cuts) == (\n                undirected_set(r.used_cuts))\n        require exact == r.bpe_boundary_exact\n\n        if not exact:\n            count_as_boundary_changed()\n            continue  # Excluded from this comparison only.\n\n        require normalize_partition(r.bpe_groups) == (\n                normalize_partition(r.safe_groups))\n        require len(r.bpe_node_ids) == len(r.bpe_groups) == (\n                len(r.safe_groups)) == dot_fragment_count(r.safe)\n        require len(r.bpe_node_ids) == r.num_bpe_fragments == (\n                r.num_safe_fragments)\n        require r.roundtrip_ok is True\n\n        selected.append(r)\n    return selected\n\nNORMALIZE_PARTITION(groups):\n    return sort(sort(atom_indices) for atom_indices in groups)\n\n# Pipeline.convert records the cut-set comparison.\n# export_exact_graphbpe.py consumes that flag and additionally\n# validates partitions, counts, IDs and the round-trip flag.\n# Equal fragment counts alone do not establish equal boundaries.",
+      "notes": "Strict batch mode rejects boundary changes. With --allow-stereo-coarsening, successful changed-boundary records can be saved and excluded later from the exact-boundary comparison. The existing outputs contain 49,992 successful records: 5,663 changed boundaries, 44,329 exact boundaries, and 44,328 exact records shared with BRICS. Audit cut lists are not required as inputs to SAFE decoding.",
+      "sources": [
+        {
+          "label": "Batch pipeline: audit and strict/coarsening modes",
+          "path": "safe/batch_chembl.py",
+          "line": 44
+        },
+        {
+          "label": "Exact-boundary export and validation",
+          "path": "experiments/tokenization/export_exact_graphbpe.py",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "id": "lookup",
+      "title": "3. Fixed fragment lookup: complete graph → owner-tracked subgraphs",
+      "description": "Parse the complete SAFE string so every connection label can be resolved. Separately scan atom lexemes to remember which dot-separated fragment contributed each atom; bracket atoms and Cl/Br each count as one atom.",
+      "code": "MAP_FIXED_SAFE_FRAGMENTS(safe, tokenizer):\n    fragments = split(safe, \".\")\n    mol = parse_complete_SAFE(safe, removeHs=False)\n    # Reject unsupported syntax, atom maps and dummy atoms.\n\n    owners = []\n    fragment_id = 0\n    for lexeme in scan_SMILES_lexemes(safe):\n        if lexeme == \".\":\n            fragment_id += 1\n        else if is_atom(lexeme):\n            owners.append(fragment_id)\n    require len(owners) == mol.number_of_atoms\n\n    # Each canonical write/reparse can reorder atoms.\n    # Use RDKit _smilesAtomOutputOrder to reorder owners too.\n    mol, owners = match_DemoDiff_preprocessing_with_tracking(\n        mol, owners, tokenizer.kekulize)\n\n    ids = []\n    for f in range(len(fragments)):\n        atoms = [i for i in mol.atoms if owners[i] == f]\n        submol = upstream.get_sub_molecule(\n            mol, atoms, kekulize=tokenizer.kekulize)\n        require submol.number_of_atoms == len(atoms)\n        key = upstream_compatible_motif_key(submol)\n\n        if key not in tokenizer.node_vocabulary:\n            report_missing_key(fragments[f], key)\n            # Strict mode raises; diagnostic mode returns None.\n            # Never rerun GraphBPE to force a vocabulary match.\n        ids.append(lookup_or_None(key))\n\n    return {safe, ids, coverage, ids_are_lossless: False}\n\n# CC1.O1: atom lexemes = [C, C, O]; owners = [0, 0, 1].\n# Extract internal bonds for group 0 and the single atom for group 1.\n# CC1 and O1 cannot be parsed independently as complete molecules.",
+      "notes": "The adapter reuses DemoDiff's key convention, including its single-atom helper, which reconstructs from the element symbol. A vocabulary key is therefore not a lossless copy of all chemical attributes. Mapping IDs follow SAFE fragment order; recorded bpe_node_ids follow GraphBPE group order. Full SAFE remains necessary for reconstruction.",
+      "sources": [
+        {
+          "label": "FixedSAFEVocabMapper: ownership, canonicalization and lookup",
+          "path": "experiments/tokenization/demodiff_fixed_safe.py",
+          "line": 49
+        }
+      ]
+    }
   ]
 }

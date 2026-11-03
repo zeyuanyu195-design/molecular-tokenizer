@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Molecular tokenization · Results explorer</title>
   <meta name="description" content="Verified comparison of BRICS+SAFE, original DemoDiff and fixed-boundary GraphBPE+SAFE, with pseudocode and three molecular examples.">
-  <link rel="stylesheet" href="results.css"><script src="results.js" defer></script>
+  <link rel="stylesheet" href="results.css?v=20261103-pseudocode"><script src="results.js?v=20261103-pseudocode" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
@@ -30,6 +30,7 @@
     <div class="section-head"><div><div class="eyebrow">02 / ALGORITHM</div><h2>Train. Encode. Decode.</h2></div><label class="select-label">Method<select id="method-select"><option value="brics">BRICS+SAFE</option><option value="demo">Original DemoDiff</option><option value="graph" selected>GraphBPE+SAFE</option></select></label></div>
     <div id="method-flow" class="method-flow"></div>
     <div class="algorithm-layout"><div class="method-copy"><h3 id="method-title"></h3><span class="label">TRAINING & VOCABULARY</span><p id="method-training"></p><span class="label">RECONSTRUCTION</span><p id="method-decode"></p><p class="subtle">Training blocks are conceptual. These experiments load existing vocabularies; their original training corpora have not been verified.</p></div><div class="code-panel"><div class="code-toolbar"><div role="group" aria-label="Pseudocode function"><button data-step="train" aria-pressed="false">train</button><button data-step="encode" aria-pressed="true">encode</button><button data-step="decode" aria-pressed="false">decode</button></div><span>PSEUDOCODE</span></div><pre><code id="pseudocode"></code></pre></div></div>
+    <div id="graph-encode-details" hidden></div>
   </section>
   <section id="examples">
     <div class="section-head"><div><div class="eyebrow">03 / MOLECULE EXPLORER</div><h2>Follow the fragments.</h2></div><label class="select-label">Verified example<select id="example-select"><option value="0">CHEMBL45973 · 5 motifs</option><option value="1" selected>CHEMBL13214 · 8 motifs</option><option value="2">CHEMBL34237 · 12 motifs</option></select></label></div>
