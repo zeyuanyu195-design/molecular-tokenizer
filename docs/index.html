@@ -5,7 +5,6 @@
   <title>Molecular tokenization · Results explorer</title>
   <meta name="description" content="Verified comparison of BRICS+SAFE, original DemoDiff and fixed-boundary GraphBPE+SAFE, with pseudocode and three molecular examples.">
   <link rel="stylesheet" href="results.css?v=20261103-histograms"><script src="results.js?v=20261103-pseudocode" defer></script>
-  <script src="histograms.js?v=20261103-simple" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
@@ -29,21 +28,11 @@
   </section>
 
   <section id="distributions">
-    <div class="section-head"><div><div class="eyebrow">LENGTH DISTRIBUTIONS / MATCHED COHORT</div><h2>BRICS versus GraphBPE.</h2></div><label class="select-label">Counting unit<select id="distribution-unit"><option value="fragments">Fragment counts</option><option value="text">SAFE text tokens</option></select></label></div>
-    <p>Overlaid token-length histograms for BRICS and GraphBPE, using the log–log histogram style in <a href="https://arxiv.org/html/2510.08744v1">DemoDiff, Appendix B.2, Figure 9</a>. All values come from this project’s saved results.</p>
-    <p><strong>Fixed cohort: 44,328 matched molecules.</strong> The full/shared toggle above changes the statistics table only; these plots always compare identical molecules.</p>
-    <p id="distribution-description" aria-live="polite"></p>
-    <p id="distribution-error" hidden role="alert">Distribution data could not be loaded. Please reload or download the files below.</p>
-    <figure class="distribution-figure"><a id="distribution-image-link" href="figures/token-distributions-fragments.png?v=simple"><img id="distribution-image" src="figures/token-distributions-fragments.png?v=simple" alt="Overlaid BRICS versus GraphBPE fragment-count histogram on 44,328 matched molecules" loading="lazy" width="1980" height="1232"></a><figcaption id="distribution-caption">Click the figure to view it at full resolution.</figcaption></figure>
-    <div class="source-links"><a id="distribution-png" href="figures/token-distributions-fragments.png?v=simple" download>Download PNG ↓</a><a id="distribution-pdf" href="figures/token-distributions-fragments.pdf?v=simple" download>Download vector PDF ↓</a><a href="figures/token-distributions.json" download>Download frequencies &amp; statistics (JSON) ↓</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/experiments/tokenization/plot_token_distributions.py">Plotting script ↗</a></div>
-    <div class="table-scroll"><table id="distribution-stats"><caption>Same molecules and counting unit within each comparison</caption><thead><tr><th>Method</th><th>Molecules</th><th>Mean</th><th>Median</th><th>P95</th><th>P99</th><th>Maximum</th></tr></thead><tbody></tbody></table></div>
-    <details><summary>Counting, binning and boundary definitions</summary><div class="detail-body">
-    <p><strong>Fragment counts:</strong> the number of original BRICS groups or GraphBPE groups, one fragment per counting token. This does not train a BRICS vocabulary or imply a complete reversible token-ID sequence. Connection labels, edge tables and attachment information are excluded.</p>
-    <p>The cohort requires exact GraphBPE → SAFE boundaries, a successful BRICS record and a successful original-SMILES DemoDiff record, matched by record index, ChEMBL ID and original SMILES. In 304 of these molecules, BRICS boundaries change during SAFE serialization. The fragment plot uses the <em>original BRICS groups</em>; the text plot uses the final SAFE strings. BRICS final SAFE fragment counts average 6.095809, versus 6.102915 original BRICS fragments.</p>
-    <p><strong>SAFE text lengths:</strong> both representations use the same existing SAFE text tokenizer, restored with its custom pre-tokenizer. Counts include connectivity syntax; no special tokens, padding, truncation or dropout are used.</p>
-    <p>Both methods share 54 logarithmic bins, with density = bin count / (44,328 × bin width). Both axes use logarithmic scales to show the full length range and long tail. All observations are retained; zero-height bins are not visible on log axes.</p>
-    <p>The paper compares atom versus motif counts; this histogram compares BRICS versus GraphBPE and does not inherit the paper’s compression claim.</p>
-    </div></details>
+    <div class="section-head"><div><div class="eyebrow">TOKEN-LENGTH DISTRIBUTION / MATCHED COHORT</div><h2>SAFE text tokens to motif IDs.</h2></div></div>
+    <p>Comparison of the two representations in the results table, on the same <strong>44,328 molecules</strong>.</p>
+    <p><strong>Mean counted length: <span style="color:#2e86a6">60.22 BRICS+SAFE text tokens</span> → <span style="color:#a8427d">8.41 GraphBPE+SAFE motif IDs</span>.</strong> Dashed lines mark these means.</p>
+    <figure class="distribution-figure"><img src="figures/counted-length-comparison.png?v=20261103" alt="Overlaid histogram: BRICS+SAFE text tokens average 60.22; GraphBPE+SAFE motif IDs average 8.41, on 44,328 matched molecules. Motif counts exclude connectivity information." loading="lazy" width="2200" height="1364"><figcaption>Shared logarithmic bins and log-scaled axes show the complete length range. The statistics table’s full/shared toggle does not change this matched-cohort plot.</figcaption></figure>
+    <aside class="note"><strong>Counting scope.</strong> BRICS+SAFE text tokens include connectivity symbols; GraphBPE+SAFE motif IDs exclude them. This plot shows the difference in counted lengths between the two representations, not a complete-encoding compression ratio. Reconstruction currently retains the full SAFE string.</aside>
   </section>
   <section id="methods">
     <div class="section-head"><div><div class="eyebrow">02 / ALGORITHM</div><h2>Train. Encode. Decode.</h2></div><label class="select-label">Method<select id="method-select"><option value="brics">BRICS+SAFE</option><option value="demo">Original DemoDiff</option><option value="graph" selected>GraphBPE+SAFE</option></select></label></div>
