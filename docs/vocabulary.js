@@ -32,7 +32,10 @@
     function tokens(node, values, ids, fragmentIndex) {
       values.forEach((value, i) => {
         const span = document.createElement("span"); span.className="v-token";
-        span.textContent=mode==="ids" ? ids[i] : value;
+        const primary=document.createElement("span"), secondary=document.createElement("small");
+        primary.textContent=mode==="ids" ? `ID ${ids[i]}` : value;
+        secondary.textContent=mode==="ids" ? value : `ID ${ids[i]}`;
+        span.append(primary,secondary);
         span.title=`${value} · ID ${ids[i]}`;
         if (fragmentIndex !== undefined) span.dataset.vFragment=fragmentIndex;
         node.append(span);
@@ -56,13 +59,13 @@
         const hybridCell = cell(tr,"");
         const badge = document.createElement("small");
         badge.className = "v-match-label";
-        badge.textContent = f.encode_mode === "whole" ? "Complete match · 1 token" : f.encode_mode === "base" ? "Base vocabulary · 1 token" : "Substring fallback";
+        badge.textContent = f.encode_mode === "whole" ? "Complete match · 1 token" : f.encode_mode === "base" ? "Base vocabulary · 1 token" : "Text-substring fallback · not necessarily motifs";
         hybridCell.append(badge);
         tokens(hybridCell,f.tokens,f.ids);
         cell(tr,`${f.old_ids.length} → ${f.ids.length}`);
         body.append(tr);
         tokens(sequence,f.tokens,f.ids,i);
-        if(i<dotsCount){const dot=document.createElement("span");dot.className="v-token v-dot";dot.textContent=mode==="ids"?"11":".";dot.title="Fragment separator · ID 11";sequence.append(dot);}
+        if(i<dotsCount){const dot=document.createElement("span");dot.className="v-token v-dot";dot.textContent=mode==="ids"?"ID 11 · .":". · ID 11";dot.title="Fragment separator · ID 11";sequence.append(dot);}
       });
       const dots=document.createElement("tr");["Separating dots",dotsCount,dotsCount,`${dotsCount} → ${dotsCount}`].forEach(v=>cell(dots,v));body.append(dots);
       const total=document.createElement("tr");["Total",selected.old_length,selected.length,`${selected.old_length} → ${selected.length}`].forEach(v=>cell(total,v));body.append(total);
