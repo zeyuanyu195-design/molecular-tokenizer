@@ -1,0 +1,324 @@
+{
+  "updated": "2026-11-09",
+  "summary": {
+    "primary_scope": "SAFE partition exactly matches original GraphBPE partition",
+    "records": 44329,
+    "distinct_canonical_smiles_strings": 44328,
+    "excluded_boundary_changed_records": 5663,
+    "cohorts": {
+      "train": 35518,
+      "test": 4543,
+      "validation": 4268
+    },
+    "note": "Frozen vocabularies. Includes training and validation records; descriptive full-cohort statistics.",
+    "budgets": {
+      "16000": {
+        "records": 44329,
+        "whole_fragment": {
+          "n": 44329,
+          "total": 1555440,
+          "mean": 35.088542489115476,
+          "median": 27,
+          "p95": 81,
+          "min": 1,
+          "max": 2700
+        },
+        "hybrid": {
+          "n": 44329,
+          "total": 883006,
+          "mean": 19.91937557806402,
+          "median": 12,
+          "p95": 51,
+          "min": 1,
+          "max": 1005
+        },
+        "saved_tokens": 672434,
+        "length_reduction": 0.4323111145399372,
+        "compression_factor": 1.761528234236234,
+        "shorter": 32854,
+        "equal": 4597,
+        "longer": 6878,
+        "exact_whole_safe_roundtrips": 44329,
+        "exact_hybrid_safe_roundtrips": 44329
+      },
+      "32000": {
+        "records": 44329,
+        "whole_fragment": {
+          "n": 44329,
+          "total": 1214713,
+          "mean": 27.402219765841775,
+          "median": 22,
+          "p95": 67,
+          "min": 1,
+          "max": 1860
+        },
+        "hybrid": {
+          "n": 44329,
+          "total": 806065,
+          "mean": 18.18369464684518,
+          "median": 11,
+          "p95": 48,
+          "min": 1,
+          "max": 856
+        },
+        "saved_tokens": 408648,
+        "length_reduction": 0.3364152684625916,
+        "compression_factor": 1.5069665597687532,
+        "shorter": 23127,
+        "equal": 13442,
+        "longer": 7760,
+        "exact_whole_safe_roundtrips": 44329,
+        "exact_hybrid_safe_roundtrips": 44329
+      }
+    },
+    "selected_hybrid": {
+      "16000": "K16000_whole50",
+      "32000": "K32000_whole25"
+    },
+    "sources": {
+      "records.jsonl": "1188a184688372a62e1cc9aa03a392aeae4e882143687313a3ba88ab166a97d7",
+      "summary.json": "e0324c528807760698aab1ab28edd8b255a675b753cf45c7f720e2ef4d0d895a",
+      "per_molecule_comparison.jsonl": "759968912a9dba5104f6d39c4051b78559b5de073d43ee7695b1ade4fdd8a6eb",
+      "report_boundary_exact_comparison.py": "394bcc3f562a8a8d540db0fca62051feb7a2339cc66d94e5c1854e6c92c37286"
+    }
+  },
+  "example": {
+    "record_index": 39224,
+    "chembl_id": "CHEMBL45183",
+    "safe": "C123CCC(C1)C45C26.C7(=O)C8NC(=O)[C@H]9N.C8c1cccs1.C9C(=O)O.O67.C3.C4.C5",
+    "length": 23,
+    "ids": [
+      11140,
+      10047,
+      9447,
+      2191,
+      12524,
+      11,
+      9755,
+      2179,
+      9879,
+      37,
+      11,
+      2179,
+      10285,
+      11,
+      3294,
+      11,
+      2356,
+      11,
+      2137,
+      11,
+      2136,
+      11,
+      2138
+    ],
+    "fragments": [
+      {
+        "text": "C123CCC(C1)C45C26",
+        "whole_entry": false,
+        "ids": [
+          11140,
+          10047,
+          9447,
+          2191,
+          12524
+        ],
+        "tokens": [
+          "C123",
+          "CCC(C",
+          "1)",
+          "C45",
+          "C26"
+        ],
+        "old_ids": [
+          14286
+        ],
+        "old_tokens": [
+          "C123CCC(C1)C45C26"
+        ]
+      },
+      {
+        "text": "C7(=O)C8NC(=O)[C@H]9N",
+        "whole_entry": false,
+        "ids": [
+          9755,
+          2179,
+          9879,
+          37
+        ],
+        "tokens": [
+          "C7(=O)",
+          "C8",
+          "NC(=O)[C@H]9",
+          "N"
+        ],
+        "old_ids": [
+          27,
+          20,
+          7,
+          23,
+          38,
+          8,
+          27,
+          21,
+          37,
+          27,
+          7,
+          23,
+          38,
+          8,
+          80,
+          22,
+          37
+        ],
+        "old_tokens": [
+          "C",
+          "7",
+          "(",
+          "=",
+          "O",
+          ")",
+          "C",
+          "8",
+          "N",
+          "C",
+          "(",
+          "=",
+          "O",
+          ")",
+          "[C@H]",
+          "9",
+          "N"
+        ]
+      },
+      {
+        "text": "C8c1cccs1",
+        "whole_entry": false,
+        "ids": [
+          2179,
+          10285
+        ],
+        "tokens": [
+          "C8",
+          "c1cccs1"
+        ],
+        "old_ids": [
+          27,
+          21,
+          54,
+          14,
+          54,
+          54,
+          54,
+          68,
+          14
+        ],
+        "old_tokens": [
+          "C",
+          "8",
+          "c",
+          "1",
+          "c",
+          "c",
+          "c",
+          "s",
+          "1"
+        ]
+      },
+      {
+        "text": "C9C(=O)O",
+        "whole_entry": true,
+        "ids": [
+          3294
+        ],
+        "tokens": [
+          "C9C(=O)O"
+        ],
+        "old_ids": [
+          3294
+        ],
+        "old_tokens": [
+          "C9C(=O)O"
+        ]
+      },
+      {
+        "text": "O67",
+        "whole_entry": true,
+        "ids": [
+          2356
+        ],
+        "tokens": [
+          "O67"
+        ],
+        "old_ids": [
+          2356
+        ],
+        "old_tokens": [
+          "O67"
+        ]
+      },
+      {
+        "text": "C3",
+        "whole_entry": true,
+        "ids": [
+          2137
+        ],
+        "tokens": [
+          "C3"
+        ],
+        "old_ids": [
+          2137
+        ],
+        "old_tokens": [
+          "C3"
+        ]
+      },
+      {
+        "text": "C4",
+        "whole_entry": true,
+        "ids": [
+          2136
+        ],
+        "tokens": [
+          "C4"
+        ],
+        "old_ids": [
+          2136
+        ],
+        "old_tokens": [
+          "C4"
+        ]
+      },
+      {
+        "text": "C5",
+        "whole_entry": true,
+        "ids": [
+          2138
+        ],
+        "tokens": [
+          "C5"
+        ],
+        "old_ids": [
+          2138
+        ],
+        "old_tokens": [
+          "C5"
+        ]
+      }
+    ]
+  },
+  "methods": {
+    "whole": {
+      "title": "Whole-fragment vocabulary",
+      "train": "TRAIN(train_SAFE, K):\n    base = existing_SAFE_vocabulary + 256_byte_fallback_entries\n    M = 2136\n    fragments = split_each_training_SAFE_on_dots()\n    ranked = frequency_rank(fragments, lexical_tie_break)\n    remove_strings_already_represented_by_one_base_token(ranked)\n    add_top(K - M, ranked)  # literal labels retained\n    return vocabulary",
+      "encode": "ENCODE(safe, vocabulary):\n    for fragment in safe.split(\".\"):\n        if complete_fragment_entry_exists(fragment):\n            emit its_ID\n        else:\n            emit base_tokenize(fragment)\n            # Use UTF-8 byte fallback if exact reconstruction fails.\n        emit dot_ID between fragments\n    return IDs",
+      "decode": "DECODE(IDs, vocabulary):\n    safe = UTF8_decode(concatenate vocabulary.byte_payload[ID])\n    return safe\n    # Parse the COMPLETE SAFE string to recover the molecule.\n    # No original SAFE side table or per-molecule edge table."
+    },
+    "hybrid": {
+      "title": "Whole fragments + within-fragment BPE",
+      "train": "TRAIN(train_SAFE, K, whole_fraction):\n    keep the same base vocabulary M = 2136\n    reserve floor((K-M) * whole_fraction) frequent whole fragments\n    base_encode each TRAIN fragment separately\n    learn BPE merges weighted by TRAIN fragment frequency\n    # Never merge across dots; preserve connection labels.\n    append merge-prefix substrings until total model IDs == K\n    reuse an existing ID for an identical byte payload\n    return vocabulary, within_fragment_BPE\n\nSELECT_ON_VALIDATION():\n    compare whole fractions 25%, 50%, 75% of (K-M)\n    minimize validation total length; freeze before test evaluation",
+      "encode": "ENCODE(safe, vocabulary, within_fragment_BPE):\n    for fragment in safe.split(\".\"):\n        if complete_fragment_entry_exists(fragment):\n            emit its_ID\n        else:\n            base_IDs = lossless_base_encode(fragment)\n            emit within_fragment_BPE(base_IDs).model_IDs\n        emit dot_ID between fragments\n    return IDs",
+      "decode": "DECODE(IDs, vocabulary):\n    safe = UTF8_decode(concatenate vocabulary.byte_payload[ID])\n    return safe\n    # Parse the COMPLETE SAFE string to recover the molecule.\n    # No original SAFE side table or per-molecule edge table."
+    }
+  }
+}

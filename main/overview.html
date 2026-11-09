@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -68,7 +68,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#molecular-tokenization-graphbpe-safe-and-demodiff" class="md-skip">
+        <a href="#reversible-graphbpe-safe-tokenization" class="md-skip">
           Skip to content
         </a>
       
@@ -288,10 +288,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#main-finding" class="md-nav__link">
+  <a href="#latest-result-44329-boundary-preserving-records" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Main finding
+        Latest result — 44,329 boundary-preserving records
       
     </span>
   </a>
@@ -299,10 +299,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#train-encode-and-decode" class="md-nav__link">
+  <a href="#from-graph-fragments-to-a-bounded-vocabulary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Train, encode and decode
+        From graph fragments to a bounded vocabulary
       
     </span>
   </a>
@@ -310,22 +310,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#token-length-results" class="md-nav__link">
+  <a href="#pseudocode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Token-length results
+        Pseudocode
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Token-length results">
+    <nav class="md-nav" aria-label="Pseudocode">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#shared-molecules" class="md-nav__link">
+  <a href="#whole-fragment-scheme" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Shared molecules
+        Whole-fragment scheme
       
     </span>
   </a>
@@ -333,10 +333,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#full-available-cohorts" class="md-nav__link">
+  <a href="#hybrid-scheme" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Full available cohorts
+        Hybrid scheme
       
     </span>
   </a>
@@ -349,10 +349,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#boundary-preservation-and-sample-selection" class="md-nav__link">
+  <a href="#chembl45183-39-23-tokens-at-16k" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Boundary preservation and sample selection
+        CHEMBL45183 — 39 → 23 tokens at 16k
       
     </span>
   </a>
@@ -360,121 +360,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-pseudocode" class="md-nav__link">
+  <a href="#validation-and-interpretation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core pseudocode
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Core pseudocode">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#bricssafe" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BRICS+SAFE
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#original-demodiff" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Original DemoDiff
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#graphbpesafe" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GraphBPE+SAFE
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#three-boundary-preserving-examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Three boundary-preserving examples
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Three boundary-preserving examples">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-chembl45973-5-graphbpe-motifs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. CHEMBL45973 — 5 GraphBPE motifs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-chembl13214-8-graphbpe-motifs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. CHEMBL13214 — 8 GraphBPE motifs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-chembl34237-12-graphbpe-motifs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. CHEMBL34237 — 12 GraphBPE motifs
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#interpretation-and-implementation-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interpretation and implementation status
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#evidence" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Evidence
+        Validation and interpretation
       
     </span>
   </a>
@@ -987,10 +876,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#main-finding" class="md-nav__link">
+  <a href="#latest-result-44329-boundary-preserving-records" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Main finding
+        Latest result — 44,329 boundary-preserving records
       
     </span>
   </a>
@@ -998,10 +887,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#train-encode-and-decode" class="md-nav__link">
+  <a href="#from-graph-fragments-to-a-bounded-vocabulary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Train, encode and decode
+        From graph fragments to a bounded vocabulary
       
     </span>
   </a>
@@ -1009,22 +898,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#token-length-results" class="md-nav__link">
+  <a href="#pseudocode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Token-length results
+        Pseudocode
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Token-length results">
+    <nav class="md-nav" aria-label="Pseudocode">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#shared-molecules" class="md-nav__link">
+  <a href="#whole-fragment-scheme" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Shared molecules
+        Whole-fragment scheme
       
     </span>
   </a>
@@ -1032,10 +921,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#full-available-cohorts" class="md-nav__link">
+  <a href="#hybrid-scheme" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Full available cohorts
+        Hybrid scheme
       
     </span>
   </a>
@@ -1048,10 +937,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#boundary-preservation-and-sample-selection" class="md-nav__link">
+  <a href="#chembl45183-39-23-tokens-at-16k" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Boundary preservation and sample selection
+        CHEMBL45183 — 39 → 23 tokens at 16k
       
     </span>
   </a>
@@ -1059,121 +948,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#core-pseudocode" class="md-nav__link">
+  <a href="#validation-and-interpretation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Core pseudocode
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Core pseudocode">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#bricssafe" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BRICS+SAFE
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#original-demodiff" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Original DemoDiff
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#graphbpesafe" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        GraphBPE+SAFE
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#three-boundary-preserving-examples" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Three boundary-preserving examples
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Three boundary-preserving examples">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-chembl45973-5-graphbpe-motifs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. CHEMBL45973 — 5 GraphBPE motifs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-chembl13214-8-graphbpe-motifs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. CHEMBL13214 — 8 GraphBPE motifs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-chembl34237-12-graphbpe-motifs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. CHEMBL34237 — 12 GraphBPE motifs
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#interpretation-and-implementation-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interpretation and implementation status
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#evidence" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Evidence
+        Validation and interpretation
       
     </span>
   </a>
@@ -1200,432 +978,247 @@
   
 
 
-<h1 id="molecular-tokenization-graphbpe-safe-and-demodiff">Molecular tokenization: GraphBPE, SAFE and DemoDiff<a class="headerlink" href="#molecular-tokenization-graphbpe-safe-and-demodiff" title="Permanent link">&para;</a></h1>
-<p><a href="https://zeyuanyu195-design.github.io/molecular-tokenizer/">Explore the interactive results</a></p>
-<h2 id="main-finding">Main finding<a class="headerlink" href="#main-finding" title="Permanent link">&para;</a></h2>
-<p>On <strong>44,328 matched molecules</strong>, fixed-boundary GraphBPE+SAFE and the original DemoDiff tokenizer produce <strong>identical motif/node counts for every molecule</strong>: <strong>372,924 tokens in total</strong>, averaging <strong>8.412832 per molecule</strong>. DemoDiff receives the original <code>canonical_smiles</code>, not a SAFE string.</p>
-<p>These are motif/node counts <strong>excluding connectivity overhead</strong>. They are not directly comparable as complete encoding costs to SAFE text-token lengths, which include connectivity symbols.</p>
-<h2 id="train-encode-and-decode">Train, encode and decode<a class="headerlink" href="#train-encode-and-decode" title="Permanent link">&para;</a></h2>
+<h1 id="reversible-graphbpe-safe-tokenization">Reversible GraphBPE + SAFE tokenization<a class="headerlink" href="#reversible-graphbpe-safe-tokenization" title="Permanent link">&para;</a></h1>
+<p><a href="https://zeyuanyu195-design.github.io/molecular-tokenizer/#vocabulary-results">Interactive results and token-by-token example</a></p>
+<h2 id="latest-result-44329-boundary-preserving-records">Latest result — 44,329 boundary-preserving records<a class="headerlink" href="#latest-result-44329-boundary-preserving-records" title="Permanent link">&para;</a></h2>
+<p>We compare <strong>whole-fragment lookup with base-token fallback</strong> against <strong>whole-fragment lookup with within-fragment BPE fallback</strong>, at the same total model vocabulary budget. Both preserve complete SAFE strings, including connection labels, bond/stereo symbols and dots.</p>
 <table>
 <thead>
 <tr>
-<th>Method</th>
-<th>Train / vocabulary used</th>
-<th>Encode</th>
-<th>Decode</th>
-<th>Counted unit</th>
+<th style="text-align: right;">Total vocabulary</th>
+<th style="text-align: right;">Records</th>
+<th style="text-align: right;">Whole-fragment mean</th>
+<th style="text-align: right;">Hybrid mean</th>
+<th style="text-align: right;">Length reduction</th>
+<th style="text-align: right;">Whole-fragment total</th>
+<th style="text-align: right;">Hybrid total</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>BRICS+SAFE</td>
-<td>Fixed BRICS rules; existing SAFE text tokenizer</td>
-<td>SMILES → BRICS → SAFE → text IDs</td>
-<td>Text IDs → SAFE → SMILES</td>
-<td>SAFE text tokens</td>
-</tr>
-<tr>
-<td>Original DemoDiff</td>
-<td>NPE/GraphBPE motif learning; existing node/ring/edge vocabulary</td>
-<td>Original SMILES → GraphBPE → node IDs + edge/attachment information</td>
-<td>Node IDs + bond adjacency + attachment positions → SMILES</td>
-<td>Node IDs only</td>
-</tr>
-<tr>
-<td>GraphBPE+SAFE</td>
-<td>Same existing GraphBPE node/ring vocabulary</td>
-<td>SMILES → GraphBPE → SAFE → fixed-boundary motif lookup</td>
-<td>Complete SAFE → SMILES</td>
-<td>Motif IDs only</td>
-</tr>
-</tbody>
-</table>
-<p>No vocabulary is retrained in this experiment. The graph vocabulary contains 3,000 node entries and 300 ring entries; its original training corpus and that of the SAFE text tokenizer have not been verified. The additional frequency-based vocabulary previously proposed is <strong>not</strong> part of these results.</p>
-<h2 id="token-length-results">Token-length results<a class="headerlink" href="#token-length-results" title="Permanent link">&para;</a></h2>
-<h3 id="shared-molecules">Shared molecules<a class="headerlink" href="#shared-molecules" title="Permanent link">&para;</a></h3>
-<p>All rows below use the same <strong>44,328 molecules</strong>, matched by record index and checked against ChEMBL ID and original SMILES.</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th style="text-align: right;">Molecules</th>
-<th style="text-align: right;">Total tokens</th>
-<th style="text-align: right;">Mean</th>
-<th style="text-align: right;">Median</th>
-<th style="text-align: right;">P95</th>
-<th style="text-align: right;">Maximum</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>BRICS+SAFE</td>
-<td style="text-align: right;">44,328</td>
-<td style="text-align: right;">2,669,535</td>
-<td style="text-align: right;">60.222320</td>
-<td style="text-align: right;">52</td>
-<td style="text-align: right;">107</td>
-<td style="text-align: right;">1,487</td>
-</tr>
-<tr>
-<td>Original DemoDiff</td>
-<td style="text-align: right;">44,328</td>
-<td style="text-align: right;">372,924</td>
-<td style="text-align: right;">8.412832</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">223</td>
-</tr>
-<tr>
-<td>GraphBPE+SAFE · fixed motifs</td>
-<td style="text-align: right;">44,328</td>
-<td style="text-align: right;">372,924</td>
-<td style="text-align: right;">8.412832</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">223</td>
-</tr>
-<tr>
-<td>GraphBPE+SAFE · text control</td>
-<td style="text-align: right;">44,328</td>
-<td style="text-align: right;">3,051,888</td>
-<td style="text-align: right;">68.847861</td>
-<td style="text-align: right;">56</td>
-<td style="text-align: right;">133</td>
-<td style="text-align: right;">2,779</td>
-</tr>
-</tbody>
-</table>
-<p>BRICS+SAFE and the GraphBPE+SAFE text control use the <strong>same SAFE text tokenizer</strong>, with no special tokens, padding or truncation, and with dropout disabled. Only these two rows measure the same text-token unit. The two motif rows exclude connectivity information.</p>
-<h3 id="full-available-cohorts">Full available cohorts<a class="headerlink" href="#full-available-cohorts" title="Permanent link">&para;</a></h3>
-<p>These cohorts have different inclusion criteria and are not matched-sample comparisons. GraphBPE+SAFE fixed motifs includes only the 44,329 boundary-preserving records.</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th style="text-align: right;">Molecules</th>
-<th style="text-align: right;">Total tokens</th>
-<th style="text-align: right;">Mean</th>
-<th style="text-align: right;">Median</th>
-<th style="text-align: right;">P95</th>
-<th style="text-align: right;">Maximum</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>BRICS+SAFE</td>
-<td style="text-align: right;">49,997</td>
-<td style="text-align: right;">3,024,042</td>
-<td style="text-align: right;">60.484469</td>
-<td style="text-align: right;">52</td>
-<td style="text-align: right;">109</td>
-<td style="text-align: right;">1,487</td>
-</tr>
-<tr>
-<td>Original DemoDiff</td>
-<td style="text-align: right;">49,998</td>
-<td style="text-align: right;">428,440</td>
-<td style="text-align: right;">8.569143</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">23</td>
-<td style="text-align: right;">246</td>
-</tr>
-<tr>
-<td>GraphBPE+SAFE · fixed motifs</td>
+<td style="text-align: right;">16,000</td>
 <td style="text-align: right;">44,329</td>
-<td style="text-align: right;">372,957</td>
-<td style="text-align: right;">8.413386</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">223</td>
+<td style="text-align: right;">35.088542</td>
+<td style="text-align: right;">19.919376</td>
+<td style="text-align: right;">43.23%</td>
+<td style="text-align: right;">1,555,440</td>
+<td style="text-align: right;">883,006</td>
 </tr>
 <tr>
-<td>GraphBPE+SAFE · text control</td>
-<td style="text-align: right;">49,992</td>
-<td style="text-align: right;">3,435,594</td>
-<td style="text-align: right;">68.722876</td>
-<td style="text-align: right;">56</td>
-<td style="text-align: right;">135</td>
-<td style="text-align: right;">2,779</td>
+<td style="text-align: right;">32,000</td>
+<td style="text-align: right;">44,329</td>
+<td style="text-align: right;">27.402220</td>
+<td style="text-align: right;">18.183695</td>
+<td style="text-align: right;">33.64%</td>
+<td style="text-align: right;">1,214,713</td>
+<td style="text-align: right;">806,065</td>
 </tr>
 </tbody>
 </table>
-<p>The original DemoDiff experiment processes the first <strong>50,000 original SMILES</strong>: <strong>49,998 succeed</strong>, <strong>2 fail SMILES parsing</strong>, and <strong>0 successfully encoded rows report unknown nodes</strong>.</p>
-<h2 id="boundary-preservation-and-sample-selection">Boundary preservation and sample selection<a class="headerlink" href="#boundary-preservation-and-sample-selection" title="Permanent link">&para;</a></h2>
-<ul>
-<li>GraphBPE+SAFE succeeds for 49,992 of the 50,000 input records.</li>
-<li>5,663 successful records have final SAFE boundaries different from the original GraphBPE partition and are excluded from the fixed-boundary comparison.</li>
-<li>44,329 retain the original boundaries. Their motif counts also match original-SMILES DemoDiff counts record by record: 372,957 total, mean 8.413386.</li>
-<li>One of those records, CHEMBL1213498, lacks a successful BRICS result, leaving 44,328 shared records for the three-method table.</li>
-</ul>
-<p>The current SAFE implementation restricts some cuts to preserve stereochemistry. Boundary changes are not limited to cutting stereogenic double bonds: omitted cuts also involve single, aromatic and triple bonds. For CHEMBL55653, an omitted double-bond cut changes four original GraphBPE motifs into three SAFE fragments while preserving the reconstructed molecule.</p>
-<p>SAFE dots separate fragments; <strong>paired labels, their attachment positions and bond symbols</strong>, rather than dots alone, encode cross-fragment connectivity.</p>
-<h2 id="core-pseudocode">Core pseudocode<a class="headerlink" href="#core-pseudocode" title="Permanent link">&para;</a></h2>
-<p>The training blocks describe the conceptual roles of <code>train</code>. The reported measurements load existing vocabularies. Encoding and decoding blocks distinguish the three evaluated paths.</p>
-<h3 id="bricssafe">BRICS+SAFE<a class="headerlink" href="#bricssafe" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>TRAIN(training_SAFE_strings, vocabulary_size):
-    use predefined BRICS fragmentation rules
-    learn a SAFE text-token vocabulary from training strings
-    return text_tokenizer
-
-# This experiment loads an existing text tokenizer.
-# Its original training corpus has not been verified.
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>ENCODE(smiles, text_tokenizer):
-    safe = SAFE.encode(smiles, slicer=BRICS)
-    ids = text_tokenizer.encode(safe,
-        add_special_tokens=False, padding=False,
-        truncation=False, dropout=0)
-    return safe, ids, len(ids)
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>DECODE(text_ids, text_tokenizer):
-    safe = text_tokenizer.decode(text_ids)
-    return SAFE.decode(safe)
-</code></pre></div>
-<h3 id="original-demodiff">Original DemoDiff<a class="headerlink" href="#original-demodiff" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>TRAIN(training_molecular_graphs, target_size):
-    initialize graph vocabulary and ring handling
-    repeat until target_size or no eligible merge:
-        count eligible adjacent-subgraph pairs
-        merge the most frequent pair in training graphs
-        add the resulting motif to the node vocabulary
-    retain node, ring and edge/attachment vocabularies
-
-# Conceptual NPE training, not rerun for this experiment.
-# The original vocabulary training corpus is unverified.
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>ENCODE(original_smiles, tokenizer):
-    node_ids, adj = tokenizer.encode(
-        original_smiles, update_vocab_edge=False)
-    bonds, positions = tokenizer.get_bond_position_by_vocab(adj)
-    return node_ids, bonds, positions, len(node_ids)
-
-# Input is the original canonical_smiles, not a SAFE string.
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>DECODE(node_ids, bonds, positions, tokenizer):
-    return tokenizer.decode(node_ids, bonds, positions,
-        replace_unknown_with_random=False)
-</code></pre></div>
-<h3 id="graphbpesafe">GraphBPE+SAFE<a class="headerlink" href="#graphbpesafe" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>TRAIN(training_molecular_graphs, target_size):
-    return NPE_TRAIN(training_molecular_graphs, target_size)
-
-# For the reported experiment, load the existing vocabulary.
-# No additional SAFE-fragment vocabulary is trained.
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>ENCODE(smiles, vocabulary):
-    groups = GraphBPE.partition(smiles, vocabulary)
-    safe = SAFE.serialize(smiles, proposed_partition=groups)
-    if final_SAFE_partition(safe) != groups:
-        exclude from the boundary-preserving comparison
-    ids = []
-    for fragment in SAFE_order(safe):
-        subgraph = extract_from_complete_SAFE_graph(fragment)
-        key = DemoDiff_compatible_motif_key(subgraph)
-        ids.append(vocabulary.lookup(key))
-    return safe, ids, len(ids)
-
-# No second GraphBPE merge pass during fixed-boundary lookup.
-# Aggregate lengths reuse len(record.bpe_node_ids) after
-# exact-boundary validation; examples also verify this mapping.
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>DECODE(safe, motif_ids):
-    return SAFE.decode(safe)
-
-# Connectivity is retained in the complete SAFE string.
-# Decoding from motif_ids alone is not implemented.
-</code></pre></div>
-<h2 id="three-boundary-preserving-examples">Three boundary-preserving examples<a class="headerlink" href="#three-boundary-preserving-examples" title="Permanent link">&para;</a></h2>
-<p>All three examples belong to the shared cohort and pass molecular reconstruction checks for all three methods. Fixed motif IDs are listed in <strong>SAFE fragment order</strong>; DemoDiff node IDs follow its own graph order. The same motif may appear more than once.</p>
-<h3 id="1-chembl45973-5-graphbpe-motifs">1. CHEMBL45973 — 5 GraphBPE motifs<a class="headerlink" href="#1-chembl45973-5-graphbpe-motifs" title="Permanent link">&para;</a></h3>
-<p>Original SMILES:</p>
-<div class="highlight"><pre><span></span><code>Cc1nc(N(N)CCC#N)oc1C
-</code></pre></div>
+<p>Reduction = 1 − hybrid total / whole-fragment total. No BOS/EOS, padding or truncation. These are complete encoding lengths, not the earlier motif-only counts (~8.41) that exclude connectivity.</p>
+<p><strong>Scope:</strong> all 44,329 records have identical GraphBPE and final SAFE partitions. The 5,663 changed-boundary records are excluded. The 44,329 records contain 44,328 distinct original canonical-SMILES strings; the table counts records without deduplication. This is different from the earlier 44,328-record cohort matched across BRICS and DemoDiff.</p>
+<h2 id="from-graph-fragments-to-a-bounded-vocabulary">From graph fragments to a bounded vocabulary<a class="headerlink" href="#from-graph-fragments-to-a-bounded-vocabulary" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Start with the existing SMILES → GraphBPE partition → SAFE serialization. Do not rerun GraphBPE during text tokenization.</li>
+<li>Keep the existing split: <strong>35,518 training / 4,268 validation / 4,543 test records</strong>. The same non-stereochemical molecular graph and its stereoisomers stay in one split.</li>
+<li>Keep <strong>M = 2,136</strong> base entries: 1,880 existing SAFE entries + 256 byte-fallback entries. Count literal complete fragments on TRAIN only; e.g. <code>C4c1cccs1</code> and <code>C8c1cccs1</code> are different entries.</li>
+<li>Whole-fragment scheme: add the most frequent K−M complete fragments. A miss uses base text tokens; dots remain separate tokens.</li>
+<li>Hybrid scheme: allocate part of K−M to complete fragments, and the rest to TRAIN-only BPE substrings learned inside each fragment. Start from base tokens, never merge across dots, never rewrite labels. Identical payloads share an output ID.</li>
+<li>Compare 25%, 50%, 75% whole-fragment allocations on VALIDATION, then freeze the selected configuration. A complete-fragment hit emits one ID; a miss uses within-fragment BPE.</li>
+<li>Decode by concatenating global vocabulary byte payloads. The reconstructed complete SAFE carries connectivity; no original SAFE or per-molecule edge table is needed.</li>
+</ol>
 <table>
 <thead>
 <tr>
-<th>Representation</th>
-<th style="text-align: right;">Fragments / nodes</th>
-<th style="text-align: right;">Counted token length</th>
+<th>Scheme / total budget</th>
+<th style="text-align: right;">Base entries</th>
+<th style="text-align: right;">Dedicated whole-fragment entries</th>
+<th style="text-align: right;">Added substring entries</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>BRICS+SAFE</td>
+<td>Whole / 16k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">13,864</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Hybrid / 16k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">6,932</td>
+<td style="text-align: right;">6,932</td>
+</tr>
+<tr>
+<td>Whole / 32k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">29,864</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Hybrid / 32k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">7,466</td>
+<td style="text-align: right;">22,398</td>
+</tr>
+</tbody>
+</table>
+<p>BPE can itself learn a complete-fragment string; the categories describe how entries were allocated, not exclusive chemical types. A substring need not be a valid standalone molecule.</p>
+<h2 id="pseudocode">Pseudocode<a class="headerlink" href="#pseudocode" title="Permanent link">&para;</a></h2>
+<h3 id="whole-fragment-scheme">Whole-fragment scheme<a class="headerlink" href="#whole-fragment-scheme" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>TRAIN(train_SAFE, K):
+    base = existing_SAFE_vocabulary + 256_byte_fallback_entries
+    M = 2136
+    fragments = split_each_training_SAFE_on_dots()
+    ranked = frequency_rank(fragments, lexical_tie_break)
+    remove_strings_already_represented_by_one_base_token(ranked)
+    add_top(K - M, ranked)  # literal labels retained
+    return vocabulary
+
+ENCODE(safe, vocabulary):
+    for fragment in safe.split("."):
+        if complete_fragment_entry_exists(fragment):
+            emit its_ID
+        else:
+            emit base_tokenize(fragment)
+            # Use UTF-8 byte fallback if exact reconstruction fails.
+        emit dot_ID between fragments
+    return IDs
+
+DECODE(IDs, vocabulary):
+    safe = UTF8_decode(concatenate vocabulary.byte_payload[ID])
+    return safe
+    # Parse the COMPLETE SAFE string to recover the molecule.
+    # No original SAFE side table or per-molecule edge table.
+</code></pre></div>
+<h3 id="hybrid-scheme">Hybrid scheme<a class="headerlink" href="#hybrid-scheme" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>TRAIN(train_SAFE, K, whole_fraction):
+    keep the same base vocabulary M = 2136
+    reserve floor((K-M) * whole_fraction) frequent whole fragments
+    base_encode each TRAIN fragment separately
+    learn BPE merges weighted by TRAIN fragment frequency
+    # Never merge across dots; preserve connection labels.
+    append merge-prefix substrings until total model IDs == K
+    reuse an existing ID for an identical byte payload
+    return vocabulary, within_fragment_BPE
+
+SELECT_ON_VALIDATION():
+    compare whole fractions 25%, 50%, 75% of (K-M)
+    minimize validation total length; freeze before test evaluation
+
+ENCODE(safe, vocabulary, within_fragment_BPE):
+    for fragment in safe.split("."):
+        if complete_fragment_entry_exists(fragment):
+            emit its_ID
+        else:
+            base_IDs = lossless_base_encode(fragment)
+            emit within_fragment_BPE(base_IDs).model_IDs
+        emit dot_ID between fragments
+    return IDs
+
+DECODE(IDs, vocabulary):
+    safe = UTF8_decode(concatenate vocabulary.byte_payload[ID])
+    return safe
+    # Parse the COMPLETE SAFE string to recover the molecule.
+    # No original SAFE side table or per-molecule edge table.
+</code></pre></div>
+<h2 id="chembl45183-39-23-tokens-at-16k">CHEMBL45183 — 39 → 23 tokens at 16k<a class="headerlink" href="#chembl45183-39-23-tokens-at-16k" title="Permanent link">&para;</a></h2>
+<p>Original record_index: 39224 (TEST). All eight SAFE fragment boundaries are preserved.</p>
+<div class="highlight"><pre><span></span><code>C123CCC(C1)C45C26.C7(=O)C8NC(=O)[C@H]9N.C8c1cccs1.C9C(=O)O.O67.C3.C4.C5
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Fragment</th>
+<th style="text-align: right;">Old tokens</th>
+<th style="text-align: right;">Hybrid tokens</th>
+<th>Hybrid text payloads (one quoted string per token)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C123CCC(C1)C45C26</code></td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;">20 text tokens</td>
-</tr>
-<tr>
-<td>Original DemoDiff</td>
 <td style="text-align: right;">5</td>
-<td style="text-align: right;">5 node IDs</td>
+<td><code>C123</code> · <code>CCC(C</code> · <code>1)</code> · <code>C45</code> · <code>C26</code></td>
 </tr>
 <tr>
-<td>GraphBPE+SAFE</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">5 motif IDs</td>
+<td><code>C7(=O)C8NC(=O)[C@H]9N</code></td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">4</td>
+<td><code>C7(=O)</code> · <code>C8</code> · <code>NC(=O)[C@H]9</code> · <code>N</code></td>
 </tr>
 <tr>
-<td>GraphBPE+SAFE text control</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">28 text tokens</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Complete BRICS SAFE</strong></p>
-<div class="highlight"><pre><span></span><code>Cc1nc(N(N)CCC#N)oc1C
-</code></pre></div>
-<p><strong>Complete GraphBPE SAFE</strong></p>
-<div class="highlight"><pre><span></span><code>c12nc3oc1C.N34CC5.C5#N.C2.N4
-</code></pre></div>
-<details>
-<summary>SAFE fragments, motif keys and IDs</summary>
-
-| SAFE fragment | DemoDiff-compatible motif key | ID |
-| --- | --- | ---: |
-| `c12nc3oc1C` | `CC1=CN=CO1` | 2577 |
-| `N34CC5` | `CCN` | 2895 |
-| `C5#N` | `C#N` | 2942 |
-| `C2` | `C` | 2971 |
-| `N4` | `N` | 2972 |
-
-DemoDiff node IDs: `[2971, 2972, 2895, 2942, 2577]`.
-
-</details>
-
-<h3 id="2-chembl13214-8-graphbpe-motifs">2. CHEMBL13214 — 8 GraphBPE motifs<a class="headerlink" href="#2-chembl13214-8-graphbpe-motifs" title="Permanent link">&para;</a></h3>
-<p>Original SMILES:</p>
-<div class="highlight"><pre><span></span><code>CN(C)Cc1ccc(CSCCNC(=O)NCCSCc2ccc(CN(C)C)o2)o1
-</code></pre></div>
-<table>
-<thead>
-<tr>
-<th>Representation</th>
-<th style="text-align: right;">Fragments / nodes</th>
-<th style="text-align: right;">Counted token length</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>BRICS+SAFE</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">79 text tokens</td>
-</tr>
-<tr>
-<td>Original DemoDiff</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">8 node IDs</td>
-</tr>
-<tr>
-<td>GraphBPE+SAFE</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">8 motif IDs</td>
-</tr>
-<tr>
-<td>GraphBPE+SAFE text control</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">60 text tokens</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Complete BRICS SAFE</strong></p>
-<div class="highlight"><pre><span></span><code>c15ccc6o1.c17ccc8o1.CN%10C.C%15C%11.C39=O.C%12C%16.N%13(C)C.C%105.C%146.S%14%15.N3%11.N9%12.S%164.C47.C%138
-</code></pre></div>
-<p><strong>Complete GraphBPE SAFE</strong></p>
-<div class="highlight"><pre><span></span><code>C3c1ccc4o1.C6(=O)NCC7.c18ccc9o1.C5CN6.C9N(C)C.CN3C.C4S5.S7C8
-</code></pre></div>
-<details>
-<summary>SAFE fragments, motif keys and IDs</summary>
-
-| SAFE fragment | DemoDiff-compatible motif key | ID |
-| --- | --- | ---: |
-| `C3c1ccc4o1` | `CC1=CC=CO1` | 2509 |
-| `C6(=O)NCC7` | `CCNC=O` | 2722 |
-| `c18ccc9o1` | `C1=COC=C1` | 2682 |
-| `C5CN6` | `CCN` | 2895 |
-| `C9N(C)C` | `CN(C)C` | 2855 |
-| `CN3C` | `CNC` | 2905 |
-| `C4S5` | `CS` | 2945 |
-| `S7C8` | `CS` | 2945 |
-
-DemoDiff node IDs: `[2682, 2895, 2722, 2905, 2945, 2945, 2509, 2855]`.
-
-</details>
-
-<h3 id="3-chembl34237-12-graphbpe-motifs">3. CHEMBL34237 — 12 GraphBPE motifs<a class="headerlink" href="#3-chembl34237-12-graphbpe-motifs" title="Permanent link">&para;</a></h3>
-<p>Original SMILES:</p>
-<div class="highlight"><pre><span></span><code>CCCCNCC1OC(OC2C(N)CC(N)C(OC3OC(CN)C(O)C(O)C3N)C2O)C(O)C(N)C1O
-</code></pre></div>
-<table>
-<thead>
-<tr>
-<th>Representation</th>
-<th style="text-align: right;">Fragments / nodes</th>
-<th style="text-align: right;">Counted token length</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>BRICS+SAFE</td>
+<td><code>C8c1cccs1</code></td>
 <td style="text-align: right;">9</td>
-<td style="text-align: right;">79 text tokens</td>
+<td style="text-align: right;">2</td>
+<td><code>C8</code> · <code>c1cccs1</code></td>
 </tr>
 <tr>
-<td>Original DemoDiff</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">12 node IDs</td>
+<td><code>C9C(=O)O</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C9C(=O)O</code></td>
 </tr>
 <tr>
-<td>GraphBPE+SAFE</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">12 motif IDs</td>
+<td><code>O67</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>O67</code></td>
 </tr>
 <tr>
-<td>GraphBPE+SAFE text control</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">84 text tokens</td>
+<td><code>C3</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C3</code></td>
+</tr>
+<tr>
+<td><code>C4</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C4</code></td>
+</tr>
+<tr>
+<td><code>C5</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C5</code></td>
+</tr>
+<tr>
+<td>Separating dots</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td>Each <code>.</code> has ID 11</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align: right;"><strong>39</strong></td>
+<td style="text-align: right;"><strong>23</strong></td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Complete BRICS SAFE</strong></p>
-<div class="highlight"><pre><span></span><code>C1%10OC4C(O)C(N)C1O.C16C(N)CC(N)C7C1O.C15OC%11C(O)C(O)C1N.CCCC8.N89.C9%10.O46.O57.C%11N
+<p>Fragment 1 increases from 1 to 5 tokens because it loses its dedicated whole-fragment slot; fragments 2 and 3 decrease from 17 to 4 and 9 to 2. Net saving: 16 tokens. <code>C8c1cccs1</code> now uses <code>C8</code> and <code>c1cccs1</code>, preserving both external label 8 and internal ring label 1.</p>
+<p>Final sequence (line breaks only separate original fragments):</p>
+<div class="highlight"><pre><span></span><code>"C123", "CCC(C", "1)", "C45", "C26", ".",
+"C7(=O)", "C8", "NC(=O)[C@H]9", "N", ".",
+"C8", "c1cccs1", ".",
+"C9C(=O)O", ".",
+"O67", ".",
+"C3", ".",
+"C4", ".",
+"C5"
 </code></pre></div>
-<p><strong>Complete GraphBPE SAFE</strong></p>
-<div class="highlight"><pre><span></span><code>C14OC7C5C(N)C16.C18C(N)CC9C%10C1%14.C1%11OC%12C(O)C(O)C1%13.CCCCNC4.O78.O%10%11.C%12N.N9.N%13.O%14.O5.O6
-</code></pre></div>
-<details>
-<summary>SAFE fragments, motif keys and IDs</summary>
-
-| SAFE fragment | DemoDiff-compatible motif key | ID |
-| --- | --- | ---: |
-| `C14OC7C5C(N)C16` | `NC1CCOCC1` | 2341 |
-| `C18C(N)CC9C%10C1%14` | `NC1CCCCC1` | 2233 |
-| `C1%11OC%12C(O)C(O)C1%13` | `OC1CCOCC1O` | 2136 |
-| `CCCCNC4` | `CCCCNC` | 2607 |
-| `O78` | `O` | 2973 |
-| `O%10%11` | `O` | 2973 |
-| `C%12N` | `CN` | 2940 |
-| `N9` | `N` | 2972 |
-| `N%13` | `N` | 2972 |
-| `O%14` | `O` | 2973 |
-| `O5` | `O` | 2973 |
-| `O6` | `O` | 2973 |
-
-DemoDiff node IDs: `[2973, 2972, 2973, 2972, 2973, 2973, 2973, 2940, 2233, 2341, 2607, 2136]`.
-
-</details>
-
-<h2 id="interpretation-and-implementation-status">Interpretation and implementation status<a class="headerlink" href="#interpretation-and-implementation-status" title="Permanent link">&para;</a></h2>
-<p>GraphBPE segmentation, SAFE serialization, molecular reconstruction, and fixed-boundary motif lookup are implemented for this comparison. <strong>A reversible model-token sequence decoded from motif IDs alone has not been implemented.</strong> GraphBPE+SAFE reconstruction here retains the complete SAFE string; DemoDiff reconstruction uses separate edge and attachment-position information.</p>
-<p>The three displayed examples have verified round trips. The full DemoDiff batch has not undergone a complete molecular round-trip validation. Equal motif counts do not by themselves establish equal information content, full encoding compression, or lossless generation.</p>
-<h2 id="evidence">Evidence<a class="headerlink" href="#evidence" title="Permanent link">&para;</a></h2>
+<h2 id="validation-and-interpretation">Validation and interpretation<a class="headerlink" href="#validation-and-interpretation" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="results.json">Machine-readable results and the three examples</a></li>
-<li><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/safe/batch_chembl.py">GraphBPE / SAFE boundary recording</a></li>
-<li><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/safe/converter.py">Current SAFE stereochemistry handling</a></li>
-<li><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/safe/compare_safe_token_lengths.py">SAFE text-token counting</a></li>
-<li><a href="https://github.com/liugangcode/DemoDiff/blob/0acb85ef446c175a3e3a60bbad43de97d97ca76f/downstream/graphbpe.py">Original DemoDiff implementation</a></li>
+<li>Both budgets and both methods restored <strong>44,329 / 44,329</strong> primary SAFE strings exactly in the prior per-record checks. The new report filters and recomputes those verified records; it does not retrain the vocabulary.</li>
+<li>At 16k: 32,854 records become shorter, 4,597 unchanged, 6,878 longer. At 32k: 23,127 shorter, 13,442 unchanged, 7,760 longer.</li>
+<li>The primary table includes TRAIN and VALIDATION records; it is a descriptive full-cohort result, not a held-out test score. Only new entries were fit on TRAIN; provenance of the pre-existing base/NPE vocabularies has not been audited.</li>
+<li>On the 4,543-record TEST set, whole → hybrid means are <strong>38.781862 → 20.742461 (16k)</strong> and <strong>33.608849 → 19.193044 (32k)</strong>. The test set was explored in earlier diagnosis, so it is not a pristine final holdout.</li>
+<li>Pure within-fragment BPE controls achieve TEST means <strong>20.744662 (16k)</strong> and <strong>19.193044 (32k)</strong>. Most demonstrated compression comes from substring reuse; dedicated whole-fragment slots have not shown a substantial extra compression advantage.</li>
+<li>Existing fragment boundaries are preserved, but one motif can produce multiple model tokens. Lossless encoding does not establish valid diffusion generation or attachment-label pairing in newly generated molecules.</li>
 </ul>
-<p>Source-result and tokenizer fingerprints are included in the machine-readable results. Statistics describe the local experimental outputs, not a new training or evaluation run performed by this webpage.</p>
+<p><a href="vocabulary-results.json">Machine-readable results, pseudocode and example IDs</a></p>
 
 
 
@@ -1720,7 +1313,7 @@ DemoDiff node IDs: `[2973, 2972, 2973, 2972, 2973, 2973, 2973, 2940, 2233, 2341,
       <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.expand"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
         <script src="assets/js/google-analytics.js"></script>
       

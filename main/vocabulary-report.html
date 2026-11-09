@@ -1,0 +1,1297 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Gotta be SAFE: a new framework for molecular design">
+      
+      
+      
+        <link rel="canonical" href="https://safe-docs.datamol.io/main/vocabulary-report.html">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Reversible GraphBPE + SAFE tokenization - SAFE</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#reversible-graphbpe-safe-tokenization" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="SAFE" class="md-header__button md-logo" aria-label="SAFE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SAFE
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Reversible GraphBPE + SAFE tokenization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/datamol-io/safe" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    datamol-io/safe
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="SAFE" class="md-nav__button md-logo" aria-label="SAFE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SAFE
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/datamol-io/safe" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    datamol-io/safe
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="overview.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="migration.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Migrating to 1.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="releasing.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releasing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/getting-started.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started with SAFE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/design-with-safe.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Molecular design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/how-it-works.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How SAFE encoding works?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/extracting-representation-molfeat.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    so really we just need our custom converter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/load-from-wandb.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Loading from Weights & Biases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/safe.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAFE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/safe.viz.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/safe.models.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model training
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="license.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="data_license.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#latest-result-44329-boundary-preserving-records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Latest result — 44,329 boundary-preserving records
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#from-graph-fragments-to-a-bounded-vocabulary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From graph fragments to a bounded vocabulary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pseudocode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pseudocode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pseudocode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whole-fragment-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Whole-fragment scheme
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hybrid-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hybrid scheme
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chembl45183-39-23-tokens-at-16k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CHEMBL45183 — 39 → 23 tokens at 16k
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-and-interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation and interpretation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="reversible-graphbpe-safe-tokenization">Reversible GraphBPE + SAFE tokenization<a class="headerlink" href="#reversible-graphbpe-safe-tokenization" title="Permanent link">&para;</a></h1>
+<p><a href="https://zeyuanyu195-design.github.io/molecular-tokenizer/#vocabulary-results">Interactive results and token-by-token example</a></p>
+<h2 id="latest-result-44329-boundary-preserving-records">Latest result — 44,329 boundary-preserving records<a class="headerlink" href="#latest-result-44329-boundary-preserving-records" title="Permanent link">&para;</a></h2>
+<p>We compare <strong>whole-fragment lookup with base-token fallback</strong> against <strong>whole-fragment lookup with within-fragment BPE fallback</strong>, at the same total model vocabulary budget. Both preserve complete SAFE strings, including connection labels, bond/stereo symbols and dots.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Total vocabulary</th>
+<th style="text-align: right;">Records</th>
+<th style="text-align: right;">Whole-fragment mean</th>
+<th style="text-align: right;">Hybrid mean</th>
+<th style="text-align: right;">Length reduction</th>
+<th style="text-align: right;">Whole-fragment total</th>
+<th style="text-align: right;">Hybrid total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">16,000</td>
+<td style="text-align: right;">44,329</td>
+<td style="text-align: right;">35.088542</td>
+<td style="text-align: right;">19.919376</td>
+<td style="text-align: right;">43.23%</td>
+<td style="text-align: right;">1,555,440</td>
+<td style="text-align: right;">883,006</td>
+</tr>
+<tr>
+<td style="text-align: right;">32,000</td>
+<td style="text-align: right;">44,329</td>
+<td style="text-align: right;">27.402220</td>
+<td style="text-align: right;">18.183695</td>
+<td style="text-align: right;">33.64%</td>
+<td style="text-align: right;">1,214,713</td>
+<td style="text-align: right;">806,065</td>
+</tr>
+</tbody>
+</table>
+<p>Reduction = 1 − hybrid total / whole-fragment total. No BOS/EOS, padding or truncation. These are complete encoding lengths, not the earlier motif-only counts (~8.41) that exclude connectivity.</p>
+<p><strong>Scope:</strong> all 44,329 records have identical GraphBPE and final SAFE partitions. The 5,663 changed-boundary records are excluded. The 44,329 records contain 44,328 distinct original canonical-SMILES strings; the table counts records without deduplication. This is different from the earlier 44,328-record cohort matched across BRICS and DemoDiff.</p>
+<h2 id="from-graph-fragments-to-a-bounded-vocabulary">From graph fragments to a bounded vocabulary<a class="headerlink" href="#from-graph-fragments-to-a-bounded-vocabulary" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Start with the existing SMILES → GraphBPE partition → SAFE serialization. Do not rerun GraphBPE during text tokenization.</li>
+<li>Keep the existing split: <strong>35,518 training / 4,268 validation / 4,543 test records</strong>. The same non-stereochemical molecular graph and its stereoisomers stay in one split.</li>
+<li>Keep <strong>M = 2,136</strong> base entries: 1,880 existing SAFE entries + 256 byte-fallback entries. Count literal complete fragments on TRAIN only; e.g. <code>C4c1cccs1</code> and <code>C8c1cccs1</code> are different entries.</li>
+<li>Whole-fragment scheme: add the most frequent K−M complete fragments. A miss uses base text tokens; dots remain separate tokens.</li>
+<li>Hybrid scheme: allocate part of K−M to complete fragments, and the rest to TRAIN-only BPE substrings learned inside each fragment. Start from base tokens, never merge across dots, never rewrite labels. Identical payloads share an output ID.</li>
+<li>Compare 25%, 50%, 75% whole-fragment allocations on VALIDATION, then freeze the selected configuration. A complete-fragment hit emits one ID; a miss uses within-fragment BPE.</li>
+<li>Decode by concatenating global vocabulary byte payloads. The reconstructed complete SAFE carries connectivity; no original SAFE or per-molecule edge table is needed.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Scheme / total budget</th>
+<th style="text-align: right;">Base entries</th>
+<th style="text-align: right;">Dedicated whole-fragment entries</th>
+<th style="text-align: right;">Added substring entries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Whole / 16k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">13,864</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Hybrid / 16k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">6,932</td>
+<td style="text-align: right;">6,932</td>
+</tr>
+<tr>
+<td>Whole / 32k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">29,864</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Hybrid / 32k</td>
+<td style="text-align: right;">2,136</td>
+<td style="text-align: right;">7,466</td>
+<td style="text-align: right;">22,398</td>
+</tr>
+</tbody>
+</table>
+<p>BPE can itself learn a complete-fragment string; the categories describe how entries were allocated, not exclusive chemical types. A substring need not be a valid standalone molecule.</p>
+<h2 id="pseudocode">Pseudocode<a class="headerlink" href="#pseudocode" title="Permanent link">&para;</a></h2>
+<h3 id="whole-fragment-scheme">Whole-fragment scheme<a class="headerlink" href="#whole-fragment-scheme" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>TRAIN(train_SAFE, K):
+    base = existing_SAFE_vocabulary + 256_byte_fallback_entries
+    M = 2136
+    fragments = split_each_training_SAFE_on_dots()
+    ranked = frequency_rank(fragments, lexical_tie_break)
+    remove_strings_already_represented_by_one_base_token(ranked)
+    add_top(K - M, ranked)  # literal labels retained
+    return vocabulary
+
+ENCODE(safe, vocabulary):
+    for fragment in safe.split("."):
+        if complete_fragment_entry_exists(fragment):
+            emit its_ID
+        else:
+            emit base_tokenize(fragment)
+            # Use UTF-8 byte fallback if exact reconstruction fails.
+        emit dot_ID between fragments
+    return IDs
+
+DECODE(IDs, vocabulary):
+    safe = UTF8_decode(concatenate vocabulary.byte_payload[ID])
+    return safe
+    # Parse the COMPLETE SAFE string to recover the molecule.
+    # No original SAFE side table or per-molecule edge table.
+</code></pre></div>
+<h3 id="hybrid-scheme">Hybrid scheme<a class="headerlink" href="#hybrid-scheme" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>TRAIN(train_SAFE, K, whole_fraction):
+    keep the same base vocabulary M = 2136
+    reserve floor((K-M) * whole_fraction) frequent whole fragments
+    base_encode each TRAIN fragment separately
+    learn BPE merges weighted by TRAIN fragment frequency
+    # Never merge across dots; preserve connection labels.
+    append merge-prefix substrings until total model IDs == K
+    reuse an existing ID for an identical byte payload
+    return vocabulary, within_fragment_BPE
+
+SELECT_ON_VALIDATION():
+    compare whole fractions 25%, 50%, 75% of (K-M)
+    minimize validation total length; freeze before test evaluation
+
+ENCODE(safe, vocabulary, within_fragment_BPE):
+    for fragment in safe.split("."):
+        if complete_fragment_entry_exists(fragment):
+            emit its_ID
+        else:
+            base_IDs = lossless_base_encode(fragment)
+            emit within_fragment_BPE(base_IDs).model_IDs
+        emit dot_ID between fragments
+    return IDs
+
+DECODE(IDs, vocabulary):
+    safe = UTF8_decode(concatenate vocabulary.byte_payload[ID])
+    return safe
+    # Parse the COMPLETE SAFE string to recover the molecule.
+    # No original SAFE side table or per-molecule edge table.
+</code></pre></div>
+<h2 id="chembl45183-39-23-tokens-at-16k">CHEMBL45183 — 39 → 23 tokens at 16k<a class="headerlink" href="#chembl45183-39-23-tokens-at-16k" title="Permanent link">&para;</a></h2>
+<p>Original record_index: 39224 (TEST). All eight SAFE fragment boundaries are preserved.</p>
+<div class="highlight"><pre><span></span><code>C123CCC(C1)C45C26.C7(=O)C8NC(=O)[C@H]9N.C8c1cccs1.C9C(=O)O.O67.C3.C4.C5
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Fragment</th>
+<th style="text-align: right;">Old tokens</th>
+<th style="text-align: right;">Hybrid tokens</th>
+<th>Hybrid text payloads (one quoted string per token)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>C123CCC(C1)C45C26</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td><code>C123</code> · <code>CCC(C</code> · <code>1)</code> · <code>C45</code> · <code>C26</code></td>
+</tr>
+<tr>
+<td><code>C7(=O)C8NC(=O)[C@H]9N</code></td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">4</td>
+<td><code>C7(=O)</code> · <code>C8</code> · <code>NC(=O)[C@H]9</code> · <code>N</code></td>
+</tr>
+<tr>
+<td><code>C8c1cccs1</code></td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2</td>
+<td><code>C8</code> · <code>c1cccs1</code></td>
+</tr>
+<tr>
+<td><code>C9C(=O)O</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C9C(=O)O</code></td>
+</tr>
+<tr>
+<td><code>O67</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>O67</code></td>
+</tr>
+<tr>
+<td><code>C3</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C3</code></td>
+</tr>
+<tr>
+<td><code>C4</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C4</code></td>
+</tr>
+<tr>
+<td><code>C5</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td><code>C5</code></td>
+</tr>
+<tr>
+<td>Separating dots</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td>Each <code>.</code> has ID 11</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align: right;"><strong>39</strong></td>
+<td style="text-align: right;"><strong>23</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Fragment 1 increases from 1 to 5 tokens because it loses its dedicated whole-fragment slot; fragments 2 and 3 decrease from 17 to 4 and 9 to 2. Net saving: 16 tokens. <code>C8c1cccs1</code> now uses <code>C8</code> and <code>c1cccs1</code>, preserving both external label 8 and internal ring label 1.</p>
+<p>Final sequence (line breaks only separate original fragments):</p>
+<div class="highlight"><pre><span></span><code>"C123", "CCC(C", "1)", "C45", "C26", ".",
+"C7(=O)", "C8", "NC(=O)[C@H]9", "N", ".",
+"C8", "c1cccs1", ".",
+"C9C(=O)O", ".",
+"O67", ".",
+"C3", ".",
+"C4", ".",
+"C5"
+</code></pre></div>
+<h2 id="validation-and-interpretation">Validation and interpretation<a class="headerlink" href="#validation-and-interpretation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Both budgets and both methods restored <strong>44,329 / 44,329</strong> primary SAFE strings exactly in the prior per-record checks. The new report filters and recomputes those verified records; it does not retrain the vocabulary.</li>
+<li>At 16k: 32,854 records become shorter, 4,597 unchanged, 6,878 longer. At 32k: 23,127 shorter, 13,442 unchanged, 7,760 longer.</li>
+<li>The primary table includes TRAIN and VALIDATION records; it is a descriptive full-cohort result, not a held-out test score. Only new entries were fit on TRAIN; provenance of the pre-existing base/NPE vocabularies has not been audited.</li>
+<li>On the 4,543-record TEST set, whole → hybrid means are <strong>38.781862 → 20.742461 (16k)</strong> and <strong>33.608849 → 19.193044 (32k)</strong>. The test set was explored in earlier diagnosis, so it is not a pristine final holdout.</li>
+<li>Pure within-fragment BPE controls achieve TEST means <strong>20.744662 (16k)</strong> and <strong>19.193044 (32k)</strong>. Most demonstrated compression comes from substring reuse; dedicated whole-fragment slots have not shown a substantial extra compression advantage.</li>
+<li>Existing fragment boundaries are preserved, but one motif can produce multiple model tokens. Lossless encoding does not establish valid diffusion generation or attachment-label pairing in newly generated molecules.</li>
+</ul>
+<p><a href="vocabulary-results.json">Machine-readable results, pseudocode and example IDs</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright 2026 Valence Labs
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/datamol-io" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/datamol_io" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M459.4 151.7c.3 4.5.3 9.1.3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53C87.4 130.8 165 172.4 252.1 176.9c-1.6-7.8-2.6-15.9-2.6-24C249.5 95.1 296.3 48 354.4 48c30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://pypi.org/project/safe-mol/" target="_blank" rel="noopener" title="pypi.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 444.7a20.4 20.4 0 1 1 0-40.7 20.4 20.4 0 1 1 0 40.7M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.6-183.4a20.4 20.4 0 1 1 0 40.8 20.4 20.4 0 1 1 0-40.8"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.expand"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="assets/js/google-analytics.js"></script>
+      
+    
+  <script data-mkdocs-jupyter-mathjax="{&quot;url&quot;: &quot;https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-chtml.js&quot;, &quot;version&quot;: 4}">
+/* Shared by full pages and Material's instant navigation. */
+(() => {
+  const config = JSON.parse(document.currentScript.dataset.mkdocsJupyterMathjax);
+  if (window.mkdocsJupyterMathJax) return;
+
+  let loading;
+  let queue = Promise.resolve();
+  let previous = [];
+
+  const ready = async () => {
+    if (!loading) {
+      loading = (async () => {
+        let math = window.MathJax;
+        if (!math?.typesetPromise) {
+          const url = new URL(config.url, document.baseURI).href;
+          const existing = Array.from(document.scripts).find(script =>
+            script.src && (script.src === url || script.id === 'MathJax-script' ||
+              (/mathjax/i.test(script.src) &&
+               /\/(?:MathJax|latest|(?:tex|mml)(?:-mml)?-(?:chtml|svg))\.js(?:[?#]|$)/i.test(script.src))));
+          if (existing) {
+            if (!math?.startup?.promise) {
+              await new Promise((resolve, reject) => {
+                existing.addEventListener('load', resolve, { once: true });
+                existing.addEventListener('error', reject, { once: true });
+              });
+            }
+          } else {
+            // Keep site macros, delimiters and startup hooks when supplied.
+            const options = math || {};
+            window.MathJax = {
+              ...options,
+              loader: {
+                ...options.loader,
+                load: Array.from(new Set(['ui/safe', ...(options.loader?.load || [])]))
+              },
+              startup: { typeset: false, ...options.startup },
+              tex: {
+                tags: 'ams',
+                useLabelIds: true,
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                ...options.tex
+              }
+            };
+            await new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = config.url;
+              script.id = 'MathJax-script';
+              script.async = true;
+              script.onload = resolve;
+              script.onerror = reject;
+              document.head.appendChild(script);
+            });
+          }
+        }
+        math = window.MathJax;
+        await math.startup.promise;
+        return math;
+      })();
+    }
+    const math = await loading;
+    // A site owner can extend the v3 queue again on each navigation.
+    await math.startup.promise;
+    return math;
+  };
+
+  const unrendered = node => {
+    if (node.matches('mjx-container')) return [];
+    if (!node.querySelector('mjx-container')) return [node];
+    // In v3, scanning generated assistive MathML again produces nested output.
+    return Array.from(node.children).flatMap(unrendered);
+  };
+
+  const refresh = () => {
+    // A separate chain also serializes v3, without changing v4's startup promise.
+    queue = queue.then(async () => {
+      const notebooks = Array.from(document.querySelectorAll('.jupyter-wrapper'));
+      if (!notebooks.length && !previous.length) return;
+      if (notebooks.length === previous.length &&
+          notebooks.every((node, index) => node === previous[index])) return;
+      const math = await ready();
+      if (previous.length) {
+        math.typesetClear(previous);
+        math.texReset();
+      }
+      previous = notebooks.filter(node => node.isConnected);
+      const pending = previous.flatMap(unrendered);
+      if (pending.length) await math.typesetPromise(pending);
+    }).catch(error => console.error('mkdocs-jupyter: MathJax rendering failed', error));
+    return queue;
+  };
+
+  window.mkdocsJupyterMathJax = { refresh };
+  const start = () => {
+    if (typeof document$ !== 'undefined') document$.subscribe(refresh);
+    else refresh();
+  };
+  // Theme bundles and user-provided MathJax scripts can follow notebook content.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else start();
+})();
+
+</script>
+</body>
+</html>
