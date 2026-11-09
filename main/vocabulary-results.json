@@ -87,6 +87,7 @@
     "chembl_id": "CHEMBL45183",
     "safe": "C123CCC(C1)C45C26.C7(=O)C8NC(=O)[C@H]9N.C8c1cccs1.C9C(=O)O.O67.C3.C4.C5",
     "length": 23,
+    "old_length": 39,
     "ids": [
       11140,
       10047,
@@ -116,6 +117,7 @@
       {
         "text": "C123CCC(C1)C45C26",
         "whole_entry": false,
+        "encode_mode": "substring",
         "ids": [
           11140,
           10047,
@@ -140,6 +142,7 @@
       {
         "text": "C7(=O)C8NC(=O)[C@H]9N",
         "whole_entry": false,
+        "encode_mode": "substring",
         "ids": [
           9755,
           2179,
@@ -194,6 +197,7 @@
       {
         "text": "C8c1cccs1",
         "whole_entry": false,
+        "encode_mode": "substring",
         "ids": [
           2179,
           10285
@@ -228,6 +232,7 @@
       {
         "text": "C9C(=O)O",
         "whole_entry": true,
+        "encode_mode": "whole",
         "ids": [
           3294
         ],
@@ -244,6 +249,7 @@
       {
         "text": "O67",
         "whole_entry": true,
+        "encode_mode": "whole",
         "ids": [
           2356
         ],
@@ -260,6 +266,7 @@
       {
         "text": "C3",
         "whole_entry": true,
+        "encode_mode": "whole",
         "ids": [
           2137
         ],
@@ -276,6 +283,7 @@
       {
         "text": "C4",
         "whole_entry": true,
+        "encode_mode": "whole",
         "ids": [
           2136
         ],
@@ -292,6 +300,7 @@
       {
         "text": "C5",
         "whole_entry": true,
+        "encode_mode": "whole",
         "ids": [
           2138
         ],
@@ -305,7 +314,11 @@
           "C5"
         ]
       }
-    ]
+    ],
+    "cohort": "test",
+    "boundary_exact": true,
+    "exact_safe_roundtrip": true,
+    "canonical_isomeric_roundtrip": true
   },
   "methods": {
     "whole": {
@@ -320,5 +333,2428 @@
       "encode": "ENCODE(safe, vocabulary, within_fragment_BPE):\n    for fragment in safe.split(\".\"):\n        if complete_fragment_entry_exists(fragment):\n            emit its_ID\n        else:\n            base_IDs = lossless_base_encode(fragment)\n            emit within_fragment_BPE(base_IDs).model_IDs\n        emit dot_ID between fragments\n    return IDs",
       "decode": "DECODE(IDs, vocabulary):\n    safe = UTF8_decode(concatenate vocabulary.byte_payload[ID])\n    return safe\n    # Parse the COMPLETE SAFE string to recover the molecule.\n    # No original SAFE side table or per-molecule edge table."
     }
-  }
+  },
+  "examples": [
+    {
+      "record_index": 39224,
+      "chembl_id": "CHEMBL45183",
+      "safe": "C123CCC(C1)C45C26.C7(=O)C8NC(=O)[C@H]9N.C8c1cccs1.C9C(=O)O.O67.C3.C4.C5",
+      "length": 23,
+      "old_length": 39,
+      "ids": [
+        11140,
+        10047,
+        9447,
+        2191,
+        12524,
+        11,
+        9755,
+        2179,
+        9879,
+        37,
+        11,
+        2179,
+        10285,
+        11,
+        3294,
+        11,
+        2356,
+        11,
+        2137,
+        11,
+        2136,
+        11,
+        2138
+      ],
+      "fragments": [
+        {
+          "text": "C123CCC(C1)C45C26",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            11140,
+            10047,
+            9447,
+            2191,
+            12524
+          ],
+          "tokens": [
+            "C123",
+            "CCC(C",
+            "1)",
+            "C45",
+            "C26"
+          ],
+          "old_ids": [
+            14286
+          ],
+          "old_tokens": [
+            "C123CCC(C1)C45C26"
+          ]
+        },
+        {
+          "text": "C7(=O)C8NC(=O)[C@H]9N",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9755,
+            2179,
+            9879,
+            37
+          ],
+          "tokens": [
+            "C7(=O)",
+            "C8",
+            "NC(=O)[C@H]9",
+            "N"
+          ],
+          "old_ids": [
+            27,
+            20,
+            7,
+            23,
+            38,
+            8,
+            27,
+            21,
+            37,
+            27,
+            7,
+            23,
+            38,
+            8,
+            80,
+            22,
+            37
+          ],
+          "old_tokens": [
+            "C",
+            "7",
+            "(",
+            "=",
+            "O",
+            ")",
+            "C",
+            "8",
+            "N",
+            "C",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[C@H]",
+            "9",
+            "N"
+          ]
+        },
+        {
+          "text": "C8c1cccs1",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2179,
+            10285
+          ],
+          "tokens": [
+            "C8",
+            "c1cccs1"
+          ],
+          "old_ids": [
+            27,
+            21,
+            54,
+            14,
+            54,
+            54,
+            54,
+            68,
+            14
+          ],
+          "old_tokens": [
+            "C",
+            "8",
+            "c",
+            "1",
+            "c",
+            "c",
+            "c",
+            "s",
+            "1"
+          ]
+        },
+        {
+          "text": "C9C(=O)O",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            3294
+          ],
+          "tokens": [
+            "C9C(=O)O"
+          ],
+          "old_ids": [
+            3294
+          ],
+          "old_tokens": [
+            "C9C(=O)O"
+          ]
+        },
+        {
+          "text": "O67",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2356
+          ],
+          "tokens": [
+            "O67"
+          ],
+          "old_ids": [
+            2356
+          ],
+          "old_tokens": [
+            "O67"
+          ]
+        },
+        {
+          "text": "C3",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2137
+          ],
+          "tokens": [
+            "C3"
+          ],
+          "old_ids": [
+            2137
+          ],
+          "old_tokens": [
+            "C3"
+          ]
+        },
+        {
+          "text": "C4",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2136
+          ],
+          "tokens": [
+            "C4"
+          ],
+          "old_ids": [
+            2136
+          ],
+          "old_tokens": [
+            "C4"
+          ]
+        },
+        {
+          "text": "C5",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2138
+          ],
+          "tokens": [
+            "C5"
+          ],
+          "old_ids": [
+            2138
+          ],
+          "old_tokens": [
+            "C5"
+          ]
+        }
+      ],
+      "cohort": "test",
+      "boundary_exact": true,
+      "exact_safe_roundtrip": true,
+      "canonical_isomeric_roundtrip": true
+    },
+    {
+      "record_index": 77,
+      "chembl_id": "CHEMBL438993",
+      "safe": "C6(=O)[C@H]3NC(=O)[C@H]%12NC(=O)[C@H]7NC(=O)[C@H]8N9.C9(=O)[C@H]%11NC(=O)[C@H]%10NC(C)=O.O4c1ccc([N+](=O)[O-])cc1.CCN2C4=O.[C@H]15CCCN16.C8CC(=O)O.N2C5=O.C7C(=O)O.C%10C(=O)O.[C@H]%11(C)O.C%12(C)C.C3(C)C",
+      "length": 34,
+      "old_length": 98,
+      "ids": [
+        9524,
+        9226,
+        10032,
+        14230,
+        11,
+        2203,
+        12706,
+        9977,
+        9698,
+        11,
+        2146,
+        9989,
+        11,
+        4647,
+        8836,
+        11,
+        9609,
+        9269,
+        19,
+        11,
+        8953,
+        11,
+        2638,
+        6686,
+        11,
+        2493,
+        11,
+        3355,
+        11,
+        7557,
+        11,
+        3513,
+        11,
+        2453
+      ],
+      "fragments": [
+        {
+          "text": "C6(=O)[C@H]3NC(=O)[C@H]%12NC(=O)[C@H]7NC(=O)[C@H]8N9",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9524,
+            9226,
+            10032,
+            14230
+          ],
+          "tokens": [
+            "C6(=O)",
+            "[C@H]3",
+            "NC(=O)[C@H]%12",
+            "NC(=O)[C@H]7NC(=O)[C@H]8N9"
+          ],
+          "old_ids": [
+            27,
+            19,
+            7,
+            23,
+            38,
+            8,
+            80,
+            16,
+            37,
+            27,
+            7,
+            23,
+            38,
+            8,
+            80,
+            87,
+            37,
+            27,
+            7,
+            23,
+            38,
+            8,
+            80,
+            20,
+            37,
+            27,
+            7,
+            23,
+            38,
+            8,
+            80,
+            21,
+            37,
+            22
+          ],
+          "old_tokens": [
+            "C",
+            "6",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[C@H]",
+            "3",
+            "N",
+            "C",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[C@H]",
+            "%12",
+            "N",
+            "C",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[C@H]",
+            "7",
+            "N",
+            "C",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[C@H]",
+            "8",
+            "N",
+            "9"
+          ]
+        },
+        {
+          "text": "C9(=O)[C@H]%11NC(=O)[C@H]%10NC(C)=O",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2203,
+            12706,
+            9977,
+            9698
+          ],
+          "tokens": [
+            "C9",
+            "(=O)[C@H]%11",
+            "NC(=O)[C@H]%10",
+            "NC(C)=O"
+          ],
+          "old_ids": [
+            27,
+            22,
+            7,
+            23,
+            38,
+            8,
+            80,
+            82,
+            37,
+            27,
+            7,
+            23,
+            38,
+            8,
+            80,
+            78,
+            37,
+            27,
+            7,
+            27,
+            8,
+            23,
+            38
+          ],
+          "old_tokens": [
+            "C",
+            "9",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[C@H]",
+            "%11",
+            "N",
+            "C",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[C@H]",
+            "%10",
+            "N",
+            "C",
+            "(",
+            "C",
+            ")",
+            "=",
+            "O"
+          ]
+        },
+        {
+          "text": "O4c1ccc([N+](=O)[O-])cc1",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2146,
+            9989
+          ],
+          "tokens": [
+            "O4",
+            "c1ccc([N+](=O)[O-])cc1"
+          ],
+          "old_ids": [
+            9290
+          ],
+          "old_tokens": [
+            "O4c1ccc([N+](=O)[O-])cc1"
+          ]
+        },
+        {
+          "text": "CCN2C4=O",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            4647,
+            8836
+          ],
+          "tokens": [
+            "CCN2",
+            "C4=O"
+          ],
+          "old_ids": [
+            27,
+            27,
+            37,
+            15,
+            27,
+            17,
+            23,
+            38
+          ],
+          "old_tokens": [
+            "C",
+            "C",
+            "N",
+            "2",
+            "C",
+            "4",
+            "=",
+            "O"
+          ]
+        },
+        {
+          "text": "[C@H]15CCCN16",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9609,
+            9269,
+            19
+          ],
+          "tokens": [
+            "[C@H]15",
+            "CCCN1",
+            "6"
+          ],
+          "old_ids": [
+            80,
+            14,
+            18,
+            27,
+            27,
+            27,
+            37,
+            14,
+            19
+          ],
+          "old_tokens": [
+            "[C@H]",
+            "1",
+            "5",
+            "C",
+            "C",
+            "C",
+            "N",
+            "1",
+            "6"
+          ]
+        },
+        {
+          "text": "C8CC(=O)O",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            8953
+          ],
+          "tokens": [
+            "C8CC(=O)O"
+          ],
+          "old_ids": [
+            8953
+          ],
+          "old_tokens": [
+            "C8CC(=O)O"
+          ]
+        },
+        {
+          "text": "N2C5=O",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2638,
+            6686
+          ],
+          "tokens": [
+            "N2",
+            "C5=O"
+          ],
+          "old_ids": [
+            37,
+            15,
+            27,
+            18,
+            23,
+            38
+          ],
+          "old_tokens": [
+            "N",
+            "2",
+            "C",
+            "5",
+            "=",
+            "O"
+          ]
+        },
+        {
+          "text": "C7C(=O)O",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2493
+          ],
+          "tokens": [
+            "C7C(=O)O"
+          ],
+          "old_ids": [
+            2493
+          ],
+          "old_tokens": [
+            "C7C(=O)O"
+          ]
+        },
+        {
+          "text": "C%10C(=O)O",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            3355
+          ],
+          "tokens": [
+            "C%10C(=O)O"
+          ],
+          "old_ids": [
+            3355
+          ],
+          "old_tokens": [
+            "C%10C(=O)O"
+          ]
+        },
+        {
+          "text": "[C@H]%11(C)O",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            7557
+          ],
+          "tokens": [
+            "[C@H]%11(C)O"
+          ],
+          "old_ids": [
+            7557
+          ],
+          "old_tokens": [
+            "[C@H]%11(C)O"
+          ]
+        },
+        {
+          "text": "C%12(C)C",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            3513
+          ],
+          "tokens": [
+            "C%12(C)C"
+          ],
+          "old_ids": [
+            3513
+          ],
+          "old_tokens": [
+            "C%12(C)C"
+          ]
+        },
+        {
+          "text": "C3(C)C",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2453
+          ],
+          "tokens": [
+            "C3(C)C"
+          ],
+          "old_ids": [
+            2453
+          ],
+          "old_tokens": [
+            "C3(C)C"
+          ]
+        }
+      ],
+      "cohort": "test",
+      "boundary_exact": true,
+      "exact_safe_roundtrip": true,
+      "canonical_isomeric_roundtrip": true
+    },
+    {
+      "record_index": 49005,
+      "chembl_id": "CHEMBL4299958",
+      "safe": "n1%23cnc2c(=O)[nH]c(N)nc21.[C@@H]15[C@H](O)[C@@H](CO%16)O[C@H]1%24.O%22C[C@H]1O[C@@H]%23[C@H](O)[C@@H]1O.P%16(=O)([O-])O%19.P%19%20(=O)O.P%21%22(=O)O.N%24%25%17.[N+]=678.C89=%18.C9=%10%11.C%12%13=%14.C%15%17=%18.CO5.N%20%21.C%25=6.N%11%12.N=%14%15.C7.O=%10.N%13",
+      "length": 58,
+      "old_length": 120,
+      "ids": [
+        9092,
+        123,
+        10682,
+        11,
+        9525,
+        9264,
+        9153,
+        2426,
+        10485,
+        9124,
+        125,
+        11,
+        2663,
+        10095,
+        123,
+        10010,
+        11,
+        13406,
+        11412,
+        2369,
+        11,
+        39,
+        9120,
+        9102,
+        11,
+        39,
+        9133,
+        9102,
+        11,
+        2934,
+        112,
+        11,
+        4538,
+        11,
+        2141,
+        9187,
+        11,
+        2229,
+        11,
+        2456,
+        11,
+        7721,
+        11,
+        2282,
+        11,
+        2536,
+        11,
+        7116,
+        11,
+        2350,
+        11,
+        2278,
+        11,
+        2160,
+        11,
+        2197,
+        11,
+        3167
+      ],
+      "fragments": [
+        {
+          "text": "n1%23cnc2c(=O)[nH]c(N)nc21",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9092,
+            123,
+            10682
+          ],
+          "tokens": [
+            "n1",
+            "%23",
+            "cnc2c(=O)[nH]c(N)nc21"
+          ],
+          "old_ids": [
+            64,
+            14,
+            123,
+            54,
+            64,
+            54,
+            15,
+            54,
+            7,
+            23,
+            38,
+            8,
+            89,
+            54,
+            7,
+            37,
+            8,
+            64,
+            54,
+            15,
+            14
+          ],
+          "old_tokens": [
+            "n",
+            "1",
+            "%23",
+            "c",
+            "n",
+            "c",
+            "2",
+            "c",
+            "(",
+            "=",
+            "O",
+            ")",
+            "[nH]",
+            "c",
+            "(",
+            "N",
+            ")",
+            "n",
+            "c",
+            "2",
+            "1"
+          ]
+        },
+        {
+          "text": "[C@@H]15[C@H](O)[C@@H](CO%16)O[C@H]1%24",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9525,
+            9264,
+            9153,
+            2426,
+            10485,
+            9124,
+            125
+          ],
+          "tokens": [
+            "[C@@H]15",
+            "[C@H](O)",
+            "[C@@H](C",
+            "O%16",
+            ")O",
+            "[C@H]1",
+            "%24"
+          ],
+          "old_ids": [
+            79,
+            14,
+            18,
+            80,
+            7,
+            38,
+            8,
+            79,
+            7,
+            27,
+            38,
+            108,
+            8,
+            38,
+            80,
+            14,
+            125
+          ],
+          "old_tokens": [
+            "[C@@H]",
+            "1",
+            "5",
+            "[C@H]",
+            "(",
+            "O",
+            ")",
+            "[C@@H]",
+            "(",
+            "C",
+            "O",
+            "%16",
+            ")",
+            "O",
+            "[C@H]",
+            "1",
+            "%24"
+          ]
+        },
+        {
+          "text": "O%22C[C@H]1O[C@@H]%23[C@H](O)[C@@H]1O",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2663,
+            10095,
+            123,
+            10010
+          ],
+          "tokens": [
+            "O%22",
+            "C[C@H]1O[C@@H]",
+            "%23",
+            "[C@H](O)[C@@H]1O"
+          ],
+          "old_ids": [
+            38,
+            122,
+            27,
+            80,
+            14,
+            38,
+            79,
+            123,
+            80,
+            7,
+            38,
+            8,
+            79,
+            14,
+            38
+          ],
+          "old_tokens": [
+            "O",
+            "%22",
+            "C",
+            "[C@H]",
+            "1",
+            "O",
+            "[C@@H]",
+            "%23",
+            "[C@H]",
+            "(",
+            "O",
+            ")",
+            "[C@@H]",
+            "1",
+            "O"
+          ]
+        },
+        {
+          "text": "P%16(=O)([O-])O%19",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            13406,
+            11412,
+            2369
+          ],
+          "tokens": [
+            "P%16",
+            "(=O)([O-])",
+            "O%19"
+          ],
+          "old_ids": [
+            39,
+            108,
+            7,
+            23,
+            38,
+            8,
+            7,
+            94,
+            8,
+            38,
+            116
+          ],
+          "old_tokens": [
+            "P",
+            "%16",
+            "(",
+            "=",
+            "O",
+            ")",
+            "(",
+            "[O-]",
+            ")",
+            "O",
+            "%19"
+          ]
+        },
+        {
+          "text": "P%19%20(=O)O",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            39,
+            9120,
+            9102
+          ],
+          "tokens": [
+            "P",
+            "%19%20",
+            "(=O)O"
+          ],
+          "old_ids": [
+            39,
+            116,
+            118,
+            7,
+            23,
+            38,
+            8,
+            38
+          ],
+          "old_tokens": [
+            "P",
+            "%19",
+            "%20",
+            "(",
+            "=",
+            "O",
+            ")",
+            "O"
+          ]
+        },
+        {
+          "text": "P%21%22(=O)O",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            39,
+            9133,
+            9102
+          ],
+          "tokens": [
+            "P",
+            "%21%22",
+            "(=O)O"
+          ],
+          "old_ids": [
+            39,
+            119,
+            122,
+            7,
+            23,
+            38,
+            8,
+            38
+          ],
+          "old_tokens": [
+            "P",
+            "%21",
+            "%22",
+            "(",
+            "=",
+            "O",
+            ")",
+            "O"
+          ]
+        },
+        {
+          "text": "N%24%25%17",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2934,
+            112
+          ],
+          "tokens": [
+            "N%24%25",
+            "%17"
+          ],
+          "old_ids": [
+            37,
+            125,
+            128,
+            112
+          ],
+          "old_tokens": [
+            "N",
+            "%24",
+            "%25",
+            "%17"
+          ]
+        },
+        {
+          "text": "[N+]=678",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            4538
+          ],
+          "tokens": [
+            "[N+]=678"
+          ],
+          "old_ids": [
+            4538
+          ],
+          "old_tokens": [
+            "[N+]=678"
+          ]
+        },
+        {
+          "text": "C89=%18",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2141,
+            9187
+          ],
+          "tokens": [
+            "C89",
+            "=%18"
+          ],
+          "old_ids": [
+            27,
+            21,
+            22,
+            23,
+            114
+          ],
+          "old_tokens": [
+            "C",
+            "8",
+            "9",
+            "=",
+            "%18"
+          ]
+        },
+        {
+          "text": "C9=%10%11",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2229
+          ],
+          "tokens": [
+            "C9=%10%11"
+          ],
+          "old_ids": [
+            2229
+          ],
+          "old_tokens": [
+            "C9=%10%11"
+          ]
+        },
+        {
+          "text": "C%12%13=%14",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2456
+          ],
+          "tokens": [
+            "C%12%13=%14"
+          ],
+          "old_ids": [
+            2456
+          ],
+          "old_tokens": [
+            "C%12%13=%14"
+          ]
+        },
+        {
+          "text": "C%15%17=%18",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            7721
+          ],
+          "tokens": [
+            "C%15%17=%18"
+          ],
+          "old_ids": [
+            7721
+          ],
+          "old_tokens": [
+            "C%15%17=%18"
+          ]
+        },
+        {
+          "text": "CO5",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2282
+          ],
+          "tokens": [
+            "CO5"
+          ],
+          "old_ids": [
+            2282
+          ],
+          "old_tokens": [
+            "CO5"
+          ]
+        },
+        {
+          "text": "N%20%21",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2536
+          ],
+          "tokens": [
+            "N%20%21"
+          ],
+          "old_ids": [
+            2536
+          ],
+          "old_tokens": [
+            "N%20%21"
+          ]
+        },
+        {
+          "text": "C%25=6",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            7116
+          ],
+          "tokens": [
+            "C%25=6"
+          ],
+          "old_ids": [
+            7116
+          ],
+          "old_tokens": [
+            "C%25=6"
+          ]
+        },
+        {
+          "text": "N%11%12",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2350
+          ],
+          "tokens": [
+            "N%11%12"
+          ],
+          "old_ids": [
+            2350
+          ],
+          "old_tokens": [
+            "N%11%12"
+          ]
+        },
+        {
+          "text": "N=%14%15",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2278
+          ],
+          "tokens": [
+            "N=%14%15"
+          ],
+          "old_ids": [
+            2278
+          ],
+          "old_tokens": [
+            "N=%14%15"
+          ]
+        },
+        {
+          "text": "C7",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2160
+          ],
+          "tokens": [
+            "C7"
+          ],
+          "old_ids": [
+            2160
+          ],
+          "old_tokens": [
+            "C7"
+          ]
+        },
+        {
+          "text": "O=%10",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2197
+          ],
+          "tokens": [
+            "O=%10"
+          ],
+          "old_ids": [
+            2197
+          ],
+          "old_tokens": [
+            "O=%10"
+          ]
+        },
+        {
+          "text": "N%13",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            3167
+          ],
+          "tokens": [
+            "N%13"
+          ],
+          "old_ids": [
+            3167
+          ],
+          "old_tokens": [
+            "N%13"
+          ]
+        }
+      ],
+      "cohort": "test",
+      "boundary_exact": true,
+      "exact_safe_roundtrip": true,
+      "canonical_isomeric_roundtrip": true
+    },
+    {
+      "record_index": 47576,
+      "chembl_id": "CHEMBL4299779",
+      "safe": "C%27CCCNC(=O)c1cc%28cc%13c1.O%30[C@H]1[C@H]%31[C@@H]%32C[C@@H]%33[C@@H]16.O%15[C@@H]1[C@@H]%17[C@H]%18C[C@H]%19[C@H]1%20.[C@H]17O[C@H]8[C@@H](O)[C@H](O)[C@H]19.[C@H]1%10O[C@@H]%11[C@@H](O)[C@H](O)[C@H]1%12.[C@@H]1%21O[C@@H]%22[C@H](O)[C@@H](O)[C@@H]1%23.[C@@H]1%24O[C@H]%25[C@H](O)[C@@H](O)[C@@H]1%26.[C@@H]1%29O[C@H]%30[C@@H](O)[C@H]1O%10.[C@H]1%14O[C@@H]%15[C@H](O)[C@@H]1O%24.C5[C@H](N%16)C(N)=O.c1%28cn(C%29)nn1.c1%13cn(C%14)nn1.N=C(N)NCC5.C%16(=O)CCC%27.O67.C8N.C%11N.O%20%21.C%22N.C%25N.O%31.N%32.N%33.N9.N%12.O%17.N%18.N%19.N%23.N%26",
+      "length": 117,
+      "old_length": 252,
+      "ids": [
+        2440,
+        9146,
+        11644,
+        135,
+        9068,
+        11819,
+        11,
+        3343,
+        9124,
+        12229,
+        79,
+        148,
+        9880,
+        150,
+        9884,
+        11,
+        2423,
+        9127,
+        10267,
+        10722,
+        9481,
+        116,
+        15407,
+        11,
+        9845,
+        14565,
+        9318,
+        11094,
+        22,
+        11,
+        11237,
+        9995,
+        82,
+        9318,
+        11094,
+        87,
+        11,
+        12400,
+        9995,
+        122,
+        10502,
+        12532,
+        11,
+        12401,
+        9394,
+        128,
+        10502,
+        12533,
+        11,
+        9127,
+        140,
+        9394,
+        145,
+        9980,
+        78,
+        11,
+        13479,
+        38,
+        9743,
+        10010,
+        125,
+        11,
+        2138,
+        9637,
+        108,
+        10166,
+        11,
+        12005,
+        14922,
+        140,
+        12216,
+        11,
+        9852,
+        14922,
+        100,
+        12216,
+        11,
+        10064,
+        2592,
+        11,
+        13218,
+        9179,
+        132,
+        11,
+        2356,
+        11,
+        8957,
+        11,
+        14069,
+        11,
+        2567,
+        11,
+        2364,
+        37,
+        11,
+        2500,
+        37,
+        11,
+        3049,
+        11,
+        11125,
+        11,
+        11989,
+        11,
+        2935,
+        11,
+        3676,
+        11,
+        2415,
+        11,
+        3842,
+        11,
+        4128,
+        11,
+        5647,
+        11,
+        10448
+      ],
+      "fragments": [
+        {
+          "text": "C%27CCCNC(=O)c1cc%28cc%13c1",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2440,
+            9146,
+            11644,
+            135,
+            9068,
+            11819
+          ],
+          "tokens": [
+            "C%27",
+            "CCCN",
+            "C(=O)c1cc",
+            "%28",
+            "cc",
+            "%13c1"
+          ],
+          "old_ids": [
+            27,
+            132,
+            27,
+            27,
+            27,
+            37,
+            27,
+            7,
+            23,
+            38,
+            8,
+            54,
+            14,
+            54,
+            54,
+            135,
+            54,
+            54,
+            96,
+            54,
+            14
+          ],
+          "old_tokens": [
+            "C",
+            "%27",
+            "C",
+            "C",
+            "C",
+            "N",
+            "C",
+            "(",
+            "=",
+            "O",
+            ")",
+            "c",
+            "1",
+            "c",
+            "c",
+            "%28",
+            "c",
+            "c",
+            "%13",
+            "c",
+            "1"
+          ]
+        },
+        {
+          "text": "O%30[C@H]1[C@H]%31[C@@H]%32C[C@@H]%33[C@@H]16",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            3343,
+            9124,
+            12229,
+            79,
+            148,
+            9880,
+            150,
+            9884
+          ],
+          "tokens": [
+            "O%30",
+            "[C@H]1",
+            "[C@H]%31",
+            "[C@@H]",
+            "%32",
+            "C[C@@H]",
+            "%33",
+            "[C@@H]16"
+          ],
+          "old_ids": [
+            38,
+            145,
+            80,
+            14,
+            80,
+            147,
+            79,
+            148,
+            27,
+            79,
+            150,
+            79,
+            14,
+            19
+          ],
+          "old_tokens": [
+            "O",
+            "%30",
+            "[C@H]",
+            "1",
+            "[C@H]",
+            "%31",
+            "[C@@H]",
+            "%32",
+            "C",
+            "[C@@H]",
+            "%33",
+            "[C@@H]",
+            "1",
+            "6"
+          ]
+        },
+        {
+          "text": "O%15[C@@H]1[C@@H]%17[C@H]%18C[C@H]%19[C@H]1%20",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2423,
+            9127,
+            10267,
+            10722,
+            9481,
+            116,
+            15407
+          ],
+          "tokens": [
+            "O%15",
+            "[C@@H]1",
+            "[C@@H]%17",
+            "[C@H]%18",
+            "C[C@H]",
+            "%19",
+            "[C@H]1%20"
+          ],
+          "old_ids": [
+            38,
+            106,
+            79,
+            14,
+            79,
+            112,
+            80,
+            114,
+            27,
+            80,
+            116,
+            80,
+            14,
+            118
+          ],
+          "old_tokens": [
+            "O",
+            "%15",
+            "[C@@H]",
+            "1",
+            "[C@@H]",
+            "%17",
+            "[C@H]",
+            "%18",
+            "C",
+            "[C@H]",
+            "%19",
+            "[C@H]",
+            "1",
+            "%20"
+          ]
+        },
+        {
+          "text": "[C@H]17O[C@H]8[C@@H](O)[C@H](O)[C@H]19",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9845,
+            14565,
+            9318,
+            11094,
+            22
+          ],
+          "tokens": [
+            "[C@H]17",
+            "O[C@H]8",
+            "[C@@H](O)",
+            "[C@H](O)[C@H]1",
+            "9"
+          ],
+          "old_ids": [
+            80,
+            14,
+            20,
+            38,
+            80,
+            21,
+            79,
+            7,
+            38,
+            8,
+            80,
+            7,
+            38,
+            8,
+            80,
+            14,
+            22
+          ],
+          "old_tokens": [
+            "[C@H]",
+            "1",
+            "7",
+            "O",
+            "[C@H]",
+            "8",
+            "[C@@H]",
+            "(",
+            "O",
+            ")",
+            "[C@H]",
+            "(",
+            "O",
+            ")",
+            "[C@H]",
+            "1",
+            "9"
+          ]
+        },
+        {
+          "text": "[C@H]1%10O[C@@H]%11[C@@H](O)[C@H](O)[C@H]1%12",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            11237,
+            9995,
+            82,
+            9318,
+            11094,
+            87
+          ],
+          "tokens": [
+            "[C@H]1%10",
+            "O[C@@H]",
+            "%11",
+            "[C@@H](O)",
+            "[C@H](O)[C@H]1",
+            "%12"
+          ],
+          "old_ids": [
+            80,
+            14,
+            78,
+            38,
+            79,
+            82,
+            79,
+            7,
+            38,
+            8,
+            80,
+            7,
+            38,
+            8,
+            80,
+            14,
+            87
+          ],
+          "old_tokens": [
+            "[C@H]",
+            "1",
+            "%10",
+            "O",
+            "[C@@H]",
+            "%11",
+            "[C@@H]",
+            "(",
+            "O",
+            ")",
+            "[C@H]",
+            "(",
+            "O",
+            ")",
+            "[C@H]",
+            "1",
+            "%12"
+          ]
+        },
+        {
+          "text": "[C@@H]1%21O[C@@H]%22[C@H](O)[C@@H](O)[C@@H]1%23",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            12400,
+            9995,
+            122,
+            10502,
+            12532
+          ],
+          "tokens": [
+            "[C@@H]1%21",
+            "O[C@@H]",
+            "%22",
+            "[C@H](O)[C@@H](O)",
+            "[C@@H]1%23"
+          ],
+          "old_ids": [
+            79,
+            14,
+            119,
+            38,
+            79,
+            122,
+            80,
+            7,
+            38,
+            8,
+            79,
+            7,
+            38,
+            8,
+            79,
+            14,
+            123
+          ],
+          "old_tokens": [
+            "[C@@H]",
+            "1",
+            "%21",
+            "O",
+            "[C@@H]",
+            "%22",
+            "[C@H]",
+            "(",
+            "O",
+            ")",
+            "[C@@H]",
+            "(",
+            "O",
+            ")",
+            "[C@@H]",
+            "1",
+            "%23"
+          ]
+        },
+        {
+          "text": "[C@@H]1%24O[C@H]%25[C@H](O)[C@@H](O)[C@@H]1%26",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            12401,
+            9394,
+            128,
+            10502,
+            12533
+          ],
+          "tokens": [
+            "[C@@H]1%24",
+            "O[C@H]",
+            "%25",
+            "[C@H](O)[C@@H](O)",
+            "[C@@H]1%26"
+          ],
+          "old_ids": [
+            79,
+            14,
+            125,
+            38,
+            80,
+            128,
+            80,
+            7,
+            38,
+            8,
+            79,
+            7,
+            38,
+            8,
+            79,
+            14,
+            130
+          ],
+          "old_tokens": [
+            "[C@@H]",
+            "1",
+            "%24",
+            "O",
+            "[C@H]",
+            "%25",
+            "[C@H]",
+            "(",
+            "O",
+            ")",
+            "[C@@H]",
+            "(",
+            "O",
+            ")",
+            "[C@@H]",
+            "1",
+            "%26"
+          ]
+        },
+        {
+          "text": "[C@@H]1%29O[C@H]%30[C@@H](O)[C@H]1O%10",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9127,
+            140,
+            9394,
+            145,
+            9980,
+            78
+          ],
+          "tokens": [
+            "[C@@H]1",
+            "%29",
+            "O[C@H]",
+            "%30",
+            "[C@@H](O)[C@H]1O",
+            "%10"
+          ],
+          "old_ids": [
+            79,
+            14,
+            140,
+            38,
+            80,
+            145,
+            79,
+            7,
+            38,
+            8,
+            80,
+            14,
+            38,
+            78
+          ],
+          "old_tokens": [
+            "[C@@H]",
+            "1",
+            "%29",
+            "O",
+            "[C@H]",
+            "%30",
+            "[C@@H]",
+            "(",
+            "O",
+            ")",
+            "[C@H]",
+            "1",
+            "O",
+            "%10"
+          ]
+        },
+        {
+          "text": "[C@H]1%14O[C@@H]%15[C@H](O)[C@@H]1O%24",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            13479,
+            38,
+            9743,
+            10010,
+            125
+          ],
+          "tokens": [
+            "[C@H]1%14",
+            "O",
+            "[C@@H]%15",
+            "[C@H](O)[C@@H]1O",
+            "%24"
+          ],
+          "old_ids": [
+            80,
+            14,
+            100,
+            38,
+            79,
+            106,
+            80,
+            7,
+            38,
+            8,
+            79,
+            14,
+            38,
+            125
+          ],
+          "old_tokens": [
+            "[C@H]",
+            "1",
+            "%14",
+            "O",
+            "[C@@H]",
+            "%15",
+            "[C@H]",
+            "(",
+            "O",
+            ")",
+            "[C@@H]",
+            "1",
+            "O",
+            "%24"
+          ]
+        },
+        {
+          "text": "C5[C@H](N%16)C(N)=O",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2138,
+            9637,
+            108,
+            10166
+          ],
+          "tokens": [
+            "C5",
+            "[C@H](N",
+            "%16",
+            ")C(N)=O"
+          ],
+          "old_ids": [
+            27,
+            18,
+            80,
+            7,
+            37,
+            108,
+            8,
+            27,
+            7,
+            37,
+            8,
+            23,
+            38
+          ],
+          "old_tokens": [
+            "C",
+            "5",
+            "[C@H]",
+            "(",
+            "N",
+            "%16",
+            ")",
+            "C",
+            "(",
+            "N",
+            ")",
+            "=",
+            "O"
+          ]
+        },
+        {
+          "text": "c1%28cn(C%29)nn1",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            12005,
+            14922,
+            140,
+            12216
+          ],
+          "tokens": [
+            "c1%28",
+            "cn(C",
+            "%29",
+            ")nn1"
+          ],
+          "old_ids": [
+            54,
+            14,
+            135,
+            54,
+            64,
+            7,
+            27,
+            140,
+            8,
+            64,
+            64,
+            14
+          ],
+          "old_tokens": [
+            "c",
+            "1",
+            "%28",
+            "c",
+            "n",
+            "(",
+            "C",
+            "%29",
+            ")",
+            "n",
+            "n",
+            "1"
+          ]
+        },
+        {
+          "text": "c1%13cn(C%14)nn1",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            9852,
+            14922,
+            100,
+            12216
+          ],
+          "tokens": [
+            "c1%13",
+            "cn(C",
+            "%14",
+            ")nn1"
+          ],
+          "old_ids": [
+            54,
+            14,
+            96,
+            54,
+            64,
+            7,
+            27,
+            100,
+            8,
+            64,
+            64,
+            14
+          ],
+          "old_tokens": [
+            "c",
+            "1",
+            "%13",
+            "c",
+            "n",
+            "(",
+            "C",
+            "%14",
+            ")",
+            "n",
+            "n",
+            "1"
+          ]
+        },
+        {
+          "text": "N=C(N)NCC5",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            10064,
+            2592
+          ],
+          "tokens": [
+            "N=C(N)N",
+            "CC5"
+          ],
+          "old_ids": [
+            37,
+            23,
+            27,
+            7,
+            37,
+            8,
+            37,
+            27,
+            27,
+            18
+          ],
+          "old_tokens": [
+            "N",
+            "=",
+            "C",
+            "(",
+            "N",
+            ")",
+            "N",
+            "C",
+            "C",
+            "5"
+          ]
+        },
+        {
+          "text": "C%16(=O)CCC%27",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            13218,
+            9179,
+            132
+          ],
+          "tokens": [
+            "C%16(=O)",
+            "CCC",
+            "%27"
+          ],
+          "old_ids": [
+            27,
+            108,
+            7,
+            23,
+            38,
+            8,
+            27,
+            27,
+            27,
+            132
+          ],
+          "old_tokens": [
+            "C",
+            "%16",
+            "(",
+            "=",
+            "O",
+            ")",
+            "C",
+            "C",
+            "C",
+            "%27"
+          ]
+        },
+        {
+          "text": "O67",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2356
+          ],
+          "tokens": [
+            "O67"
+          ],
+          "old_ids": [
+            2356
+          ],
+          "old_tokens": [
+            "O67"
+          ]
+        },
+        {
+          "text": "C8N",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            8957
+          ],
+          "tokens": [
+            "C8N"
+          ],
+          "old_ids": [
+            8957
+          ],
+          "old_tokens": [
+            "C8N"
+          ]
+        },
+        {
+          "text": "C%11N",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            14069
+          ],
+          "tokens": [
+            "C%11N"
+          ],
+          "old_ids": [
+            13692
+          ],
+          "old_tokens": [
+            "C%11N"
+          ]
+        },
+        {
+          "text": "O%20%21",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2567
+          ],
+          "tokens": [
+            "O%20%21"
+          ],
+          "old_ids": [
+            2567
+          ],
+          "old_tokens": [
+            "O%20%21"
+          ]
+        },
+        {
+          "text": "C%22N",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2364,
+            37
+          ],
+          "tokens": [
+            "C%22",
+            "N"
+          ],
+          "old_ids": [
+            27,
+            122,
+            37
+          ],
+          "old_tokens": [
+            "C",
+            "%22",
+            "N"
+          ]
+        },
+        {
+          "text": "C%25N",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            2500,
+            37
+          ],
+          "tokens": [
+            "C%25",
+            "N"
+          ],
+          "old_ids": [
+            27,
+            128,
+            37
+          ],
+          "old_tokens": [
+            "C",
+            "%25",
+            "N"
+          ]
+        },
+        {
+          "text": "O%31",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            3049
+          ],
+          "tokens": [
+            "O%31"
+          ],
+          "old_ids": [
+            3049
+          ],
+          "old_tokens": [
+            "O%31"
+          ]
+        },
+        {
+          "text": "N%32",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            11125
+          ],
+          "tokens": [
+            "N%32"
+          ],
+          "old_ids": [
+            37,
+            148
+          ],
+          "old_tokens": [
+            "N",
+            "%32"
+          ]
+        },
+        {
+          "text": "N%33",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            11989
+          ],
+          "tokens": [
+            "N%33"
+          ],
+          "old_ids": [
+            12443
+          ],
+          "old_tokens": [
+            "N%33"
+          ]
+        },
+        {
+          "text": "N9",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2935
+          ],
+          "tokens": [
+            "N9"
+          ],
+          "old_ids": [
+            2935
+          ],
+          "old_tokens": [
+            "N9"
+          ]
+        },
+        {
+          "text": "N%12",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            3676
+          ],
+          "tokens": [
+            "N%12"
+          ],
+          "old_ids": [
+            3676
+          ],
+          "old_tokens": [
+            "N%12"
+          ]
+        },
+        {
+          "text": "O%17",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            2415
+          ],
+          "tokens": [
+            "O%17"
+          ],
+          "old_ids": [
+            2415
+          ],
+          "old_tokens": [
+            "O%17"
+          ]
+        },
+        {
+          "text": "N%18",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            3842
+          ],
+          "tokens": [
+            "N%18"
+          ],
+          "old_ids": [
+            3842
+          ],
+          "old_tokens": [
+            "N%18"
+          ]
+        },
+        {
+          "text": "N%19",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            4128
+          ],
+          "tokens": [
+            "N%19"
+          ],
+          "old_ids": [
+            4128
+          ],
+          "old_tokens": [
+            "N%19"
+          ]
+        },
+        {
+          "text": "N%23",
+          "whole_entry": true,
+          "encode_mode": "whole",
+          "ids": [
+            5647
+          ],
+          "tokens": [
+            "N%23"
+          ],
+          "old_ids": [
+            5647
+          ],
+          "old_tokens": [
+            "N%23"
+          ]
+        },
+        {
+          "text": "N%26",
+          "whole_entry": false,
+          "encode_mode": "substring",
+          "ids": [
+            10448
+          ],
+          "tokens": [
+            "N%26"
+          ],
+          "old_ids": [
+            15812
+          ],
+          "old_tokens": [
+            "N%26"
+          ]
+        }
+      ],
+      "cohort": "test",
+      "boundary_exact": true,
+      "exact_safe_roundtrip": true,
+      "canonical_isomeric_roundtrip": true
+    }
+  ],
+  "example_selection_note": "Original 8-fragment example plus illustrative TEST records with 12, 20 and 30 fragments; these examples are not representative averages."
 }
