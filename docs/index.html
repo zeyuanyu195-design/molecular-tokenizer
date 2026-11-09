@@ -6,11 +6,11 @@
   <meta name="description" content="Whole-fragment and hybrid SAFE vocabularies on 44,329 boundary-preserving records, with pseudocode and a 39-to-23-token example.">
   <link rel="stylesheet" href="results.css?v=20261103-histograms"><script src="results.js?v=20261103-pseudocode" defer></script>
   <link rel="stylesheet" href="connection-demo.css?v=20261103"><script src="connection-demo.js?v=20261103" defer></script>
-  <link rel="stylesheet" href="vocabulary.css?v=20261109"><script src="vocabulary.js?v=20261109" defer></script>
+  <link rel="stylesheet" href="vocabulary.css?v=20261109-examples"><script src="vocabulary.js?v=20261109-examples" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
-<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#vocabulary-results">Results</a><a href="#v-flow">Process</a><a href="#v-algorithms">Pseudocode</a><a href="#v-example">39 → 23 example</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
+<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#vocabulary-results">Results</a><a href="#v-flow">Process</a><a href="#v-algorithms">Pseudocode</a><a href="#v-example">Token examples</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
 <main id="main">
   <section class="intro">
     <div class="eyebrow">UPDATED 09 NOV 2026 / 44,329 BOUNDARY-PRESERVING RECORDS</div>
@@ -40,12 +40,14 @@
       <section id="v-algorithms"><div class="section-head"><div><div class="eyebrow">TWO CODECS / PSEUDOCODE</div><h2 id="v-code-title"></h2></div><label class="select-label">Scheme<select id="v-method"><option value="whole">Whole fragments</option><option value="hybrid" selected>Hybrid</option></select></label></div>
         <div class="code-panel" id="v-code-panel"><div class="code-toolbar"><div role="group" aria-label="Vocabulary algorithm"><button data-v-step="train" aria-pressed="false">train</button><button data-v-step="encode" aria-pressed="true">encode</button><button data-v-step="decode" aria-pressed="false">decode</button></div><span>PSEUDOCODE</span></div><pre><code id="v-code"></code></pre></div>
       </section>
-      <section id="v-example"><div class="section-head"><div><div class="eyebrow">CHEMBL45183 · TEST RECORD 39224 · FIXED 16k EXAMPLE</div><h2>39 → 23 tokens. Eight fragments.</h2></div><div class="segmented" role="group" aria-label="Example token display"><button data-v-mode="text" aria-pressed="true">Token text</button><button data-v-mode="ids" aria-pressed="false">Token IDs</button></div></div>
+      <section id="v-example"><div class="section-head"><div><div class="eyebrow" id="v-example-label">VERIFIED TEST EXAMPLES · FIXED 16k</div><h2 id="v-example-title">Compare fragment by fragment.</h2></div><div class="segmented" role="group" aria-label="Example token display"><button data-v-mode="text" aria-pressed="true">Token text</button><button data-v-mode="ids" aria-pressed="false">Token IDs</button></div></div>
+        <label class="select-label v-example-picker">Verified molecule<select id="v-example-select" aria-label="Verified molecule"></select></label>
+        <p>Choose the original example or longer molecules with 12, 20 and 30 fragments. All are boundary-preserving TEST records with verified reconstruction. They illustrate individual encodings, not population-average compression.</p>
         <p>This example always uses the selected <strong>16k</strong> hybrid, regardless of the statistics budget above. Each chip is one token; hover to inspect its text and ID.</p>
         <code id="v-safe"></code>
         <div class="table-scroll"><table id="v-example-table"><caption>Original SAFE fragment boundaries are unchanged</caption><thead><tr><th>SAFE fragment</th><th>Whole-fragment scheme</th><th>Hybrid scheme</th><th>Count</th></tr></thead><tbody id="v-example-body"></tbody></table></div>
-        <h3>All 23 hybrid tokens in order</h3><div id="v-sequence" aria-label="Complete 23-token sequence"></div>
-        <p>Content: 5 + 4 + 2 + 1 + 1 + 1 + 1 + 1 = 16 tokens; plus 7 dots = <strong>23</strong>. Fragment 1 loses a complete-word slot and grows from 1 to 5, while fragments 2 and 3 shrink from 17 to 4 and 9 to 2.</p>
+        <h3 id="v-sequence-title">Complete hybrid token sequence</h3><div id="v-sequence" aria-label="Complete 23-token sequence"></div>
+        <p id="v-count-explanation" aria-live="polite"></p>
       </section>
       <aside class="note"><strong>What the comparison establishes.</strong> Substring reuse drives most compression: pure within-fragment BPE TEST means are 20.744662 (16k) and 19.193044 (32k), versus hybrid 20.742461 and 19.193044. Dedicated whole-fragment slots have not demonstrated a substantial extra compression advantage. One motif may use multiple model tokens. Exact reconstruction does not prove valid diffusion generation. Pre-existing vocabulary training provenance has not been audited; the TEST set was explored in earlier diagnosis.</aside>
       <p><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer#readme">Read the complete report ↗</a> · <a href="vocabulary-results.json">Results, pseudocode and example IDs (JSON)</a></p>
