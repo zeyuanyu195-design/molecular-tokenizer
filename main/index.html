@@ -5,8 +5,8 @@
   <title>Molecular tokenization · Results explorer</title>
   <meta name="description" content="Whole-fragment and hybrid SAFE vocabularies on 44,329 boundary-preserving records, with pseudocode and a 39-to-23-token example.">
   <link rel="stylesheet" href="results.css?v=20261103-histograms"><script src="results.js?v=20261103-pseudocode" defer></script>
-  <link rel="stylesheet" href="connection-demo.css?v=20261109-codecs"><script src="connection-demo.js?v=20261109-codecs" defer></script>
-  <link rel="stylesheet" href="vocabulary.css?v=20261109-means"><script src="vocabulary.js?v=20261109-examples" defer></script>
+  <link rel="stylesheet" href="connection-demo.css?v=20261109-stepfix"><script src="connection-demo.js?v=20261109-stepfix" defer></script>
+  <link rel="stylesheet" href="vocabulary.css?v=20261109-stepfix"><script src="vocabulary.js?v=20261109-stepfix" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
@@ -55,10 +55,11 @@
       <section id="v-algorithms"><div class="section-head"><div><div class="eyebrow">TWO CODECS / PSEUDOCODE</div><h2 id="v-code-title"></h2></div><label class="select-label">Scheme<select id="v-method"><option value="whole">Whole fragments</option><option value="hybrid" selected>Hybrid</option></select></label></div>
         <div class="code-panel" id="v-code-panel"><div class="code-toolbar"><div role="group" aria-label="Vocabulary algorithm"><button data-v-step="train" aria-pressed="false">train</button><button data-v-step="encode" aria-pressed="true">encode</button><button data-v-step="decode" aria-pressed="false">decode</button></div><span>PSEUDOCODE</span></div><pre><code id="v-code"></code></pre></div>
       </section>
-      <section id="v-example"><div class="section-head"><div><div class="eyebrow" id="v-example-label">VERIFIED TEST EXAMPLES · FIXED 16k</div><h2 id="v-example-title">Compare fragment by fragment.</h2></div><div class="segmented" role="group" aria-label="Example token display"><button data-v-mode="text" aria-pressed="true">Token text</button><button data-v-mode="ids" aria-pressed="false">Token IDs</button></div></div>
+      <section id="v-example"><div class="section-head"><div><div class="eyebrow" id="v-example-label">VERIFIED TEST EXAMPLES · FIXED 16k</div><h2 id="v-example-title">Compare fragment by fragment.</h2></div><div class="segmented" role="group" aria-label="Example token display"><button data-v-mode="text" aria-pressed="true">Text + ID</button><button data-v-mode="ids" aria-pressed="false">ID + text</button></div></div>
         <label class="select-label v-example-picker">Verified molecule<select id="v-example-select" aria-label="Verified molecule"></select></label>
         <p>Choose the original example or longer molecules with 12, 20 and 30 fragments. All are boundary-preserving TEST records with verified reconstruction. They illustrate individual encodings, not population-average compression.</p>
-        <p>This example always uses the selected <strong>16k</strong> hybrid, regardless of the statistics budget above. Each chip is one token; hover to inspect its text and ID.</p>
+        <p>This example always uses the selected <strong>16k</strong> hybrid, regardless of the statistics budget above. Each chip shows both its text and actual ID. IDs belong to the dictionary of that column.</p>
+        <aside class="note"><strong>Text substrings are not chemical motifs.</strong> Hybrid fallback learns text combinations without a chemical-subgraph constraint. For example, <code>1)</code> is a real entry in the 16k hybrid dictionary (ID <strong>9447</strong>), but is not an independent chemical motif. Exact reconstruction verifies the text codec, not motif-level semantics or the validity of generated molecules.</aside>
         <code id="v-safe"></code>
         <div class="table-scroll"><table id="v-example-table"><caption>Original SAFE fragment boundaries are unchanged</caption><thead><tr><th>SAFE fragment</th><th>Whole-fragment scheme</th><th>Hybrid scheme</th><th>Count</th></tr></thead><tbody id="v-example-body"></tbody></table></div>
         <h3 id="v-sequence-title">Complete hybrid token sequence</h3><div id="v-sequence" aria-label="Complete 23-token sequence"></div>
@@ -78,6 +79,7 @@
       <div id="cd-steps" class="cd-steps" role="group" aria-label="Tokenization steps"></div>
       <div id="cd-status" class="cd-status" role="status" aria-live="polite"></div>
       <div class="cd-step-copy"><h3 id="cd-step-title"></h3><p id="cd-step-copy"></p></div>
+      <details id="cd-context" class="cd-context" open><summary id="cd-context-summary" hidden>Reference: molecular graph and SAFE connection labels</summary>
       <span class="label">ORIGINAL SMILES</span><code id="cd-input" class="cd-input"></code>
       <div class="cd-layout">
         <figure class="cd-visual"><div class="cd-graph-scroll"><div id="cd-graph" class="cd-graph"></div></div><figcaption id="cd-graph-caption"></figcaption><div id="cd-atom-info" class="cd-atom-info"></div></figure>
@@ -87,11 +89,12 @@
           <div id="cd-stereo-note" class="cd-stereo-note" hidden></div>
         </div>
       </div>
+      </details>
       <div id="cd-codec-workbench" hidden>
         <section id="cd-lookup" class="cd-work-panel" aria-labelledby="cd-lookup-title">
           <h3 id="cd-lookup-title">5. Look up the complete SAFE fragment</h3>
           <p>Matched = the literal string has a complete entry in this dictionary. Unmatched = fallback is needed. All connection labels are part of the lookup string.</p>
-          <div class="table-scroll"><table class="cd-lookup-table"><caption>Select a fragment to highlight its source atoms</caption><thead><tr><th>SAFE fragment</th><th>Whole-fragment scheme</th><th>Hybrid scheme</th></tr></thead><tbody id="cd-lookup-body"></tbody></table></div>
+          <div class="table-scroll"><table class="cd-lookup-table"><caption>Select a fragment; its source atoms are highlighted in the optional reference graph</caption><thead><tr><th>SAFE fragment</th><th>Whole-fragment scheme</th><th>Hybrid scheme</th></tr></thead><tbody id="cd-lookup-body"></tbody></table></div>
         </section>
         <section id="cd-fallback" class="cd-work-panel" hidden aria-labelledby="cd-fallback-title">
           <h3 id="cd-fallback-title">6. Keep complete hits; fall back only on misses</h3>
@@ -108,7 +111,7 @@
         <div id="cd-token-inspector" class="cd-token-inspector" role="status" aria-live="polite"></div>
         <section id="cd-decode-panel" class="cd-work-panel" hidden aria-labelledby="cd-decode-title">
           <h3 id="cd-decode-title">8. IDs → dictionary payloads → complete SAFE → molecule</h3>
-          <p>Move a slider or reveal the next token. The diagram above is the target molecule; chemistry is verified offline, not simulated in the browser. No original SAFE side table or per-molecule attachment table is used to reconstruct the text.</p>
+          <p>Move a slider or reveal the next token. The optional reference graph shows the target molecule; chemistry is verified offline, not simulated in the browser. No original SAFE side table or per-molecule attachment table is used to reconstruct the text.</p>
           <div id="cd-reconstruction" class="cd-codec-grid"></div>
         </section>
       </div>

@@ -32,6 +32,7 @@
     if (step >= 4) selectedPair = null;
     if (step === labels.length - 1) pause();
     render();
+    el('cd-steps').scrollIntoView({block: 'start', behavior: 'instant'});
   }
   function descriptions(e) {
     const protectedBond = e.bonds.find(b => b.protected);
@@ -338,6 +339,16 @@
       button.setAttribute('aria-pressed', String(i === step));
       button.classList.toggle('cd-complete', i < step);
     });
+    const context = el('cd-context');
+    // The active operation comes first. Repeated graph/SAFE context is optional
+    // during lookup, fallback and reconstruction, rather than masking the change.
+    if (context.dataset.stage !== String(step)) {
+      context.open = step < 4;
+      context.dataset.stage = String(step);
+    }
+    el('cd-context-summary').hidden = step < 4;
+    const content = el('cd-content');
+    content.insertBefore(context, step < 4 ? el('cd-codec-workbench') : root.querySelector('.cd-evidence'));
     el('cd-safe-panel').hidden = step < 3;
     el('cd-partition-panel').hidden = step >= 3;
     el('cd-codec-workbench').hidden = step < 4;
