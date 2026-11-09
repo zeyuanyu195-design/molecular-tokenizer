@@ -1,0 +1,82 @@
+{
+  "records": 44329,
+  "scope": "Same boundary-preserving records; includes TRAIN, VALIDATION and TEST. Frozen prior results, no new tokenization run.",
+  "note": "DemoDiff is a node-count reference with connectivity stored in extra edge/attachment tables. Other rows count text including connectivity syntax. Vocabulary budgets differ: the official SAFE checkpoint has 1,880 entries; our schemes have 16k/32k.",
+  "sources": {
+    "text_summary": "outputs/text_tokenizer_comparison_20261109/summary.json",
+    "demodiff": "Previously verified original-SMILES DemoDiff / GraphBPE node-count agreement on the 44,329 exact-boundary records: total 372,957.",
+    "official_safe_commit": "d162d23e3e8c8a77b54c559e88a35d08b3b1d1b5"
+  },
+  "methods": [
+    {
+      "key": "atomwise",
+      "label": "Atom-wise SMILES (incl. symbols)",
+      "label_zh": "Atom-wise SMILES（含符号）",
+      "color": "#647780",
+      "records": 44329,
+      "total": 2207489,
+      "mean": 49.797852421665276,
+      "connectivity": "Included in the text token sequence"
+    },
+    {
+      "key": "demodiff",
+      "label": "DemoDiff* (node tokens)",
+      "label_zh": "DemoDiff*（节点 token）",
+      "color": "#8166A0",
+      "records": 44329,
+      "total": 372957,
+      "mean": 8.413386270838503,
+      "connectivity": "Extra edge/attachment tables; excluded from the node-token count"
+    },
+    {
+      "key": "brics_safe",
+      "label": "Official BRICS + SAFE tokenizer",
+      "label_zh": "官方 BRICS＋SAFE tokenizer",
+      "color": "#3287A2",
+      "records": 44329,
+      "total": 2669612,
+      "mean": 60.222698459247894,
+      "connectivity": "Included in the text token sequence"
+    },
+    {
+      "key": "whole_16000",
+      "label": "Whole-fragment scheme · 16k",
+      "label_zh": "完整片段方案 · 16k",
+      "color": "#B57340",
+      "records": 44329,
+      "total": 1555440,
+      "mean": 35.088542489115476,
+      "connectivity": "Included in the text token sequence"
+    },
+    {
+      "key": "hybrid_16000",
+      "label": "Hybrid scheme · 16k",
+      "label_zh": "混合方案 · 16k",
+      "color": "#24765B",
+      "records": 44329,
+      "total": 883006,
+      "mean": 19.91937557806402,
+      "connectivity": "Included in the text token sequence"
+    },
+    {
+      "key": "whole_32000",
+      "label": "Whole-fragment scheme · 32k",
+      "label_zh": "完整片段方案 · 32k",
+      "color": "#B57340",
+      "records": 44329,
+      "total": 1214713,
+      "mean": 27.402219765841775,
+      "connectivity": "Included in the text token sequence"
+    },
+    {
+      "key": "hybrid_32000",
+      "label": "Hybrid scheme · 32k",
+      "label_zh": "混合方案 · 32k",
+      "color": "#24765B",
+      "records": 44329,
+      "total": 806065,
+      "mean": 18.18369464684518,
+      "connectivity": "Included in the text token sequence"
+    }
+  ]
+}

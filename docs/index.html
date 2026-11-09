@@ -6,17 +6,32 @@
   <meta name="description" content="Whole-fragment and hybrid SAFE vocabularies on 44,329 boundary-preserving records, with pseudocode and a 39-to-23-token example.">
   <link rel="stylesheet" href="results.css?v=20261103-histograms"><script src="results.js?v=20261103-pseudocode" defer></script>
   <link rel="stylesheet" href="connection-demo.css?v=20261109-codecs"><script src="connection-demo.js?v=20261109-codecs" defer></script>
-  <link rel="stylesheet" href="vocabulary.css?v=20261109-examples"><script src="vocabulary.js?v=20261109-examples" defer></script>
+  <link rel="stylesheet" href="vocabulary.css?v=20261109-means"><script src="vocabulary.js?v=20261109-examples" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
-<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#vocabulary-results">Results</a><a href="#v-flow">Process</a><a href="#v-algorithms">Pseudocode</a><a href="#v-example">Token examples</a><a href="#connection-demo">Step-by-step demo</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
+<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#mean-comparison">Results</a><a href="#v-flow">Process</a><a href="#v-algorithms">Pseudocode</a><a href="#v-example">Token examples</a><a href="#connection-demo">Step-by-step demo</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
 <main id="main">
   <section class="intro">
     <div class="eyebrow">UPDATED 09 NOV 2026 / 44,329 BOUNDARY-PRESERVING RECORDS</div>
     <h1>Keep the fragments.<br><span>Reuse the substrings.</span></h1>
     <p class="lead">Complete SAFE encoding at a fixed vocabulary budget. Compare whole-fragment lookup with a hybrid codec that preserves every connection label.</p>
     <div class="sample-flow"><div><strong>44,329</strong><span>boundary-preserving records only</span></div><div><strong>16k / 32k</strong><span>total model vocabulary budgets</span></div><div><strong>100%</strong><span>exact SAFE reconstruction in this cohort</span></div></div>
+  </section>
+  <section id="mean-comparison" aria-labelledby="mean-title">
+    <div class="eyebrow">MEAN TOKEN LENGTH / SAME 44,329 RECORDS</div>
+    <h2 id="mean-title">Compare all seven configurations.</h2>
+    <p>Saved results on the same boundary-preserving records, including TRAIN, VALIDATION and TEST. The 16k/32k budgets apply to our two schemes; the official SAFE checkpoint has 1,880 entries.</p>
+    <div class="table-scroll"><table id="mean-table"><caption>Mean token lengths, rounded to three decimal places</caption><thead><tr><th scope="col">Method</th><th scope="col">Mean token length</th></tr></thead><tbody>
+      <tr><th scope="row">Atom-wise SMILES (incl. symbols)</th><td>49.798</td></tr>
+      <tr><th scope="row">DemoDiff* (node tokens)<small class="mean-unit-note">Connectivity stored in extra edge/attachment tables; excluded here.</small></th><td>8.413</td></tr>
+      <tr><th scope="row">Official BRICS + SAFE tokenizer</th><td>60.223</td></tr>
+      <tr><th scope="row">Whole-fragment scheme · 16k</th><td>35.089</td></tr>
+      <tr><th scope="row">Hybrid scheme · 16k</th><td>19.919</td></tr>
+      <tr><th scope="row">Whole-fragment scheme · 32k</th><td>27.402</td></tr>
+      <tr><th scope="row">Hybrid scheme · 32k</th><td>18.184</td></tr>
+    </tbody></table></div>
+    <figure class="mean-figure"><img src="figures/mean-token-lengths.svg?v=20261109-demodiff" width="1100" height="670" alt="Mean token lengths on 44,329 records: atom-wise SMILES 49.798, DemoDiff node tokens 8.413, official BRICS plus SAFE 60.223, whole fragments at 16k 35.089, hybrid at 16k 19.919, whole fragments at 32k 27.402, hybrid at 32k 18.184. DemoDiff connectivity is stored separately."><figcaption><strong>* DemoDiff counts node tokens only.</strong> Its connectivity is stored in additional edge and attachment-position information. All other rows count text tokens including connectivity syntax. These lengths do not compare total storage or computation cost.</figcaption></figure>
   </section>
   <section id="vocabulary-results" aria-labelledby="v-title">
     <div class="eyebrow">LATEST EXPERIMENT / COMPLETE ENCODING COST</div><h2 id="v-title">Whole fragments → hybrid tokens.</h2>
