@@ -5,12 +5,12 @@
   <title>Molecular tokenization · Results explorer</title>
   <meta name="description" content="Whole-fragment and hybrid SAFE vocabularies on 44,329 boundary-preserving records, with pseudocode and a 39-to-23-token example.">
   <link rel="stylesheet" href="results.css?v=20261103-histograms"><script src="results.js?v=20261103-pseudocode" defer></script>
-  <link rel="stylesheet" href="connection-demo.css?v=20261103"><script src="connection-demo.js?v=20261103" defer></script>
+  <link rel="stylesheet" href="connection-demo.css?v=20261109-codecs"><script src="connection-demo.js?v=20261109-codecs" defer></script>
   <link rel="stylesheet" href="vocabulary.css?v=20261109-examples"><script src="vocabulary.js?v=20261109-examples" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
-<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#vocabulary-results">Results</a><a href="#v-flow">Process</a><a href="#v-algorithms">Pseudocode</a><a href="#v-example">Token examples</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
+<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#vocabulary-results">Results</a><a href="#v-flow">Process</a><a href="#v-algorithms">Pseudocode</a><a href="#v-example">Token examples</a><a href="#connection-demo">Step-by-step demo</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
 <main id="main">
   <section class="intro">
     <div class="eyebrow">UPDATED 09 NOV 2026 / 44,329 BOUNDARY-PRESERVING RECORDS</div>
@@ -53,7 +53,54 @@
       <p><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer#readme">Read the complete report ↗</a> · <a href="vocabulary-results.json">Results, pseudocode and example IDs (JSON)</a></p>
     </div>
   </section>
-  <details class="v-legacy"><summary>Historical experiments: BRICS, original DemoDiff and connectivity walkthrough</summary><p class="v-legacy-note">Earlier measurements below use different cohorts and often count motif IDs without connectivity. Their implementation limitations apply to those earlier methods, not to the new reversible codecs above.</p>
+  <section id="connection-demo" aria-labelledby="cd-title">
+    <div class="section-head"><div><div class="eyebrow">INTERACTIVE WALKTHROUGH / VERIFIED EXPERIMENT RECORDS</div><h2 id="cd-title">From SAFE fragments to actual token IDs.</h2></div><label class="select-label">Molecule<select id="cd-example"><option value="0">CHEMBL45183 · boundaries preserved · 8 → 8</option><option value="1">CHEMBL13214 · boundaries preserved · 8 → 8</option><option value="2">CHEMBL55653 · boundaries changed · 4 → 3</option></select></label></div>
+    <p>Follow the original molecular graph into SAFE, then compare complete-fragment lookup, fallback encoding and reconstruction under two frozen dictionaries. Every output chip shows its real token ID. Select the 39 → 23 example or either original walkthrough molecule.</p>
+    <p id="cd-loading">Loading verified graph and vocabulary traces…</p>
+    <div id="cd-content" hidden>
+      <div class="cd-topline"><span id="cd-badge" class="cd-badge"></span><div class="cd-controls" role="group" aria-label="Walkthrough playback"><button id="cd-prev" type="button">← Previous</button><button id="cd-play" type="button" aria-pressed="false">Auto play</button><button id="cd-next" type="button">Next →</button></div></div>
+      <p id="cd-source" class="subtle"></p><label class="select-label cd-budget-picker">Total vocabulary per scheme<select id="cd-budget"><option value="16000">16,000 entries</option><option value="32000">32,000 entries</option></select></label><p id="cd-budget-note" class="subtle"></p>
+      <div id="cd-steps" class="cd-steps" role="group" aria-label="Tokenization steps"></div>
+      <div id="cd-status" class="cd-status" role="status" aria-live="polite"></div>
+      <div class="cd-step-copy"><h3 id="cd-step-title"></h3><p id="cd-step-copy"></p></div>
+      <span class="label">ORIGINAL SMILES</span><code id="cd-input" class="cd-input"></code>
+      <div class="cd-layout">
+        <figure class="cd-visual"><div class="cd-graph-scroll"><div id="cd-graph" class="cd-graph"></div></div><figcaption id="cd-graph-caption"></figcaption><div id="cd-atom-info" class="cd-atom-info"></div></figure>
+        <div>
+          <div id="cd-partition-panel" class="cd-panel"><h3>Track the same source atoms</h3><p id="cd-partition-intro"></p><div id="cd-group-list" class="cd-group-list"></div></div>
+          <div id="cd-safe-panel" class="cd-panel" hidden><h3>Complete SAFE string</h3><div id="cd-safe-text" class="cd-safe-text" aria-label="SAFE string with selectable ring labels"></div><p class="cd-legend"><span class="cd-label-key">Gold labels</span>: cross-fragment connections. <span class="cd-ring-key">Gray labels</span>: internal ring closures. Colors under the text match the fragments in the graph.</p><div id="cd-pairs"></div><div id="cd-pair-detail" class="cd-pair-detail"></div><div id="cd-connection-flow" class="cd-connection-flow"></div></div>
+          <div id="cd-stereo-note" class="cd-stereo-note" hidden></div>
+        </div>
+      </div>
+      <div id="cd-codec-workbench" hidden>
+        <section id="cd-lookup" class="cd-work-panel" aria-labelledby="cd-lookup-title">
+          <h3 id="cd-lookup-title">5. Look up the complete SAFE fragment</h3>
+          <p>Matched = the literal string has a complete entry in this dictionary. Unmatched = fallback is needed. All connection labels are part of the lookup string.</p>
+          <div class="table-scroll"><table class="cd-lookup-table"><caption>Select a fragment to highlight its source atoms</caption><thead><tr><th>SAFE fragment</th><th>Whole-fragment scheme</th><th>Hybrid scheme</th></tr></thead><tbody id="cd-lookup-body"></tbody></table></div>
+        </section>
+        <section id="cd-fallback" class="cd-work-panel" hidden aria-labelledby="cd-fallback-title">
+          <h3 id="cd-fallback-title">6. Keep complete hits; fall back only on misses</h3>
+          <div id="cd-fragment-picker" class="cd-fragment-picker" role="group" aria-label="Fragment to encode"></div>
+          <code id="cd-focus-fragment" class="cd-input"></code>
+          <div id="cd-fallback-cards" class="cd-codec-grid"></div>
+          <aside id="cd-fallback-note" class="note"></aside>
+        </section>
+        <section id="cd-sequence-panel" class="cd-work-panel" hidden aria-labelledby="cd-sequence-title">
+          <h3 id="cd-sequence-title">7. Assemble the complete token sequence</h3>
+          <p>Read each sequence left to right, including dots. One chip = one model ID. Underlines retain the original SAFE fragment boundaries.</p>
+          <div id="cd-sequences" class="cd-codec-grid"></div>
+        </section>
+        <div id="cd-token-inspector" class="cd-token-inspector" role="status" aria-live="polite"></div>
+        <section id="cd-decode-panel" class="cd-work-panel" hidden aria-labelledby="cd-decode-title">
+          <h3 id="cd-decode-title">8. IDs → dictionary payloads → complete SAFE → molecule</h3>
+          <p>Move a slider or reveal the next token. The diagram above is the target molecule; chemistry is verified offline, not simulated in the browser. No original SAFE side table or per-molecule attachment table is used to reconstruct the text.</p>
+          <div id="cd-reconstruction" class="cd-codec-grid"></div>
+        </section>
+      </div>
+      <details class="cd-evidence"><summary>Evidence, dictionary fingerprints and reproduction</summary><div class="detail-body"><p>All three graphs were replayed from genuine saved records with the current GraphBPE+SAFE pipeline. Source atom groups, proposed/accepted cuts and SAFE strings matched the original records; paired cross-fragment labels were checked against accepted cuts. No intermediate GraphBPE merge history is invented.</p><p>Both frozen codecs were reloaded at 16k and 32k. Every output ID was resolved in its actual dictionary; complete hits were checked to remain single tokens. Concatenating the payloads reproduced the SAFE text exactly. The real SAFE decoder was then called on that restored text and the canonical isomeric molecule matched the source in all 12 combinations. The browser independently rechecks ID-to-text reconstruction using only the used vocabulary entries.</p><p>The dictionary excerpt contains shared token definitions, not molecule-specific connectivity. The source SAFE and graph metadata are used for comparison and visualization only. Text substrings such as <code>1)</code> are real vocabulary entries but are not independent chemical motifs. Exact reconstruction does not establish valid de novo generation.</p><p>The boundary-change example remains available as a stress case and is excluded from the 44,329-record comparison. All IDs are specific to a scheme and vocabulary budget.</p><p><a href="connection-demo.json">Verified traces and vocabulary SHA-256 fingerprints (JSON)</a> · <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/experiments/tokenization/CODEC_WALKTHROUGH.md">Validation and reproduction details</a></p></div></details>
+    </div>
+  </section>
+  <details class="v-legacy"><summary>Historical experiments: BRICS and original DemoDiff</summary><p class="v-legacy-note">Earlier measurements below use different cohorts and often count motif IDs without connectivity. Their implementation limitations apply to those earlier methods, not to the new reversible codecs above.</p>
   <p id="load-error" role="alert" hidden></p>
   <noscript><p>This interactive explorer requires JavaScript. The <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer#readme">README</a> contains the full static report.</p></noscript>
   <section id="results">
@@ -76,30 +123,6 @@
     <div id="method-flow" class="method-flow"></div>
     <div class="algorithm-layout"><div class="method-copy"><h3 id="method-title"></h3><span class="label">TRAINING & VOCABULARY</span><p id="method-training"></p><span class="label">RECONSTRUCTION</span><p id="method-decode"></p><p class="subtle">Training blocks are conceptual. These experiments load existing vocabularies; their original training corpora have not been verified.</p></div><div class="code-panel"><div class="code-toolbar"><div role="group" aria-label="Pseudocode function"><button data-step="train" aria-pressed="false">train</button><button data-step="encode" aria-pressed="true">encode</button><button data-step="decode" aria-pressed="false">decode</button></div><span>PSEUDOCODE</span></div><pre><code id="pseudocode"></code></pre></div></div>
     <div id="graph-encode-details" hidden></div>
-  </section>
-  <section id="connection-demo" aria-labelledby="cd-title">
-    <div class="section-head"><div><div class="eyebrow">INTERACTIVE WALKTHROUGH / VERIFIED EXPERIMENT RECORDS</div><h2 id="cd-title">Where does the connection go?</h2></div><label class="select-label">Molecule<select id="cd-example"><option value="0">CHEMBL13214 · boundaries preserved · 8 → 8</option><option value="1">CHEMBL55653 · boundaries changed · 4 → 3</option></select></label></div>
-    <p>Follow a molecular graph into SAFE and back. Select a connection label to see the two attachment atoms it joins. The dot separates fragments; the paired labels carry the link.</p>
-    <p id="cd-loading">Loading the two verified molecular traces…</p>
-    <div id="cd-content" hidden>
-      <div class="cd-topline"><span id="cd-badge" class="cd-badge"></span><div class="cd-controls" role="group" aria-label="Walkthrough playback"><button id="cd-prev" type="button">← Previous</button><button id="cd-play" type="button" aria-pressed="false">Auto play</button><button id="cd-next" type="button">Next →</button></div></div>
-      <p id="cd-source" class="subtle"></p>
-      <div id="cd-steps" class="cd-steps" role="group" aria-label="Tokenization steps"></div>
-      <div id="cd-status" class="cd-status" role="status" aria-live="polite"></div>
-      <div class="cd-step-copy"><h3 id="cd-step-title"></h3><p id="cd-step-copy"></p></div>
-      <span class="label">ORIGINAL SMILES</span><code id="cd-input" class="cd-input"></code>
-      <div class="cd-layout">
-        <figure class="cd-visual"><div class="cd-graph-scroll"><div id="cd-graph" class="cd-graph"></div></div><figcaption id="cd-graph-caption"></figcaption><div id="cd-atom-info" class="cd-atom-info"></div></figure>
-        <div>
-          <div id="cd-partition-panel" class="cd-panel"><h3>Track the same source atoms</h3><p id="cd-partition-intro"></p><div id="cd-group-list" class="cd-group-list"></div></div>
-          <div id="cd-safe-panel" class="cd-panel" hidden><h3>Complete SAFE string</h3><div id="cd-safe-text" class="cd-safe-text" aria-label="SAFE string with selectable ring labels"></div><p class="cd-legend"><span class="cd-label-key">Gold labels</span>: cross-fragment connections. <span class="cd-ring-key">Gray labels</span>: internal ring closures. Colors under the text match the fragments in the graph.</p><div id="cd-pairs"></div><div id="cd-pair-detail" class="cd-pair-detail"></div><div id="cd-connection-flow" class="cd-connection-flow"></div></div>
-          <div id="cd-stereo-note" class="cd-stereo-note" hidden></div>
-        </div>
-      </div>
-      <div id="cd-mapping" class="cd-mapping" hidden><h3>Fixed-fragment vocabulary lookup</h3><p class="subtle">Select a row to highlight its atoms. An absent key remains absent: no fallback splitting is performed.</p><div class="table-scroll"><table><caption>SAFE fragment order → DemoDiff-compatible key → existing node ID</caption><thead><tr><th scope="col">Fragment</th><th scope="col">Motif key</th><th scope="col">Vocabulary ID</th></tr></thead><tbody id="cd-mapping-body"></tbody></table></div><p class="subtle">These IDs describe motif identity, not attachment positions. The complete SAFE string is retained for reconstruction.</p></div>
-      <div id="cd-decoded" class="cd-decoded" hidden><strong>✓ Canonical isomeric graph matches the source</strong><p>Verified offline with the current SAFE decoder. Its only molecular input was the full SAFE string; the diagram’s atom and bond metadata was not supplied.</p><span class="label">DECODED SMILES</span><code id="cd-decoded-smiles"></code></div>
-      <details class="cd-evidence"><summary>How this demonstration was verified</summary><div class="detail-body"><p>Both records were taken from the existing 50,000-input experiment and replayed with the current GraphBPE+SAFE pipeline. Proposed cuts, accepted cuts, GraphBPE groups, node IDs and complete SAFE strings matched the saved records. Every cross-fragment label pair was checked against an accepted cut, and both complete SAFE strings passed canonical isomeric reconstruction checks.</p><p>Source atom numbering is zero-based. Atom correspondence between the source and SAFE is established by graph isomorphism constrained by stereochemistry and recorded fragment membership; symmetry-equivalent mappings may exist. The browser replays checked-in results and drawings, rather than running a tokenizer. Intermediate GraphBPE merges are not shown because no historical merge trace was recorded.</p><p>The boundary-change example demonstrates the <em>current repository’s</em> stereo-protection policy, not a universal restriction of SAFE notation. Exclusion applies only to the fixed-boundary comparison.</p><p><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/experiments/tokenization/CONNECTION_DEMO.md">Validation and reproduction details</a> · <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/61e3a02f371e31f67ff1e04197b7462df6ca0972/safe/converter.py#L299-L390">Cut filtering</a> · <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/61e3a02f371e31f67ff1e04197b7462df6ca0972/safe/converter.py#L505-L580">Dummy endpoints → paired SAFE labels</a></p></div></details>
-    </div>
   </section>
   <section id="examples">
     <div class="section-head"><div><div class="eyebrow">03 / MOLECULE EXPLORER</div><h2>Follow the fragments.</h2></div><label class="select-label">Verified example<select id="example-select"><option value="0">CHEMBL45973 · 5 motifs</option><option value="1" selected>CHEMBL13214 · 8 motifs</option><option value="2">CHEMBL34237 · 12 motifs</option></select></label></div>
