@@ -1,5 +1,5 @@
 {
-  "version": "20261110-ab-only-v2",
+  "version": "20261110-append-v4",
   "date": "10 Nov 2026",
   "records": 44329,
   "cohorts": {
@@ -23,40 +23,34 @@
       "C5"
     ],
     "budgets": {
-      "16000": {
+      "20000": {
         "A": {
-          "length": 21,
+          "length": 18,
           "ids": [
-            15035,
-            15266,
-            2363,
-            15248,
+            14286,
             11,
-            9446,
-            9129,
-            11849,
+            16458,
+            8957,
+            17348,
             11,
-            10587,
-            9438,
+            18865,
+            16677,
             11,
-            3466,
+            3294,
             11,
-            2528,
+            2356,
             11,
-            2309,
+            2137,
             11,
-            2308,
+            2136,
             11,
-            2310
+            2138
           ],
           "fragments": [
             {
               "text": "C123CCC(C1)C45C26",
               "ids": [
-                15035,
-                15266,
-                2363,
-                15248
+                14286
               ],
               "logical_units": [
                 "C123",
@@ -66,14 +60,15 @@
                 "C45",
                 "C26"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C7(=O)C8NC(=O)[C@H]9N",
               "ids": [
-                9446,
-                9129,
-                11849
+                16458,
+                8957,
+                17348
               ],
               "logical_units": [
                 "C7(=O)",
@@ -83,13 +78,14 @@
                 "[C@H]9",
                 "N"
               ],
+              "frozen_hit": false,
               "fallback_blocks": 0
             },
             {
               "text": "C8c1cccs1",
               "ids": [
-                10587,
-                9438
+                18865,
+                16677
               ],
               "logical_units": [
                 "C8",
@@ -99,659 +95,174 @@
                 "c",
                 "s1"
               ],
+              "frozen_hit": false,
               "fallback_blocks": 0
             },
             {
               "text": "C9C(=O)O",
               "ids": [
-                3466
+                3294
               ],
               "logical_units": [
                 "C9",
                 "C(=O)",
                 "O"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "O67",
               "ids": [
-                2528
+                2356
               ],
               "logical_units": [
                 "O67"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C3",
               "ids": [
-                2309
+                2137
               ],
               "logical_units": [
                 "C3"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C4",
               "ids": [
-                2308
+                2136
               ],
               "logical_units": [
                 "C4"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C5",
               "ids": [
-                2310
+                2138
               ],
               "logical_units": [
                 "C5"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             }
           ],
           "dictionary": {
-            "2528": {
-              "payload": "O67",
-              "text": "O67",
-              "kind": "payload"
-            },
-            "15266": {
-              "payload": "CCC(C1)",
-              "text": "CCC(C1)",
-              "kind": "payload"
-            },
-            "2308": {
-              "payload": "C4",
-              "text": "C4",
-              "kind": "payload"
-            },
-            "2309": {
-              "payload": "C3",
-              "text": "C3",
-              "kind": "payload"
-            },
-            "9446": {
-              "payload": "C7(=O)",
-              "text": "C7(=O)",
-              "kind": "payload"
-            },
-            "2310": {
-              "payload": "C5",
-              "text": "C5",
-              "kind": "payload"
-            },
-            "9129": {
-              "payload": "C8N",
-              "text": "C8N",
-              "kind": "payload"
-            },
-            "11849": {
+            "17348": {
               "payload": "C(=O)[C@H]9N",
               "text": "C(=O)[C@H]9N",
               "kind": "payload"
             },
-            "11": {
-              "payload": ".",
-              "text": ".",
-              "kind": "dot"
-            },
-            "3466": {
-              "payload": "C9C(=O)O",
-              "text": "C9C(=O)O",
+            "16677": {
+              "payload": "cs1",
+              "text": "cs1",
               "kind": "payload"
             },
-            "15248": {
-              "payload": "C26",
-              "text": "C26",
-              "kind": "payload"
-            },
-            "10587": {
-              "payload": "C8c1ccc",
-              "text": "C8c1ccc",
-              "kind": "payload"
-            },
-            "2363": {
-              "payload": "C45",
-              "text": "C45",
-              "kind": "payload"
-            },
-            "15035": {
-              "payload": "C123",
-              "text": "C123",
-              "kind": "payload"
-            },
-            "9438": {
-              "payload": "s1",
-              "text": "s1",
-              "kind": "payload"
-            }
-          },
-          "begin_id": 2306,
-          "end_id": 2307,
-          "dot_id": 11,
-          "vocabulary_sha256": "4abf29c677b9b4b241497e9f1f35c3b00e8e7d89b672f706aaff96005791285b",
-          "exact_safe_roundtrip": true,
-          "molecular_roundtrip": true
-        },
-        "B": {
-          "length": 35,
-          "ids": [
-            2306,
-            27,
-            14,
-            15,
-            16,
-            27,
-            27,
-            27,
-            7,
-            27,
-            14,
-            8,
-            27,
-            17,
-            18,
-            27,
-            15,
-            19,
-            2307,
-            11,
-            14773,
-            12701,
-            11,
-            2351,
-            9695,
-            11,
-            3466,
-            11,
-            2528,
-            11,
-            2309,
-            11,
-            2308,
-            11,
-            2310
-          ],
-          "fragments": [
-            {
-              "text": "C123CCC(C1)C45C26",
-              "ids": [
-                2306,
-                27,
-                14,
-                15,
-                16,
-                27,
-                27,
-                27,
-                7,
-                27,
-                14,
-                8,
-                27,
-                17,
-                18,
-                27,
-                15,
-                19,
-                2307
-              ],
-              "logical_units": [
-                "C123CCC(C1)C45C26"
-              ],
-              "fallback_blocks": 1
-            },
-            {
-              "text": "C7(=O)C8NC(=O)[C@H]9N",
-              "ids": [
-                14773,
-                12701
-              ],
-              "logical_units": [
-                "C7(=O)",
-                "C8",
-                "NC(=O)",
-                "[C@H]9",
-                "N"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C8c1cccs1",
-              "ids": [
-                2351,
-                9695
-              ],
-              "logical_units": [
-                "C8",
-                "c1cccs1"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C9C(=O)O",
-              "ids": [
-                3466
-              ],
-              "logical_units": [
-                "C9",
-                "C(=O)O"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "O67",
-              "ids": [
-                2528
-              ],
-              "logical_units": [
-                "O67"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C3",
-              "ids": [
-                2309
-              ],
-              "logical_units": [
-                "C3"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C4",
-              "ids": [
-                2308
-              ],
-              "logical_units": [
-                "C4"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C5",
-              "ids": [
-                2310
-              ],
-              "logical_units": [
-                "C5"
-              ],
-              "fallback_blocks": 0
-            }
-          ],
-          "dictionary": {
-            "2306": {
-              "payload": null,
-              "text": "<BLOCK_BEGIN>",
-              "kind": "begin"
-            },
-            "2307": {
-              "payload": null,
-              "text": "<BLOCK_END>",
-              "kind": "end"
-            },
-            "2308": {
-              "payload": "C4",
-              "text": "C4",
-              "kind": "payload"
-            },
-            "2309": {
-              "payload": "C3",
-              "text": "C3",
-              "kind": "payload"
-            },
-            "2310": {
-              "payload": "C5",
-              "text": "C5",
-              "kind": "payload"
-            },
-            "7": {
-              "payload": "(",
-              "text": "(",
-              "kind": "payload"
-            },
-            "8": {
-              "payload": ")",
-              "text": ")",
-              "kind": "payload"
-            },
-            "3466": {
-              "payload": "C9C(=O)O",
-              "text": "C9C(=O)O",
-              "kind": "payload"
-            },
-            "11": {
-              "payload": ".",
-              "text": ".",
-              "kind": "dot"
-            },
-            "14": {
-              "payload": "1",
-              "text": "1",
-              "kind": "payload"
-            },
-            "15": {
-              "payload": "2",
-              "text": "2",
-              "kind": "payload"
-            },
-            "16": {
-              "payload": "3",
-              "text": "3",
-              "kind": "payload"
-            },
-            "17": {
-              "payload": "4",
-              "text": "4",
-              "kind": "payload"
-            },
-            "18": {
-              "payload": "5",
-              "text": "5",
-              "kind": "payload"
-            },
-            "19": {
-              "payload": "6",
-              "text": "6",
-              "kind": "payload"
-            },
-            "27": {
-              "payload": "C",
-              "text": "C",
-              "kind": "payload"
-            },
-            "12701": {
-              "payload": "NC(=O)[C@H]9N",
-              "text": "NC(=O)[C@H]9N",
-              "kind": "payload"
-            },
-            "2351": {
-              "payload": "C8",
-              "text": "C8",
-              "kind": "payload"
-            },
-            "14773": {
-              "payload": "C7(=O)C8",
-              "text": "C7(=O)C8",
-              "kind": "payload"
-            },
-            "9695": {
-              "payload": "c1cccs1",
-              "text": "c1cccs1",
-              "kind": "payload"
-            },
-            "2528": {
-              "payload": "O67",
-              "text": "O67",
-              "kind": "payload"
-            }
-          },
-          "begin_id": 2306,
-          "end_id": 2307,
-          "dot_id": 11,
-          "vocabulary_sha256": "e27fd53f1229f61a828b4edd4e017dacf2a44b03a99bdca9b368b0b928c8fc6a",
-          "exact_safe_roundtrip": true,
-          "molecular_roundtrip": true
-        }
-      },
-      "32000": {
-        "A": {
-          "length": 21,
-          "ids": [
-            20880,
-            14828,
-            2363,
-            15774,
-            11,
-            9980,
-            25757,
-            11470,
-            11,
-            11117,
-            9972,
-            11,
-            3466,
-            11,
-            2528,
-            11,
-            2309,
-            11,
-            2308,
-            11,
-            2310
-          ],
-          "fragments": [
-            {
-              "text": "C123CCC(C1)C45C26",
-              "ids": [
-                20880,
-                14828,
-                2363,
-                15774
-              ],
-              "logical_units": [
-                "C123",
-                "C",
-                "C",
-                "C(C1)",
-                "C45",
-                "C26"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C7(=O)C8NC(=O)[C@H]9N",
-              "ids": [
-                9980,
-                25757,
-                11470
-              ],
-              "logical_units": [
-                "C7(=O)",
-                "C8",
-                "N",
-                "C(=O)",
-                "[C@H]9",
-                "N"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C8c1cccs1",
-              "ids": [
-                11117,
-                9972
-              ],
-              "logical_units": [
-                "C8",
-                "c1",
-                "c",
-                "c",
-                "c",
-                "s1"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C9C(=O)O",
-              "ids": [
-                3466
-              ],
-              "logical_units": [
-                "C9",
-                "C(=O)",
-                "O"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "O67",
-              "ids": [
-                2528
-              ],
-              "logical_units": [
-                "O67"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C3",
-              "ids": [
-                2309
-              ],
-              "logical_units": [
-                "C3"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C4",
-              "ids": [
-                2308
-              ],
-              "logical_units": [
-                "C4"
-              ],
-              "fallback_blocks": 0
-            },
-            {
-              "text": "C5",
-              "ids": [
-                2310
-              ],
-              "logical_units": [
-                "C5"
-              ],
-              "fallback_blocks": 0
-            }
-          ],
-          "dictionary": {
-            "2528": {
-              "payload": "O67",
-              "text": "O67",
-              "kind": "payload"
-            },
-            "2308": {
-              "payload": "C4",
-              "text": "C4",
-              "kind": "payload"
-            },
-            "2309": {
-              "payload": "C3",
-              "text": "C3",
-              "kind": "payload"
-            },
-            "2310": {
-              "payload": "C5",
-              "text": "C5",
-              "kind": "payload"
-            },
-            "3466": {
-              "payload": "C9C(=O)O",
-              "text": "C9C(=O)O",
-              "kind": "payload"
-            },
-            "11": {
-              "payload": ".",
-              "text": ".",
-              "kind": "dot"
-            },
-            "14828": {
-              "payload": "C(C1)",
-              "text": "C(C1)",
-              "kind": "payload"
-            },
-            "11117": {
-              "payload": "C8c1ccc",
-              "text": "C8c1ccc",
-              "kind": "payload"
-            },
-            "11470": {
-              "payload": "[C@H]9N",
-              "text": "[C@H]9N",
-              "kind": "payload"
-            },
-            "20880": {
-              "payload": "C123CC",
-              "text": "C123CC",
-              "kind": "payload"
-            },
-            "9972": {
-              "payload": "s1",
-              "text": "s1",
-              "kind": "payload"
-            },
-            "2363": {
-              "payload": "C45",
-              "text": "C45",
-              "kind": "payload"
-            },
-            "9980": {
+            "16458": {
               "payload": "C7(=O)",
               "text": "C7(=O)",
               "kind": "payload"
             },
-            "25757": {
-              "payload": "C8NC(=O)",
-              "text": "C8NC(=O)",
+            "11": {
+              "payload": ".",
+              "text": ".",
+              "kind": "dot"
+            },
+            "14286": {
+              "payload": "C123CCC(C1)C45C26",
+              "text": "C123CCC(C1)C45C26",
               "kind": "payload"
             },
-            "15774": {
-              "payload": "C26",
-              "text": "C26",
+            "18865": {
+              "payload": "C8c1cc",
+              "text": "C8c1cc",
+              "kind": "payload"
+            },
+            "2356": {
+              "payload": "O67",
+              "text": "O67",
+              "kind": "payload"
+            },
+            "2136": {
+              "payload": "C4",
+              "text": "C4",
+              "kind": "payload"
+            },
+            "2137": {
+              "payload": "C3",
+              "text": "C3",
+              "kind": "payload"
+            },
+            "2138": {
+              "payload": "C5",
+              "text": "C5",
+              "kind": "payload"
+            },
+            "8957": {
+              "payload": "C8N",
+              "text": "C8N",
+              "kind": "payload"
+            },
+            "3294": {
+              "payload": "C9C(=O)O",
+              "text": "C9C(=O)O",
               "kind": "payload"
             }
           },
-          "begin_id": 2306,
-          "end_id": 2307,
+          "begin_id": 16170,
+          "end_id": 16171,
           "dot_id": 11,
-          "vocabulary_sha256": "17eb3d3c4d72b9c8bba8b47e7198746576c92f90589523c66c6f6504b79b981d",
+          "vocabulary_sha256": "17b6bc7f66f7226cae96c5afe8e43b122df5fcb2191f05d27e7519f077baa98d",
           "exact_safe_roundtrip": true,
           "molecular_roundtrip": true
         },
         "B": {
           "length": 17,
           "ids": [
-            26166,
+            14286,
             11,
-            15262,
-            13215,
+            18622,
+            17703,
             11,
-            2351,
-            10224,
+            2179,
+            16479,
             11,
-            3466,
+            3294,
             11,
-            2528,
+            2356,
             11,
-            2309,
+            2137,
             11,
-            2308,
+            2136,
             11,
-            2310
+            2138
           ],
           "fragments": [
             {
               "text": "C123CCC(C1)C45C26",
               "ids": [
-                26166
+                14286
               ],
               "logical_units": [
                 "C123CCC(C1)C45C26"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C7(=O)C8NC(=O)[C@H]9N",
               "ids": [
-                15262,
-                13215
+                18622,
+                17703
               ],
               "logical_units": [
                 "C7(=O)",
@@ -760,96 +271,88 @@
                 "[C@H]9",
                 "N"
               ],
+              "frozen_hit": false,
               "fallback_blocks": 0
             },
             {
               "text": "C8c1cccs1",
               "ids": [
-                2351,
-                10224
+                2179,
+                16479
               ],
               "logical_units": [
                 "C8",
                 "c1cccs1"
               ],
+              "frozen_hit": false,
               "fallback_blocks": 0
             },
             {
               "text": "C9C(=O)O",
               "ids": [
-                3466
+                3294
               ],
               "logical_units": [
                 "C9",
                 "C(=O)O"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "O67",
               "ids": [
-                2528
+                2356
               ],
               "logical_units": [
                 "O67"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C3",
               "ids": [
-                2309
+                2137
               ],
               "logical_units": [
                 "C3"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C4",
               "ids": [
-                2308
+                2136
               ],
               "logical_units": [
                 "C4"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             },
             {
               "text": "C5",
               "ids": [
-                2310
+                2138
               ],
               "logical_units": [
                 "C5"
               ],
+              "frozen_hit": true,
               "fallback_blocks": 0
             }
           ],
           "dictionary": {
-            "2528": {
-              "payload": "O67",
-              "text": "O67",
+            "2179": {
+              "payload": "C8",
+              "text": "C8",
               "kind": "payload"
             },
-            "2308": {
-              "payload": "C4",
-              "text": "C4",
-              "kind": "payload"
-            },
-            "2309": {
-              "payload": "C3",
-              "text": "C3",
-              "kind": "payload"
-            },
-            "2310": {
-              "payload": "C5",
-              "text": "C5",
-              "kind": "payload"
-            },
-            "3466": {
-              "payload": "C9C(=O)O",
-              "text": "C9C(=O)O",
+            "17703": {
+              "payload": "NC(=O)[C@H]9N",
+              "text": "NC(=O)[C@H]9N",
               "kind": "payload"
             },
             "11": {
@@ -857,36 +360,437 @@
               "text": ".",
               "kind": "dot"
             },
-            "2351": {
-              "payload": "C8",
-              "text": "C8",
-              "kind": "payload"
-            },
-            "10224": {
-              "payload": "c1cccs1",
-              "text": "c1cccs1",
-              "kind": "payload"
-            },
-            "26166": {
+            "14286": {
               "payload": "C123CCC(C1)C45C26",
               "text": "C123CCC(C1)C45C26",
               "kind": "payload"
             },
-            "15262": {
+            "2356": {
+              "payload": "O67",
+              "text": "O67",
+              "kind": "payload"
+            },
+            "2136": {
+              "payload": "C4",
+              "text": "C4",
+              "kind": "payload"
+            },
+            "2137": {
+              "payload": "C3",
+              "text": "C3",
+              "kind": "payload"
+            },
+            "2138": {
+              "payload": "C5",
+              "text": "C5",
+              "kind": "payload"
+            },
+            "3294": {
+              "payload": "C9C(=O)O",
+              "text": "C9C(=O)O",
+              "kind": "payload"
+            },
+            "18622": {
               "payload": "C7(=O)C8",
               "text": "C7(=O)C8",
               "kind": "payload"
             },
-            "13215": {
-              "payload": "NC(=O)[C@H]9N",
-              "text": "NC(=O)[C@H]9N",
+            "16479": {
+              "payload": "c1cccs1",
+              "text": "c1cccs1",
               "kind": "payload"
             }
           },
-          "begin_id": 2306,
-          "end_id": 2307,
+          "begin_id": 16170,
+          "end_id": 16171,
           "dot_id": 11,
-          "vocabulary_sha256": "d014082eeac6f8729b3c0d4b198b4ad887e37b58a1f1884d4008a9c565867769",
+          "vocabulary_sha256": "ec4248370eb2ca5c20dd4e820dcadcb0fcb2b18830effe2b9e521f5e778c7075",
+          "exact_safe_roundtrip": true,
+          "molecular_roundtrip": true
+        }
+      },
+      "24000": {
+        "A": {
+          "length": 18,
+          "ids": [
+            14286,
+            11,
+            16458,
+            8957,
+            17348,
+            11,
+            22370,
+            16319,
+            11,
+            3294,
+            11,
+            2356,
+            11,
+            2137,
+            11,
+            2136,
+            11,
+            2138
+          ],
+          "fragments": [
+            {
+              "text": "C123CCC(C1)C45C26",
+              "ids": [
+                14286
+              ],
+              "logical_units": [
+                "C123",
+                "C",
+                "C",
+                "C(C1)",
+                "C45",
+                "C26"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C7(=O)C8NC(=O)[C@H]9N",
+              "ids": [
+                16458,
+                8957,
+                17348
+              ],
+              "logical_units": [
+                "C7(=O)",
+                "C8",
+                "N",
+                "C(=O)",
+                "[C@H]9",
+                "N"
+              ],
+              "frozen_hit": false,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C8c1cccs1",
+              "ids": [
+                22370,
+                16319
+              ],
+              "logical_units": [
+                "C8",
+                "c1",
+                "c",
+                "c",
+                "c",
+                "s1"
+              ],
+              "frozen_hit": false,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C9C(=O)O",
+              "ids": [
+                3294
+              ],
+              "logical_units": [
+                "C9",
+                "C(=O)",
+                "O"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "O67",
+              "ids": [
+                2356
+              ],
+              "logical_units": [
+                "O67"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C3",
+              "ids": [
+                2137
+              ],
+              "logical_units": [
+                "C3"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C4",
+              "ids": [
+                2136
+              ],
+              "logical_units": [
+                "C4"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C5",
+              "ids": [
+                2138
+              ],
+              "logical_units": [
+                "C5"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            }
+          ],
+          "dictionary": {
+            "22370": {
+              "payload": "C8c1ccc",
+              "text": "C8c1ccc",
+              "kind": "payload"
+            },
+            "17348": {
+              "payload": "C(=O)[C@H]9N",
+              "text": "C(=O)[C@H]9N",
+              "kind": "payload"
+            },
+            "16458": {
+              "payload": "C7(=O)",
+              "text": "C7(=O)",
+              "kind": "payload"
+            },
+            "11": {
+              "payload": ".",
+              "text": ".",
+              "kind": "dot"
+            },
+            "14286": {
+              "payload": "C123CCC(C1)C45C26",
+              "text": "C123CCC(C1)C45C26",
+              "kind": "payload"
+            },
+            "2356": {
+              "payload": "O67",
+              "text": "O67",
+              "kind": "payload"
+            },
+            "2136": {
+              "payload": "C4",
+              "text": "C4",
+              "kind": "payload"
+            },
+            "2137": {
+              "payload": "C3",
+              "text": "C3",
+              "kind": "payload"
+            },
+            "2138": {
+              "payload": "C5",
+              "text": "C5",
+              "kind": "payload"
+            },
+            "8957": {
+              "payload": "C8N",
+              "text": "C8N",
+              "kind": "payload"
+            },
+            "3294": {
+              "payload": "C9C(=O)O",
+              "text": "C9C(=O)O",
+              "kind": "payload"
+            },
+            "16319": {
+              "payload": "s1",
+              "text": "s1",
+              "kind": "payload"
+            }
+          },
+          "begin_id": 16170,
+          "end_id": 16171,
+          "dot_id": 11,
+          "vocabulary_sha256": "7b30e70db4be320fb1fb1dd9bf402f938cd061120351c0da7f8cd860589180f9",
+          "exact_safe_roundtrip": true,
+          "molecular_roundtrip": true
+        },
+        "B": {
+          "length": 17,
+          "ids": [
+            14286,
+            11,
+            18622,
+            17703,
+            11,
+            2179,
+            16479,
+            11,
+            3294,
+            11,
+            2356,
+            11,
+            2137,
+            11,
+            2136,
+            11,
+            2138
+          ],
+          "fragments": [
+            {
+              "text": "C123CCC(C1)C45C26",
+              "ids": [
+                14286
+              ],
+              "logical_units": [
+                "C123CCC(C1)C45C26"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C7(=O)C8NC(=O)[C@H]9N",
+              "ids": [
+                18622,
+                17703
+              ],
+              "logical_units": [
+                "C7(=O)",
+                "C8",
+                "NC(=O)",
+                "[C@H]9",
+                "N"
+              ],
+              "frozen_hit": false,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C8c1cccs1",
+              "ids": [
+                2179,
+                16479
+              ],
+              "logical_units": [
+                "C8",
+                "c1cccs1"
+              ],
+              "frozen_hit": false,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C9C(=O)O",
+              "ids": [
+                3294
+              ],
+              "logical_units": [
+                "C9",
+                "C(=O)O"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "O67",
+              "ids": [
+                2356
+              ],
+              "logical_units": [
+                "O67"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C3",
+              "ids": [
+                2137
+              ],
+              "logical_units": [
+                "C3"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C4",
+              "ids": [
+                2136
+              ],
+              "logical_units": [
+                "C4"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            },
+            {
+              "text": "C5",
+              "ids": [
+                2138
+              ],
+              "logical_units": [
+                "C5"
+              ],
+              "frozen_hit": true,
+              "fallback_blocks": 0
+            }
+          ],
+          "dictionary": {
+            "2179": {
+              "payload": "C8",
+              "text": "C8",
+              "kind": "payload"
+            },
+            "17703": {
+              "payload": "NC(=O)[C@H]9N",
+              "text": "NC(=O)[C@H]9N",
+              "kind": "payload"
+            },
+            "11": {
+              "payload": ".",
+              "text": ".",
+              "kind": "dot"
+            },
+            "14286": {
+              "payload": "C123CCC(C1)C45C26",
+              "text": "C123CCC(C1)C45C26",
+              "kind": "payload"
+            },
+            "2356": {
+              "payload": "O67",
+              "text": "O67",
+              "kind": "payload"
+            },
+            "2136": {
+              "payload": "C4",
+              "text": "C4",
+              "kind": "payload"
+            },
+            "2137": {
+              "payload": "C3",
+              "text": "C3",
+              "kind": "payload"
+            },
+            "2138": {
+              "payload": "C5",
+              "text": "C5",
+              "kind": "payload"
+            },
+            "3294": {
+              "payload": "C9C(=O)O",
+              "text": "C9C(=O)O",
+              "kind": "payload"
+            },
+            "18622": {
+              "payload": "C7(=O)C8",
+              "text": "C7(=O)C8",
+              "kind": "payload"
+            },
+            "16479": {
+              "payload": "c1cccs1",
+              "text": "c1cccs1",
+              "kind": "payload"
+            }
+          },
+          "begin_id": 16170,
+          "end_id": 16171,
+          "dot_id": 11,
+          "vocabulary_sha256": "dc6e0e524cd3b33a2dca1a65185660ba2ca171207c3013f455d3656e3c891f33",
           "exact_safe_roundtrip": true,
           "molecular_roundtrip": true
         }
@@ -894,155 +798,139 @@
     }
   },
   "budgets": {
-    "16000": {
+    "20000": {
       "A": {
         "all": {
           "n": 44329,
-          "total": 1194072,
-          "mean": 26.93658778677615,
-          "median": 16,
-          "p95": 76,
+          "total": 1079653,
+          "mean": 24.35545579643123,
+          "median": 14,
+          "p95": 66,
           "min": 1,
-          "max": 1438,
-          "exact_safe_roundtrips": 44329,
-          "molecular_roundtrips": 44329
+          "max": 1382
         },
         "test": {
           "n": 4543,
-          "total": 129316,
-          "mean": 28.46489104116223,
-          "median": 16,
-          "p95": 82,
+          "total": 119770,
+          "mean": 26.363636363636363,
+          "median": 15,
+          "p95": 74,
           "min": 1,
-          "max": 917,
-          "exact_safe_roundtrips": 4543,
-          "molecular_roundtrips": 4543
+          "max": 872
         },
         "allocation": {
-          "M": 2308,
-          "whole_entries": 6932,
-          "span_entries": 6760
+          "frozen_size": 16000,
+          "append_budget": 4000,
+          "extra_atomic_lexemes": 170,
+          "whole_entries": 13864,
+          "span_entries": 3828
         },
         "fallback": {
-          "literal_units": 459403,
-          "primitive_ids": 297839,
-          "frame_markers": 108202,
+          "literal_ids": 444968,
           "dots": 328628,
-          "fallback_blocks": 54101,
-          "molecules_using_fallback": 18341
+          "frame_markers": 79170,
+          "primitive_ids": 226887
         }
       },
       "B": {
         "all": {
           "n": 44329,
-          "total": 1558697,
-          "mean": 35.16201583613436,
-          "median": 27,
-          "p95": 85,
+          "total": 1346137,
+          "mean": 30.366960680367253,
+          "median": 24,
+          "p95": 75,
           "min": 1,
-          "max": 1458,
-          "exact_safe_roundtrips": 44329,
-          "molecular_roundtrips": 44329
+          "max": 1410
         },
         "test": {
           "n": 4543,
-          "total": 168540,
-          "mean": 37.09883337001981,
-          "median": 28,
-          "p95": 90,
+          "total": 150320,
+          "mean": 33.088267664538854,
+          "median": 25,
+          "p95": 83,
           "min": 1,
-          "max": 911,
-          "exact_safe_roundtrips": 4543,
-          "molecular_roundtrips": 4543
+          "max": 872
         },
         "allocation": {
-          "M": 2308,
-          "whole_entries": 6932,
-          "span_entries": 6760
+          "frozen_size": 16000,
+          "append_budget": 4000,
+          "extra_atomic_lexemes": 170,
+          "whole_entries": 13864,
+          "span_entries": 3828
         },
         "fallback": {
-          "literal_units": 360619,
-          "primitive_ids": 721886,
-          "frame_markers": 147564,
-          "dots": 328628,
-          "fallback_blocks": 73782,
-          "molecules_using_fallback": 31455
+          "literal_ids": 365915,
+          "frame_markers": 107426,
+          "primitive_ids": 544168,
+          "dots": 328628
         }
       }
     },
-    "32000": {
+    "24000": {
       "A": {
         "all": {
           "n": 44329,
-          "total": 1103396,
-          "mean": 24.89106454014302,
+          "total": 1040387,
+          "mean": 23.469669967741208,
           "median": 13,
-          "p95": 73,
+          "p95": 64,
           "min": 1,
-          "max": 1435,
-          "exact_safe_roundtrips": 44329,
-          "molecular_roundtrips": 44329
+          "max": 1382
         },
         "test": {
           "n": 4543,
-          "total": 119494,
-          "mean": 26.302883557120847,
+          "total": 115117,
+          "mean": 25.33942328857583,
           "median": 14,
-          "p95": 77,
+          "p95": 72,
           "min": 1,
-          "max": 907,
-          "exact_safe_roundtrips": 4543,
-          "molecular_roundtrips": 4543
+          "max": 872
         },
         "allocation": {
-          "M": 2308,
-          "whole_entries": 7466,
-          "span_entries": 22226
+          "frozen_size": 16000,
+          "append_budget": 8000,
+          "extra_atomic_lexemes": 170,
+          "whole_entries": 13864,
+          "span_entries": 7828
         },
         "fallback": {
-          "literal_units": 440377,
-          "primitive_ids": 246179,
-          "frame_markers": 88212,
+          "literal_ids": 436754,
           "dots": 328628,
-          "fallback_blocks": 44106,
-          "molecules_using_fallback": 14560
+          "frame_markers": 70570,
+          "primitive_ids": 204435
         }
       },
       "B": {
         "all": {
           "n": 44329,
-          "total": 1270618,
-          "mean": 28.66335807259356,
-          "median": 23,
-          "p95": 72,
+          "total": 1313648,
+          "mean": 29.63405445645063,
+          "median": 24,
+          "p95": 74,
           "min": 1,
-          "max": 1404,
-          "exact_safe_roundtrips": 44329,
-          "molecular_roundtrips": 44329
+          "max": 1407
         },
         "test": {
           "n": 4543,
-          "total": 143168,
-          "mean": 31.513977547875854,
-          "median": 24,
-          "p95": 80,
+          "total": 147061,
+          "mean": 32.37090028615452,
+          "median": 25,
+          "p95": 82,
           "min": 1,
-          "max": 846,
-          "exact_safe_roundtrips": 4543,
-          "molecular_roundtrips": 4543
+          "max": 860
         },
         "allocation": {
-          "M": 2308,
-          "whole_entries": 7466,
-          "span_entries": 22226
+          "frozen_size": 16000,
+          "append_budget": 8000,
+          "extra_atomic_lexemes": 170,
+          "whole_entries": 13864,
+          "span_entries": 7828
         },
         "fallback": {
-          "literal_units": 366590,
-          "primitive_ids": 482550,
-          "frame_markers": 92850,
-          "dots": 328628,
-          "fallback_blocks": 46425,
-          "molecules_using_fallback": 22220
+          "literal_ids": 365122,
+          "frame_markers": 101080,
+          "primitive_ids": 518818,
+          "dots": 328628
         }
       }
     }
@@ -1053,8 +941,8 @@
     "content_syntax_violations": 0
   },
   "evidence": {
-    "summary.json": "b45e1a8ee1cff3432923f72fdfe7aca144853d91c6060d3e39161991b1c31e5f",
-    "verification.json": "0c8270293428ecb4d524ddaa2369f9c594bfec95f3a19f4f3d1d437018bc525f",
-    "CHEMBL45183.json": "49b5909102ed68e7903ededd2d584f81b2257e22600ff7c786d9202508f2cd0b"
+    "summary.json": "828397cc31c24faf6b51c9bda2a0f19be74d2e3ed332f421b44b0af855c71073",
+    "verification.json": "4682f264c06ad169107d3e5dadf1d591e81846a7c1e602be1fbf4c3ac6fd8404",
+    "CHEMBL45183.json": "78e3914aa6631b8896476fd2eb0f0dcf0c2b240d65264a4f209c5e1a72d658d2"
   }
 }

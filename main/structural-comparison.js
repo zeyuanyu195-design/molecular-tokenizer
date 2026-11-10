@@ -6,25 +6,27 @@
   const el = id => document.getElementById(id);
   const make = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
   const names = {A: 'A · Complete syntax blocks', B: 'B · Protected structures'};
-  let data, budget = '16000', fragment = 0, algorithm = 'A', functionName = 'encode', decodeMethod = 'A';
+  let data, budget = '20000', fragment = 0, algorithm = 'A', functionName = 'encode', decodeMethod = 'A';
   const code = {
-    train: mode => `TRAIN(${mode}, K):
+    train: mode => `TRAIN(${mode}, extra_budget = 4,000 or 8,000):
     use TRAIN only (35,518 records)
-    keep the previous whole-fragment ranking
-    base = previous 2,136 entries
-         + 170 complete TRAIN ring-label lexemes
-         + BLOCK_BEGIN + BLOCK_END  # M = 2,308
+    freeze all 16,000 original IDs and payloads
+    # 2,136 foundation + 13,864 whole-fragment entries
+    append 170 missing complete TRAIN ring-label lexemes
+    append BLOCK_BEGIN + BLOCK_END  # 172 extra slots
 
-    for each original SAFE fragment:
+    for each TRAIN fragment missing the frozen lookup:
         blocks = top_level_atoms_with_complete_branches()
         keep bracket atoms and ring labels indivisible
 ${mode === 'B' ? '        merge blocks across in-fragment rings, amides,\n        and carboxylic-acid / ester groups\n        verify connected blocks and edges between neighbors\n' : '        verify connected blocks and edges between neighbors\n'}        count legal contiguous spans in TRAIN
         # At most 16 blocks / 32 atoms / 128 lexemes
 
-    reserve 6,932 whole entries at 16k; 7,466 at 32k
-    fill remaining slots with legal spans
-    compare frequency vs estimated-saving ranking
-    select by VALIDATION total length; freeze before TEST`,
+    exclude entries already in the dictionary
+    rank by TRAIN frequency, then lexical tie break
+    append top (extra_budget - 172) legal spans
+    # 3,828 spans at 20k; 7,828 spans at 24k
+    # 20k is an unchanged prefix of 24k within each scheme
+    freeze before evaluation; no TEST-driven selection`,
     encode: mode => `ENCODE(safe, ${mode}, vocabulary):
     parse the complete SAFE to locate atoms and blocks
     for each original dot-separated fragment:
@@ -55,7 +57,7 @@ ${mode === 'B' ? '        blocks = coalesce_protected_groups(blocks)\n        # 
             emit the exact dictionary payload
 
     safe = concatenate_payloads_in_order()
-    molecule = SAFE.decode(safe, fix=False)
+    molecule = SAFE.decode(safe, fix=False, remove_dummies=False)
     return molecule
 
 VERIFY_OFFLINE:
@@ -70,15 +72,15 @@ VERIFY_OFFLINE:
     for (const key of ['A','B']) {
       const tr = make('tr');
       const th = make('th', names[key]); th.scope = 'row'; tr.append(th);
-      for (const k of ['16000','32000']) tr.append(make('td', data.budgets[k][key][cohort].mean.toFixed(3), 'sc-number'));
+      for (const k of ['20000','24000']) tr.append(make('td', data.budgets[k][key][cohort].mean.toFixed(3), 'sc-number'));
       target.append(tr);
     }
   }
   function renderAlgorithm() {
     const steps = [
-      ['01 · Preserve SAFE', 'Keep the original GraphBPE boundaries, dots, connection labels and stereochemistry.'],
+      ['01 · Freeze the original 16k', 'Keep all 2,136 foundation and 13,864 whole-fragment entries, with unchanged IDs. Preserve the original SAFE boundaries and labels.'],
       ['02 · Define legal blocks', algorithm === 'A' ? 'Keep each top-level atom with its complete branches and ring labels. Bracket atoms and extended labels stay whole.' : 'Start with A, then keep in-fragment rings, amides and carboxylic-acid / ester groups together. Check graph connectivity.'],
-      ['03 · Build the vocabulary', 'Learn legal spans on TRAIN. Reserve the same whole-fragment counts; use VALIDATION to select the ranking.'],
+      ['03 · Append 4k or 8k', 'Learn spans only from TRAIN misses. Rank by frequency. New lexical units and markers consume 172 slots; total vocabulary is 20k or 24k.'],
       ['04 · Encode & reconstruct', 'Whole entries take priority. A shortest-path search chooses spans or framed fallback. Decode exact SAFE before reconstructing the molecule.']
     ];
     const flow = el('sc-flow'); flow.replaceChildren();
@@ -96,7 +98,7 @@ VERIFY_OFFLINE:
     b.addEventListener('click', () => {
       root.querySelectorAll('.sc-token.is-selected').forEach(n => n.classList.remove('is-selected'));
       b.classList.add('is-selected');
-      el('sc-inspector').textContent = `${names[scheme]} · ${Number(budget).toLocaleString()} entries · ID ${id} → ${entry.text}. ${entry.kind === 'begin' || entry.kind === 'end' ? 'Logical-block marker: counted as one model token; contributes no SAFE characters.' : entry.kind === 'dot' ? 'Original SAFE fragment separator.' : inside ? 'Complete atomic or syntax lexeme inside a fallback block; not a standalone motif.' : 'Exact payload from this scheme’s dictionary; IDs are not comparable across dictionaries.'}`;
+      el('sc-inspector').textContent = `${names[scheme]} · ${Number(budget).toLocaleString()} entries · ID ${id} → ${entry.text}. ${entry.kind === 'begin' || entry.kind === 'end' ? 'Logical-block marker: counted as one model token; contributes no SAFE characters.' : entry.kind === 'dot' ? 'Original SAFE fragment separator.' : inside ? 'Complete atomic or syntax lexeme inside a fallback block; not a standalone motif.' : id < 16000 ? 'Inherited unchanged from the frozen 16k vocabulary; the ID and payload are shared across all four configurations.' : 'Appended dictionary entry; compare its payload when inspecting another scheme. Within a scheme, the 20k vocabulary is a prefix of 24k.'}`;
     });
     return b;
   }
@@ -122,6 +124,7 @@ VERIFY_OFFLINE:
       const card = make('article',undefined,`sc-card sc-card-${scheme}`);
       const heading = make('div',undefined,'sc-card-heading'); heading.append(make('h4',names[scheme]),make('strong',`${model.length} total`)); card.append(heading);
       card.append(make('p',`Selected fragment: ${f.ids.length} model tokens`,'sc-subtle'));
+      card.append(make('p', f.frozen_hit ? 'Frozen 16k complete hit → original ID retained; no further splitting.' : f.ids.length === 1 ? 'Complete hit in the extended vocabulary → one ID.' : 'Complete lookup miss → shortest legal span sequence / framed fallback.', 'sc-subtle'));
       if (f.logical_units) {
         const details = make('details'); details.append(make('summary',`Allowed elementary blocks (${f.logical_units.length})`),make('code',f.logical_units.join(' | '),'sc-block-list')); card.append(details);
       }
@@ -133,7 +136,7 @@ VERIFY_OFFLINE:
     }
     const a = data.budgets[budget].A.all, b = data.budgets[budget].B.all;
     el('sc-example-note').textContent = `This molecule: A ${models.A.length} tokens; B ${models.B.length} tokens. Population means at this budget: A ${a.mean.toFixed(3)}, B ${b.mean.toFixed(3)}. The example is not a population-average compression claim.`;
-    el('sc-allocation').textContent = budget === '16000' ? 'A/B 16k = 2,308 foundation entries + 6,932 whole fragments + 6,760 legal spans.' : 'A/B 32k = 2,308 foundation entries + 7,466 whole fragments + 22,226 legal spans.';
+    el('sc-allocation').textContent = `Frozen 16,000 entries + 170 complete ring-label lexemes + 2 block markers + ${budget === '20000' ? '3,828' : '7,828'} legal spans = ${Number(budget).toLocaleString()} total entries.`;
     el('sc-inspector').textContent = 'Select a token to inspect its actual dictionary ID and role. Each chip is one model token, including dots and block markers.';
     el('sc-decode-range').value = '0'; renderDecode();
   }
@@ -147,7 +150,7 @@ VERIFY_OFFLINE:
   }
   async function init() {
     try {
-      const response = await fetch('structural-comparison.json?v=20261110-ab-only-v2');
+      const response = await fetch('structural-comparison.json?v=20261110-append-v4');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       data = await response.json();
       for (const models of Object.values(data.example.budgets)) for (const model of Object.values(models)) {
