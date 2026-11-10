@@ -14,7 +14,7 @@ def draw(data, output, chinese_font=None):
     font = FontProperties(fname=str(chinese_font)) if chinese else FontProperties(family="DejaVu Sans")
     labels = [r["label_zh" if chinese else "label"] for r in data["methods"]]
     values = [r["mean"] for r in data["methods"]]
-    fig, ax = plt.subplots(figsize=(11, 6.7))
+    fig, ax = plt.subplots(figsize=(11, 6.7 + max(0, len(values) - 7) * .5))
     fig.subplots_adjust(left=.37, right=.96, top=.84, bottom=.22)
     bars = ax.barh(range(len(values)), values, height=.57, color=[r["color"] for r in data["methods"]])
     ax.invert_yaxis()
@@ -53,7 +53,7 @@ def main():
     data = json.loads(args.data.read_text(encoding="utf-8"))
     if args.structural:
         current = json.loads(args.structural.read_text(encoding="utf-8"))
-        data['methods'] = [r for r in data['methods'] if r['key'] in ('atomwise', 'demodiff', 'brics_safe')]
+        data['methods'] = [r for r in data['methods'] if r['key'] in ('atomwise', 'demodiff', 'brics_safe', 'whole_16000', 'whole_32000')]
         for budget in ('16000', '32000'):
             for mode, label, zh, color in (
                 ('A', 'Complete syntax blocks', '完整语法块', '#24765B'),
@@ -66,9 +66,11 @@ def main():
                     connectivity='Included in the sequence, together with fallback block markers'))
         data['sources']['structural'] = 'structural-comparison.json'
         data['scope'] = 'Same 44,329 boundary-preserving records; includes TRAIN, VALIDATION and TEST. Current A/B and reference tokenizers.'
+    order = ['atomwise', 'demodiff', 'brics_safe', 'whole_16000', 'A_16000', 'B_16000', 'whole_32000', 'A_32000', 'B_32000']
+    data['methods'].sort(key=lambda r: order.index(r['key']))
     if args.save_data:
         args.save_data.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    assert len(data["methods"]) == 7
+    assert len({r['key'] for r in data['methods']}) == len(data['methods'])
     for row in data["methods"]:
         assert row["records"] == data["records"] == 44329
         assert abs(row["mean"] - row["total"] / row["records"]) < 1e-10

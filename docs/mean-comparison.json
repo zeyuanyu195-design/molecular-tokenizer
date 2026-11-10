@@ -40,6 +40,16 @@
       "connectivity": "Included in the text token sequence"
     },
     {
+      "key": "whole_16000",
+      "label": "Whole-fragment scheme · 16k",
+      "label_zh": "完整片段方案 · 16k",
+      "color": "#B57340",
+      "records": 44329,
+      "total": 1555440,
+      "mean": 35.088542489115476,
+      "connectivity": "Included in the text token sequence"
+    },
+    {
       "key": "A_16000",
       "label": "A · Complete syntax blocks · 16k",
       "label_zh": "A · 完整语法块 · 16k",
@@ -58,6 +68,16 @@
       "total": 1558697,
       "mean": 35.16201583613436,
       "connectivity": "Included in the sequence, together with fallback block markers"
+    },
+    {
+      "key": "whole_32000",
+      "label": "Whole-fragment scheme · 32k",
+      "label_zh": "完整片段方案 · 32k",
+      "color": "#B57340",
+      "records": 44329,
+      "total": 1214713,
+      "mean": 27.402219765841775,
+      "connectivity": "Included in the text token sequence"
     },
     {
       "key": "A_32000",
