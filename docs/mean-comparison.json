@@ -50,26 +50,6 @@
       "connectivity": "Included in the text token sequence"
     },
     {
-      "key": "A_16000",
-      "label": "A · Complete syntax blocks · 16k",
-      "label_zh": "A · 完整语法块 · 16k",
-      "color": "#24765B",
-      "records": 44329,
-      "total": 1194072,
-      "mean": 26.93658778677615,
-      "connectivity": "Included in the sequence, together with fallback block markers"
-    },
-    {
-      "key": "B_16000",
-      "label": "B · Protected structures · 16k",
-      "label_zh": "B · 受保护子结构 · 16k",
-      "color": "#68699C",
-      "records": 44329,
-      "total": 1558697,
-      "mean": 35.16201583613436,
-      "connectivity": "Included in the sequence, together with fallback block markers"
-    },
-    {
       "key": "whole_32000",
       "label": "Whole-fragment scheme · 32k",
       "label_zh": "完整片段方案 · 32k",
@@ -80,23 +60,43 @@
       "connectivity": "Included in the text token sequence"
     },
     {
-      "key": "A_32000",
-      "label": "A · Complete syntax blocks · 32k",
-      "label_zh": "A · 完整语法块 · 32k",
+      "key": "A_20000",
+      "label": "A · 16k + 4k (20k total)",
+      "label_zh": "A · 保留16k＋追加4k",
       "color": "#24765B",
       "records": 44329,
-      "total": 1103396,
-      "mean": 24.89106454014302,
+      "total": 1079653,
+      "mean": 24.35545579643123,
       "connectivity": "Included in the sequence, together with fallback block markers"
     },
     {
-      "key": "B_32000",
-      "label": "B · Protected structures · 32k",
-      "label_zh": "B · 受保护子结构 · 32k",
+      "key": "B_20000",
+      "label": "B · 16k + 4k (20k total)",
+      "label_zh": "B · 保留16k＋追加4k",
       "color": "#68699C",
       "records": 44329,
-      "total": 1270618,
-      "mean": 28.66335807259356,
+      "total": 1346137,
+      "mean": 30.366960680367253,
+      "connectivity": "Included in the sequence, together with fallback block markers"
+    },
+    {
+      "key": "A_24000",
+      "label": "A · 16k + 8k (24k total)",
+      "label_zh": "A · 保留16k＋追加8k",
+      "color": "#24765B",
+      "records": 44329,
+      "total": 1040387,
+      "mean": 23.469669967741208,
+      "connectivity": "Included in the sequence, together with fallback block markers"
+    },
+    {
+      "key": "B_24000",
+      "label": "B · 16k + 8k (24k total)",
+      "label_zh": "B · 保留16k＋追加8k",
+      "color": "#68699C",
+      "records": 44329,
+      "total": 1313648,
+      "mean": 29.63405445645063,
       "connectivity": "Included in the sequence, together with fallback block markers"
     }
   ]

@@ -54,7 +54,8 @@ def main():
     if args.structural:
         current = json.loads(args.structural.read_text(encoding="utf-8"))
         data['methods'] = [r for r in data['methods'] if r['key'] in ('atomwise', 'demodiff', 'brics_safe', 'whole_16000', 'whole_32000')]
-        for budget in ('16000', '32000'):
+        appended = '20000' in current['budgets']
+        for budget in (('20000', '24000') if appended else ('16000', '32000')):
             for mode, label, zh, color in (
                 ('A', 'Complete syntax blocks', '完整语法块', '#24765B'),
                 ('B', 'Protected structures', '受保护子结构', '#68699C'),
@@ -64,9 +65,12 @@ def main():
                     label_zh=f'{mode} · {zh} · {int(budget)//1000}k', color=color,
                     records=row['n'], total=row['total'], mean=row['mean'],
                     connectivity='Included in the sequence, together with fallback block markers'))
+                if appended:
+                    data['methods'][-1]['label']=f'{mode} · 16k + {int(budget)//1000-16}k ({int(budget)//1000}k total)'
+                    data['methods'][-1]['label_zh']=f'{mode} · 保留16k＋追加{int(budget)//1000-16}k'
         data['sources']['structural'] = 'structural-comparison.json'
         data['scope'] = 'Same 44,329 boundary-preserving records; includes TRAIN, VALIDATION and TEST. Current A/B and reference tokenizers.'
-    order = ['atomwise', 'demodiff', 'brics_safe', 'whole_16000', 'A_16000', 'B_16000', 'whole_32000', 'A_32000', 'B_32000']
+    order = ['atomwise', 'demodiff', 'brics_safe', 'whole_16000', 'A_16000', 'B_16000', 'whole_32000', 'A_32000', 'B_32000', 'A_20000', 'B_20000', 'A_24000', 'B_24000']
     data['methods'].sort(key=lambda r: order.index(r['key']))
     if args.save_data:
         args.save_data.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

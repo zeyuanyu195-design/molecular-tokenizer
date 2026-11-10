@@ -13,20 +13,22 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--structural',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--append',action='store_true',help='Frozen 16k plus 4k/8k experiment')
     args=p.parse_args()
     summary=read(args.structural/'summary.json')
-    selected=read(args.structural/'selection_before_test.json')['selected']
+    selected=({f'{m}_{K}':f'{m}_plus{K-16000}' for m in ('A','B') for K in (20000,24000)}
+              if args.append else read(args.structural/'selection_before_test.json')['selected'])
     audit=read(args.structural/'verification.json')
     new_examples=read(args.structural/'CHEMBL45183.json')
     safe='.'.join(f['fragment'] for f in new_examples[0]['fragments'])
-    result=dict(version='20261110-ab-only-v2',date='10 Nov 2026',records=44329,
+    result=dict(version='20261110-append-v4' if args.append else '20261110-ab-only-v2',date='10 Nov 2026',records=44329,
         cohorts=dict(train=35518,validation=4268,test=4543),example=dict(chembl_id='CHEMBL45183',
         record_index=39224,cohort='test',safe=safe,fragments=safe.split('.'),budgets={}),budgets={},
-        verification=dict(id_sequences=audit['verified_sequences'],logical_cut_violations=audit['logical_cut_violations'],
+        verification=dict(id_sequences=audit.get('verified_sequences',audit.get('verified_id_sequences')),logical_cut_violations=audit['logical_cut_violations'],
                           content_syntax_violations=audit['content_syntax_violations']),
         evidence={p.name:sha(p) for p in [args.structural/'summary.json',args.structural/'verification.json',
             args.structural/'CHEMBL45183.json']})
-    for K in ('16000','32000'):
+    for K in (('20000','24000') if args.append else ('16000','32000')):
         result['budgets'][K]={}
         result['example']['budgets'][K]={}
         for mode in ('A','B'):
@@ -36,7 +38,8 @@ def main():
             path=args.structural/key/'vocab.json'
             config=read(path)
             begin,end,dot=config['begin_id'],config['end_id'],config['dot_id']
-            result['budgets'][K][mode]['allocation']={k:config[k] for k in ('M','whole_entries','span_entries')}
+            allocation_keys=('frozen_size','append_budget','extra_atomic_lexemes','whole_entries','span_entries') if args.append else ('M','whole_entries','span_entries')
+            result['budgets'][K][mode]['allocation']={k:config[k] for k in allocation_keys}
             result['budgets'][K][mode]['fallback']=audit['length_components'][key]
             payloads=[None if x is None else bytes.fromhex(x).decode('utf-8',errors='replace') for x in config['payloads_hex']]
             fragments=[]
@@ -45,6 +48,7 @@ def main():
                 assert f['fragment']==safe.split('.')[i]
                 ids=f['ids']
                 fragments.append(dict(text=f['fragment'],ids=ids,logical_units=f.get('logical_units'),
+                    frozen_hit=args.append and len(ids)==1 and ids[0]<16000,
                     fallback_blocks=ids.count(begin) if begin is not None else 0))
                 if i:
                     sequence.append(dot)
