@@ -51,17 +51,19 @@
   <section id="mean-comparison" aria-labelledby="mean-title">
     <div class="eyebrow">MEAN TOKEN LENGTH / SAME 44,329 RECORDS</div>
     <h2 id="mean-title">Current schemes and reference tokenizers.</h2>
-    <p>Saved results on the same boundary-preserving records, including TRAIN, VALIDATION and TEST. The 16k/32k budgets apply to our two schemes; the official SAFE checkpoint has 1,880 entries.</p>
+    <p>Saved results on the same boundary-preserving records, including TRAIN, VALIDATION and TEST. The 16k/32k budgets apply to the whole-fragment scheme and A/B; the official SAFE checkpoint has 1,880 entries.</p>
     <div class="table-scroll"><table id="mean-table"><caption>Mean token lengths, rounded to three decimal places</caption><thead><tr><th scope="col">Method</th><th scope="col">Mean token length</th></tr></thead><tbody>
 <tr><th scope="row">Atom-wise SMILES (incl. symbols)</th><td>49.798</td></tr>
 <tr><th scope="row">DemoDiff* (node tokens)</th><td>8.413</td></tr>
 <tr><th scope="row">Official BRICS + SAFE tokenizer</th><td>60.223</td></tr>
+<tr><th scope="row">Whole-fragment scheme · 16k</th><td>35.089</td></tr>
 <tr><th scope="row">A · Complete syntax blocks · 16k</th><td>26.937</td></tr>
 <tr><th scope="row">B · Protected structures · 16k</th><td>35.162</td></tr>
+<tr><th scope="row">Whole-fragment scheme · 32k</th><td>27.402</td></tr>
 <tr><th scope="row">A · Complete syntax blocks · 32k</th><td>24.891</td></tr>
 <tr><th scope="row">B · Protected structures · 32k</th><td>28.663</td></tr>
 </tbody></table></div>
-    <figure class="mean-figure"><img src="figures/mean-token-lengths.svg?v=20261110-ab-only-v2" width="1100" height="670" alt="Mean token lengths on 44,329 records: atom-wise SMILES 49.798; DemoDiff nodes 8.413; official BRICS plus SAFE 60.223; A 16k 26.937; B 16k 35.162; A 32k 24.891; B 32k 28.663. DemoDiff connectivity is stored separately."><figcaption><strong>* DemoDiff counts node tokens only.</strong> Its connectivity is stored in additional edge and attachment-position information. All other rows count text tokens including connectivity syntax. These lengths do not compare total storage or computation cost.</figcaption></figure>
+    <figure class="mean-figure"><img src="figures/mean-token-lengths.svg?v=20261110-whole-ab-v3" width="1100" height="770" alt="Mean token lengths on 44,329 records: Atom-wise SMILES (incl. symbols) 49.798; DemoDiff* (node tokens) 8.413; Official BRICS + SAFE tokenizer 60.223; Whole-fragment scheme · 16k 35.089; A · Complete syntax blocks · 16k 26.937; B · Protected structures · 16k 35.162; Whole-fragment scheme · 32k 27.402; A · Complete syntax blocks · 32k 24.891; B · Protected structures · 32k 28.663. DemoDiff connectivity is stored separately."><figcaption><strong>* DemoDiff counts node tokens only.</strong> Its connectivity is stored in additional edge and attachment-position information. All other rows count text tokens including connectivity syntax. These lengths do not compare total storage or computation cost.</figcaption></figure>
   </section>
   <section id="connection-demo" aria-labelledby="cd-title">
     <div class="section-head"><div><div class="eyebrow">INTERACTIVE WALKTHROUGH / VERIFIED EXPERIMENT RECORDS</div><h2 id="cd-title">How SAFE preserves connections.</h2></div><label class="select-label">Molecule<select id="cd-example"><option value="0">CHEMBL45183 · boundaries preserved · 8 → 8</option><option value="1">CHEMBL13214 · boundaries preserved · 8 → 8</option><option value="2">CHEMBL55653 · boundaries changed · 4 → 3</option></select></label></div>
