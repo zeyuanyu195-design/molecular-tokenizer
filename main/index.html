@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Molecular tokenization · Results explorer</title>
-  <meta name="description" content="Compare original hybrid SAFE tokenization with complete syntax blocks (A) and protected structures (B): 44,329 molecules, pseudocode, and real CHEMBL45183 token IDs.">
+  <meta name="description" content="Compare SAFE tokenization using complete syntax blocks (A) and protected structures (B): 44,329 molecules, pseudocode, and real CHEMBL45183 token IDs.">
   <link rel="stylesheet" href="results.css?v=20261103-histograms"><script src="results.js?v=20261103-pseudocode" defer></script>
-  <link rel="stylesheet" href="connection-demo.css?v=20261109-stepfix"><script src="connection-demo.js?v=20261109-stepfix" defer></script>
-  <link rel="stylesheet" href="vocabulary.css?v=20261109-stepfix"><script src="vocabulary.js?v=20261109-stepfix" defer></script>
-  <link rel="stylesheet" href="structural-comparison.css?v=20261110-structural-v1"><script src="structural-comparison.js?v=20261110-structural-v1" defer></script>
+  <link rel="stylesheet" href="connection-demo.css?v=20261109-stepfix"><script src="connection-demo.js?v=20261110-graph-only" defer></script>
+  <link rel="stylesheet" href="vocabulary.css?v=20261109-stepfix">
+  <link rel="stylesheet" href="structural-comparison.css?v=20261110-ab-only-v2"><script src="structural-comparison.js?v=20261110-ab-only-v2" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
@@ -16,7 +16,7 @@
   <section class="intro">
     <div class="eyebrow">UPDATED 10 NOV 2026 / 44,329 BOUNDARY-PRESERVING RECORDS</div>
     <h1>Keep the structure.<br><span>Measure the trade-off.</span></h1>
-    <p class="lead">Compare the original hybrid codec with complete syntax blocks (A) and protected structures (B). Inspect the actual vocabulary IDs, compression cost and lossless SAFE reconstruction.</p>
+    <p class="lead">Compare complete syntax blocks (A) with protected structures (B). Inspect the actual vocabulary IDs, compression cost and lossless SAFE reconstruction.</p>
     <div class="sample-flow"><div><strong>44,329</strong><span>boundary-preserving records only</span></div><div><strong>16k / 32k</strong><span>total model vocabulary budgets</span></div><div><strong>100%</strong><span>exact SAFE reconstruction in this cohort</span></div></div>
   </section>
   <section id="structural-comparison" aria-labelledby="sc-title">
@@ -35,77 +35,41 @@
         <div id="sc-code-panel" class="code-panel"><div class="code-toolbar"><div role="group" aria-label="Structural algorithm function"><button type="button" data-sc-function="train" aria-pressed="false">train</button><button type="button" data-sc-function="encode" aria-pressed="true">encode</button><button type="button" data-sc-function="decode" aria-pressed="false">decode</button></div><span>PSEUDOCODE</span></div><pre><code id="sc-code"></code></pre></div>
       </div>
       <div id="sc-example" class="sc-subsection">
-        <div class="eyebrow">CHEMBL45183 / SAME SAFE, THREE DICTIONARIES</div><h3>Compare the actual splits and IDs.</h3>
+        <div class="eyebrow">CHEMBL45183 / SAME SAFE, TWO SCHEMES</div><h3>Compare the actual splits and IDs.</h3>
         <p id="sc-example-summary"></p><code id="sc-safe" class="sc-safe"></code>
         <div class="sc-controls"><label class="select-label">Vocabulary budget<select id="sc-budget"><option value="16000">16,000 entries</option><option value="32000">32,000 entries</option></select></label><label class="select-label sc-fragment-picker">Original SAFE fragment<select id="sc-fragment"></select></label></div>
         <p id="sc-allocation" class="sc-subtle"></p><code id="sc-selected-safe" class="sc-safe"></code>
         <div id="sc-cards" class="sc-cards"></div>
         <div id="sc-inspector" class="sc-inspector" role="status" aria-live="polite"></div><p id="sc-example-note"></p>
         <details><summary>Complete token sequences, including dots and block markers</summary><div class="detail-body" id="sc-sequences"></div></details>
-        <div class="sc-subsection"><div class="section-head"><h3>Replay ID → SAFE reconstruction.</h3><label class="select-label">Dictionary<select id="sc-decode-method"><option value="hybrid">Original hybrid</option><option value="A" selected>A · Complete syntax blocks</option><option value="B">B · Protected structures</option></select></label></div><div class="sc-decode-controls"><label for="sc-decode-range">Decoded IDs</label><input id="sc-decode-range" type="range" min="0" max="21" value="0"><button type="button" id="sc-decode-next">Next ID →</button><button type="button" id="sc-decode-all">Decode all</button></div><code id="sc-decoded" class="sc-safe"></code><p id="sc-decode-status" role="status" aria-live="polite"></p></div>
+        <div class="sc-subsection"><div class="section-head"><h3>Replay ID → SAFE reconstruction.</h3><label class="select-label">Dictionary<select id="sc-decode-method"><option value="A" selected>A · Complete syntax blocks</option><option value="B">B · Protected structures</option></select></label></div><div class="sc-decode-controls"><label for="sc-decode-range">Decoded IDs</label><input id="sc-decode-range" type="range" min="0" max="21" value="0"><button type="button" id="sc-decode-next">Next ID →</button><button type="button" id="sc-decode-all">Decode all</button></div><code id="sc-decoded" class="sc-safe"></code><p id="sc-decode-status" role="status" aria-live="polite"></p></div>
       </div>
-      <p id="sc-evidence">Verified from saved experiment outputs, not simulated token IDs. The browser independently reconstructs all six example sequences from dictionary excerpts. Offline checks cover 177,316 A/B ID sequences and the original molecular stereochemistry. <a href="structural-comparison.json">Results and example IDs (JSON)</a> · <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/experiments/tokenization/STRUCTURAL_SPAN_RESULTS.md">Full experiment report ↗</a></p>
+      <p id="sc-evidence">Verified from saved experiment outputs, not simulated token IDs. The browser independently reconstructs all four example sequences from dictionary excerpts. Offline checks cover 177,316 A/B ID sequences and the original molecular stereochemistry. <a href="structural-comparison.json">Results and example IDs (JSON)</a> · <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/experiments/tokenization/STRUCTURAL_SPAN_RESULTS.md">Full experiment report ↗</a></p>
     </div>
     <noscript><p>Mean lengths: A 26.937 / 24.891; B 35.162 / 28.663 (16k / 32k). Enable JavaScript to inspect actual token IDs.</p></noscript>
   </section>
   <section id="mean-comparison" aria-labelledby="mean-title">
     <div class="eyebrow">MEAN TOKEN LENGTH / SAME 44,329 RECORDS</div>
-    <h2 id="mean-title">Earlier reference configurations.</h2>
+    <h2 id="mean-title">Current schemes and reference tokenizers.</h2>
     <p>Saved results on the same boundary-preserving records, including TRAIN, VALIDATION and TEST. The 16k/32k budgets apply to our two schemes; the official SAFE checkpoint has 1,880 entries.</p>
     <div class="table-scroll"><table id="mean-table"><caption>Mean token lengths, rounded to three decimal places</caption><thead><tr><th scope="col">Method</th><th scope="col">Mean token length</th></tr></thead><tbody>
-      <tr><th scope="row">Atom-wise SMILES (incl. symbols)</th><td>49.798</td></tr>
-      <tr><th scope="row">DemoDiff* (node tokens)<small class="mean-unit-note">Connectivity stored in extra edge/attachment tables; excluded here.</small></th><td>8.413</td></tr>
-      <tr><th scope="row">Official BRICS + SAFE tokenizer</th><td>60.223</td></tr>
-      <tr><th scope="row">Whole-fragment scheme · 16k</th><td>35.089</td></tr>
-      <tr><th scope="row">Hybrid scheme · 16k</th><td>19.919</td></tr>
-      <tr><th scope="row">Whole-fragment scheme · 32k</th><td>27.402</td></tr>
-      <tr><th scope="row">Hybrid scheme · 32k</th><td>18.184</td></tr>
-    </tbody></table></div>
-    <figure class="mean-figure"><img src="figures/mean-token-lengths.svg?v=20261109-demodiff" width="1100" height="670" alt="Mean token lengths on 44,329 records: atom-wise SMILES 49.798, DemoDiff node tokens 8.413, official BRICS plus SAFE 60.223, whole fragments at 16k 35.089, hybrid at 16k 19.919, whole fragments at 32k 27.402, hybrid at 32k 18.184. DemoDiff connectivity is stored separately."><figcaption><strong>* DemoDiff counts node tokens only.</strong> Its connectivity is stored in additional edge and attachment-position information. All other rows count text tokens including connectivity syntax. These lengths do not compare total storage or computation cost.</figcaption></figure>
-  </section>
-  <section id="vocabulary-results" aria-labelledby="v-title">
-    <div class="eyebrow">EARLIER EXPERIMENT / COMPLETE ENCODING COST</div><h2 id="v-title">Whole fragments → hybrid tokens.</h2>
-    <p id="v-loading" role="status">Loading the verified boundary-preserving comparison…</p>
-    <div id="v-content" hidden>
-      <div class="section-head"><p>Both methods count dots, connection labels, bonds and stereochemistry.</p><label class="select-label">Total vocabulary<select id="v-budget"><option value="16000">16,000 entries</option><option value="32000">32,000 entries</option></select></label></div>
-      <div class="v-highlight" aria-live="polite"><span class="label">MEAN TOKENS · WHOLE-FRAGMENT → HYBRID</span><strong id="v-mean"></strong><span id="v-reduction"></span></div>
-      <div class="table-scroll"><table><caption>Same 44,329 boundary-preserving records; no special tokens, padding or truncation</caption><thead><tr><th>Method</th><th>Records</th><th>Total tokens</th><th>Mean</th><th>Median</th><th>P95</th></tr></thead><tbody id="v-stat-body"></tbody></table></div>
-      <p id="v-allocation"></p><p id="v-changes"></p>
-      <aside class="note"><strong>One primary cohort.</strong> Excludes all 5,663 changed-boundary records. Includes 35,518 TRAIN + 4,268 VALIDATION + 4,543 TEST records, so these are descriptive full-cohort results. New entries are learned on TRAIN only; allocation is selected on VALIDATION. The 44,329 records contain 44,328 distinct canonical-SMILES strings; no deduplication is applied.</aside>
-      <section id="v-flow"><div class="eyebrow">PIPELINE</div><h2>From motifs to a reversible sequence.</h2>
-        <div class="v-flow">
-          <article><span class="label">01 / EXISTING REPRESENTATION</span><h3>GraphBPE → SAFE</h3><p>Use the existing molecular partition and SAFE serialization. Keep only exact-boundary records. Do not run GraphBPE again during text tokenization.</p></article>
-          <article><span class="label">02 / FIRST CODEC</span><h3>Rank whole fragments</h3><p>Count literal TRAIN fragments, labels included. Keep M=2,136 base entries; add the most frequent K−M complete fragments. Misses use base tokens.</p></article>
-          <article><span class="label">03 / DIAGNOSE MISSES</span><h3>Labels create variants</h3><p>C4c1cccs1 and C8c1cccs1 cannot share a complete-string ID. A shared substring can reuse c1cccs1 while retaining each original label.</p></article>
-          <article><span class="label">04 / HYBRID CODEC</span><h3>Learn within fragments</h3><p>Train BPE on base-token sequences inside individual TRAIN fragments. No merges across dots; identical payloads share IDs. Keep exactly K model entries.</p></article>
-          <article><span class="label">05 / SELECT & ENCODE</span><h3>Use validation</h3><p>Compare 25%, 50%, 75% whole-fragment shares of K−M. Complete-fragment hits emit one ID; misses use BPE substrings. Dots stay separate.</p></article>
-          <article><span class="label">06 / RECONSTRUCT</span><h3>IDs → SAFE → molecule</h3><p>Concatenate vocabulary byte payloads. Restore the complete SAFE before parsing the molecule. No per-molecule edge table or original SAFE side table.</p></article>
-        </div>
-      </section>
-      <section id="v-algorithms"><div class="section-head"><div><div class="eyebrow">TWO CODECS / PSEUDOCODE</div><h2 id="v-code-title"></h2></div><label class="select-label">Scheme<select id="v-method"><option value="whole">Whole fragments</option><option value="hybrid" selected>Hybrid</option></select></label></div>
-        <div class="code-panel" id="v-code-panel"><div class="code-toolbar"><div role="group" aria-label="Vocabulary algorithm"><button data-v-step="train" aria-pressed="false">train</button><button data-v-step="encode" aria-pressed="true">encode</button><button data-v-step="decode" aria-pressed="false">decode</button></div><span>PSEUDOCODE</span></div><pre><code id="v-code"></code></pre></div>
-      </section>
-      <section id="v-example"><div class="section-head"><div><div class="eyebrow" id="v-example-label">VERIFIED TEST EXAMPLES · FIXED 16k</div><h2 id="v-example-title">Compare fragment by fragment.</h2></div><div class="segmented" role="group" aria-label="Example token display"><button data-v-mode="text" aria-pressed="true">Text + ID</button><button data-v-mode="ids" aria-pressed="false">ID + text</button></div></div>
-        <label class="select-label v-example-picker">Verified molecule<select id="v-example-select" aria-label="Verified molecule"></select></label>
-        <p>Choose the original example or longer molecules with 12, 20 and 30 fragments. All are boundary-preserving TEST records with verified reconstruction. They illustrate individual encodings, not population-average compression.</p>
-        <p>This example always uses the selected <strong>16k</strong> hybrid, regardless of the statistics budget above. Each chip shows both its text and actual ID. IDs belong to the dictionary of that column.</p>
-        <aside class="note"><strong>Text substrings are not chemical motifs.</strong> Hybrid fallback learns text combinations without a chemical-subgraph constraint. For example, <code>1)</code> is a real entry in the 16k hybrid dictionary (ID <strong>9447</strong>), but is not an independent chemical motif. Exact reconstruction verifies the text codec, not motif-level semantics or the validity of generated molecules.</aside>
-        <code id="v-safe"></code>
-        <div class="table-scroll"><table id="v-example-table"><caption>Original SAFE fragment boundaries are unchanged</caption><thead><tr><th>SAFE fragment</th><th>Whole-fragment scheme</th><th>Hybrid scheme</th><th>Count</th></tr></thead><tbody id="v-example-body"></tbody></table></div>
-        <h3 id="v-sequence-title">Complete hybrid token sequence</h3><div id="v-sequence" aria-label="Complete 23-token sequence"></div>
-        <p id="v-count-explanation" aria-live="polite"></p>
-      </section>
-      <aside class="note"><strong>What the comparison establishes.</strong> Substring reuse drives most compression: pure within-fragment BPE TEST means are 20.744662 (16k) and 19.193044 (32k), versus hybrid 20.742461 and 19.193044. Dedicated whole-fragment slots have not demonstrated a substantial extra compression advantage. One motif may use multiple model tokens. Exact reconstruction does not prove valid diffusion generation. Pre-existing vocabulary training provenance has not been audited; the TEST set was explored in earlier diagnosis.</aside>
-      <p><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer#readme">Read the complete report ↗</a> · <a href="vocabulary-results.json">Results, pseudocode and example IDs (JSON)</a></p>
-    </div>
+<tr><th scope="row">Atom-wise SMILES (incl. symbols)</th><td>49.798</td></tr>
+<tr><th scope="row">DemoDiff* (node tokens)</th><td>8.413</td></tr>
+<tr><th scope="row">Official BRICS + SAFE tokenizer</th><td>60.223</td></tr>
+<tr><th scope="row">A · Complete syntax blocks · 16k</th><td>26.937</td></tr>
+<tr><th scope="row">B · Protected structures · 16k</th><td>35.162</td></tr>
+<tr><th scope="row">A · Complete syntax blocks · 32k</th><td>24.891</td></tr>
+<tr><th scope="row">B · Protected structures · 32k</th><td>28.663</td></tr>
+</tbody></table></div>
+    <figure class="mean-figure"><img src="figures/mean-token-lengths.svg?v=20261110-ab-only-v2" width="1100" height="670" alt="Mean token lengths on 44,329 records: atom-wise SMILES 49.798; DemoDiff nodes 8.413; official BRICS plus SAFE 60.223; A 16k 26.937; B 16k 35.162; A 32k 24.891; B 32k 28.663. DemoDiff connectivity is stored separately."><figcaption><strong>* DemoDiff counts node tokens only.</strong> Its connectivity is stored in additional edge and attachment-position information. All other rows count text tokens including connectivity syntax. These lengths do not compare total storage or computation cost.</figcaption></figure>
   </section>
   <section id="connection-demo" aria-labelledby="cd-title">
-    <div class="section-head"><div><div class="eyebrow">INTERACTIVE WALKTHROUGH / VERIFIED EXPERIMENT RECORDS</div><h2 id="cd-title">From SAFE fragments to actual token IDs.</h2></div><label class="select-label">Molecule<select id="cd-example"><option value="0">CHEMBL45183 · boundaries preserved · 8 → 8</option><option value="1">CHEMBL13214 · boundaries preserved · 8 → 8</option><option value="2">CHEMBL55653 · boundaries changed · 4 → 3</option></select></label></div>
-    <p>Follow the original molecular graph into SAFE, then compare complete-fragment lookup, fallback encoding and reconstruction under two frozen dictionaries. Every output chip shows its real token ID. Select the 39 → 23 example or either original walkthrough molecule.</p>
-    <p id="cd-loading">Loading verified graph and vocabulary traces…</p>
+    <div class="section-head"><div><div class="eyebrow">INTERACTIVE WALKTHROUGH / VERIFIED EXPERIMENT RECORDS</div><h2 id="cd-title">How SAFE preserves connections.</h2></div><label class="select-label">Molecule<select id="cd-example"><option value="0">CHEMBL45183 · boundaries preserved · 8 → 8</option><option value="1">CHEMBL13214 · boundaries preserved · 8 → 8</option><option value="2">CHEMBL55653 · boundaries changed · 4 → 3</option></select></label></div>
+    <p>Follow the original molecular graph through GraphBPE partitioning and SAFE connection labels. For current A/B lookup, fallback, actual IDs and reconstruction, use the <a href="#sc-example">CHEMBL45183 comparison above</a>.</p>
+    <p id="cd-loading">Loading verified molecular graph traces…</p>
     <div id="cd-content" hidden>
       <div class="cd-topline"><span id="cd-badge" class="cd-badge"></span><div class="cd-controls" role="group" aria-label="Walkthrough playback"><button id="cd-prev" type="button">← Previous</button><button id="cd-play" type="button" aria-pressed="false">Auto play</button><button id="cd-next" type="button">Next →</button></div></div>
-      <p id="cd-source" class="subtle"></p><label class="select-label cd-budget-picker">Total vocabulary per scheme<select id="cd-budget"><option value="16000">16,000 entries</option><option value="32000">32,000 entries</option></select></label><p id="cd-budget-note" class="subtle"></p>
+      <p id="cd-source" class="subtle"></p>
       <div id="cd-steps" class="cd-steps" role="group" aria-label="Tokenization steps"></div>
       <div id="cd-status" class="cd-status" role="status" aria-live="polite"></div>
       <div class="cd-step-copy"><h3 id="cd-step-title"></h3><p id="cd-step-copy"></p></div>
@@ -120,32 +84,7 @@
         </div>
       </div>
       </details>
-      <div id="cd-codec-workbench" hidden>
-        <section id="cd-lookup" class="cd-work-panel" aria-labelledby="cd-lookup-title">
-          <h3 id="cd-lookup-title">5. Look up the complete SAFE fragment</h3>
-          <p>Matched = the literal string has a complete entry in this dictionary. Unmatched = fallback is needed. All connection labels are part of the lookup string.</p>
-          <div class="table-scroll"><table class="cd-lookup-table"><caption>Select a fragment; its source atoms are highlighted in the optional reference graph</caption><thead><tr><th>SAFE fragment</th><th>Whole-fragment scheme</th><th>Hybrid scheme</th></tr></thead><tbody id="cd-lookup-body"></tbody></table></div>
-        </section>
-        <section id="cd-fallback" class="cd-work-panel" hidden aria-labelledby="cd-fallback-title">
-          <h3 id="cd-fallback-title">6. Keep complete hits; fall back only on misses</h3>
-          <div id="cd-fragment-picker" class="cd-fragment-picker" role="group" aria-label="Fragment to encode"></div>
-          <code id="cd-focus-fragment" class="cd-input"></code>
-          <div id="cd-fallback-cards" class="cd-codec-grid"></div>
-          <aside id="cd-fallback-note" class="note"></aside>
-        </section>
-        <section id="cd-sequence-panel" class="cd-work-panel" hidden aria-labelledby="cd-sequence-title">
-          <h3 id="cd-sequence-title">7. Assemble the complete token sequence</h3>
-          <p>Read each sequence left to right, including dots. One chip = one model ID. Underlines retain the original SAFE fragment boundaries.</p>
-          <div id="cd-sequences" class="cd-codec-grid"></div>
-        </section>
-        <div id="cd-token-inspector" class="cd-token-inspector" role="status" aria-live="polite"></div>
-        <section id="cd-decode-panel" class="cd-work-panel" hidden aria-labelledby="cd-decode-title">
-          <h3 id="cd-decode-title">8. IDs → dictionary payloads → complete SAFE → molecule</h3>
-          <p>Move a slider or reveal the next token. The optional reference graph shows the target molecule; chemistry is verified offline, not simulated in the browser. No original SAFE side table or per-molecule attachment table is used to reconstruct the text.</p>
-          <div id="cd-reconstruction" class="cd-codec-grid"></div>
-        </section>
-      </div>
-      <details class="cd-evidence"><summary>Evidence, dictionary fingerprints and reproduction</summary><div class="detail-body"><p>All three graphs were replayed from genuine saved records with the current GraphBPE+SAFE pipeline. Source atom groups, proposed/accepted cuts and SAFE strings matched the original records; paired cross-fragment labels were checked against accepted cuts. No intermediate GraphBPE merge history is invented.</p><p>Both frozen codecs were reloaded at 16k and 32k. Every output ID was resolved in its actual dictionary; complete hits were checked to remain single tokens. Concatenating the payloads reproduced the SAFE text exactly. The real SAFE decoder was then called on that restored text and the canonical isomeric molecule matched the source in all 12 combinations. The browser independently rechecks ID-to-text reconstruction using only the used vocabulary entries.</p><p>The dictionary excerpt contains shared token definitions, not molecule-specific connectivity. The source SAFE and graph metadata are used for comparison and visualization only. Text substrings such as <code>1)</code> are real vocabulary entries but are not independent chemical motifs. Exact reconstruction does not establish valid de novo generation.</p><p>The boundary-change example remains available as a stress case and is excluded from the 44,329-record comparison. All IDs are specific to a scheme and vocabulary budget.</p><p><a href="connection-demo.json">Verified traces and vocabulary SHA-256 fingerprints (JSON)</a> · <a href="https://github.com/zeyuanyu195-design/molecular-tokenizer/blob/main/experiments/tokenization/CODEC_WALKTHROUGH.md">Validation and reproduction details</a></p></div></details>
+      <details class="cd-evidence"><summary>Evidence and verified molecular traces</summary><div class="detail-body"><p>All three graphs were replayed from genuine saved records. Source atom groups, proposed/accepted cuts and SAFE strings matched the original records; paired cross-fragment labels were checked against accepted cuts. No intermediate GraphBPE merge history is invented.</p><p>Dots separate fragments; paired labels, their positions after atoms, and bond symbols preserve connectivity. The boundary-change example remains a stress case excluded from the 44,329-record comparison.</p><p><a href="connection-demo.json">Verified molecular graph traces (JSON)</a> · <a href="#sc-example">Current A/B dictionaries and reconstruction</a></p></div></details>
     </div>
   </section>
   <details class="v-legacy"><summary>Historical experiments: BRICS and original DemoDiff</summary><p class="v-legacy-note">Earlier measurements below use different cohorts and often count motif IDs without connectivity. Their implementation limitations apply to those earlier methods, not to the new reversible codecs above.</p>
@@ -188,3 +127,4 @@
 </details>
 </main><footer><span>Molecular tokenization / Experimental results</span><span>44,329 boundary-preserving records · Complete reversible SAFE encoding</span></footer>
 </body></html>
+

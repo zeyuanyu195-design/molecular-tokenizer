@@ -5,7 +5,7 @@
   if (!root) return;
   const el = id => document.getElementById(id);
   const make = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
-  const names = {hybrid: 'Original hybrid', lexical: 'No new symbol-only combinations', A: 'A · Complete syntax blocks', B: 'B · Protected structures'};
+  const names = {A: 'A · Complete syntax blocks', B: 'B · Protected structures'};
   let data, budget = '16000', fragment = 0, algorithm = 'A', functionName = 'encode', decodeMethod = 'A';
   const code = {
     train: mode => `TRAIN(${mode}, K):
@@ -67,7 +67,7 @@ VERIFY_OFFLINE:
   };
   function tableRows(target, cohort) {
     target.replaceChildren();
-    for (const key of ['hybrid','lexical','A','B']) {
+    for (const key of ['A','B']) {
       const tr = make('tr');
       const th = make('th', names[key]); th.scope = 'row'; tr.append(th);
       for (const k of ['16000','32000']) tr.append(make('td', data.budgets[k][key][cohort].mean.toFixed(3), 'sc-number'));
@@ -117,14 +117,14 @@ VERIFY_OFFLINE:
     el('sc-selected-safe').textContent = `${fragment + 1}. ${data.example.fragments[fragment]}`;
     const cards = el('sc-cards'); cards.replaceChildren();
     const sequences = el('sc-sequences'); sequences.replaceChildren();
-    for (const scheme of ['hybrid','A','B']) {
+    for (const scheme of ['A','B']) {
       const model = models[scheme], f = model.fragments[fragment];
       const card = make('article',undefined,`sc-card sc-card-${scheme}`);
       const heading = make('div',undefined,'sc-card-heading'); heading.append(make('h4',names[scheme]),make('strong',`${model.length} total`)); card.append(heading);
       card.append(make('p',`Selected fragment: ${f.ids.length} model tokens`,'sc-subtle'));
       if (f.logical_units) {
         const details = make('details'); details.append(make('summary',`Allowed elementary blocks (${f.logical_units.length})`),make('code',f.logical_units.join(' | '),'sc-block-list')); card.append(details);
-      } else card.append(make('p','Unrestricted text BPE; substrings need not preserve branches or motifs.','sc-subtle'));
+      }
       const tokenbox = make('div',undefined,'sc-token-box'); drawTokens(tokenbox,f.ids,model,scheme); card.append(tokenbox);
       if (f.fallback_blocks) card.append(make('p',`${f.fallback_blocks} unmatched protected block(s): the frame preserves the logical unit, but its contents occupy multiple model tokens.`,'sc-frame-note'));
       cards.append(card);
@@ -132,7 +132,7 @@ VERIFY_OFFLINE:
       drawTokens(seq,model.ids,model,scheme); sequences.append(seq);
     }
     const a = data.budgets[budget].A.all, b = data.budgets[budget].B.all;
-    el('sc-example-note').textContent = `This molecule: ${models.hybrid.length} → ${models.A.length} → ${models.B.length} tokens (hybrid → A → B). Population means at this budget: A ${a.mean.toFixed(3)}, B ${b.mean.toFixed(3)}. The example is not a population-average compression claim.`;
+    el('sc-example-note').textContent = `This molecule: A ${models.A.length} tokens; B ${models.B.length} tokens. Population means at this budget: A ${a.mean.toFixed(3)}, B ${b.mean.toFixed(3)}. The example is not a population-average compression claim.`;
     el('sc-allocation').textContent = budget === '16000' ? 'A/B 16k = 2,308 foundation entries + 6,932 whole fragments + 6,760 legal spans.' : 'A/B 32k = 2,308 foundation entries + 7,466 whole fragments + 22,226 legal spans.';
     el('sc-inspector').textContent = 'Select a token to inspect its actual dictionary ID and role. Each chip is one model token, including dots and block markers.';
     el('sc-decode-range').value = '0'; renderDecode();
@@ -147,7 +147,7 @@ VERIFY_OFFLINE:
   }
   async function init() {
     try {
-      const response = await fetch('structural-comparison.json?v=20261110-structural-v1');
+      const response = await fetch('structural-comparison.json?v=20261110-ab-only-v2');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       data = await response.json();
       for (const models of Object.values(data.example.budgets)) for (const model of Object.values(models)) {
