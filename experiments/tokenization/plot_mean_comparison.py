@@ -47,8 +47,27 @@ def main():
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--chinese-font", type=Path)
+    parser.add_argument("--structural", type=Path, help="Current A/B export; replaces older scheme rows")
+    parser.add_argument("--save-data", type=Path, help="Save the exact data plotted")
     args = parser.parse_args()
     data = json.loads(args.data.read_text(encoding="utf-8"))
+    if args.structural:
+        current = json.loads(args.structural.read_text(encoding="utf-8"))
+        data['methods'] = [r for r in data['methods'] if r['key'] in ('atomwise', 'demodiff', 'brics_safe')]
+        for budget in ('16000', '32000'):
+            for mode, label, zh, color in (
+                ('A', 'Complete syntax blocks', '完整语法块', '#24765B'),
+                ('B', 'Protected structures', '受保护子结构', '#68699C'),
+            ):
+                row = current['budgets'][budget][mode]['all']
+                data['methods'].append(dict(key=f'{mode}_{budget}', label=f'{mode} · {label} · {int(budget)//1000}k',
+                    label_zh=f'{mode} · {zh} · {int(budget)//1000}k', color=color,
+                    records=row['n'], total=row['total'], mean=row['mean'],
+                    connectivity='Included in the sequence, together with fallback block markers'))
+        data['sources']['structural'] = 'structural-comparison.json'
+        data['scope'] = 'Same 44,329 boundary-preserving records; includes TRAIN, VALIDATION and TEST. Current A/B and reference tokenizers.'
+    if args.save_data:
+        args.save_data.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     assert len(data["methods"]) == 7
     for row in data["methods"]:
         assert row["records"] == data["records"] == 44329

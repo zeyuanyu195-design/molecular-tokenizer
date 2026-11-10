@@ -4,10 +4,8 @@
   const root = document.getElementById('connection-demo');
   if (!root) return;
   const colors = ['#247e91', '#a85479', '#92752b', '#5576ab', '#498464', '#986643', '#8062aa', '#5b8184'];
-  const labels = ['Input graph', 'GraphBPE motifs', 'Boundary check', 'SAFE connections', 'Whole lookup', 'Fallback', 'Token IDs', 'Reconstruct'];
+  const labels = ['Input graph', 'GraphBPE motifs', 'Boundary check', 'SAFE connections'];
   let data, exampleIndex = 0, step = 0, selectedPair = null, selectedFragment = 0, timer = null;
-  let budget = '16000', selectedToken = null, decodeCounts = {whole: 0, hybrid: 0};
-  const schemeNames = {whole: 'Whole-fragment scheme', hybrid: 'Hybrid scheme'};
   const el = id => document.getElementById(id);
   const node = (tag, text, className) => {
     const n = document.createElement(tag);
@@ -43,10 +41,7 @@
         ? `All ${e.bonds.filter(b => b.requested).length} proposed cuts are accepted. The final SAFE atom partition equals the GraphBPE partition: ${e.bpe_groups.length} motifs remain ${e.fragments.length} fragments. This record is included in the fixed-boundary comparison.`
         : `GraphBPE proposes 3 cuts. The current converter retains the E-configured double bond between atoms ${protectedBond.atoms.join(' and ')}. Two cuts remain, so 4 GraphBPE motifs become 3 SAFE fragments. This record is excluded from the fixed-boundary comparison, but it still decodes correctly.`,
       'Dots separate fragments. Cross-fragment ring-label pairs specify which atoms reconnect. Select a label below: its two occurrences, attachment atoms and matching bond light up together. Internal ring labels are shown separately.',
-      'Look up the literal SAFE fragment, including every connection label. A complete hit emits one ID and is never split. A miss triggers fallback. The two schemes have different dictionaries at the same total budget; “miss” does not mean a boundary mismatch.',
-      'Select a fragment to compare its actual encodings. The whole-fragment scheme falls back to base tokens. Hybrid uses within-fragment BPE only on a miss. These are text substrings, not necessarily chemical motifs: even “1)” is a real learned dictionary entry. No graph repartitioning takes place.',
-      'Every chip below is one actual model token, with its literal payload and saved ID. Dots remain separate tokens. Select a chip to inspect the vocabulary entry. IDs are local to the selected scheme and budget; equal numbers across dictionaries need not mean equal text.',
-      'Reveal dictionary payloads one token at a time, then concatenate them in order. Each reconstruction below reads IDs and the dictionary excerpt, not the original SAFE text. Equality is checked against the source only afterwards. Molecular decoding of the fully restored SAFE was verified offline without a per-molecule edge table.'
+
     ];
   }
   function highlightAtom(index) {
@@ -114,7 +109,6 @@
     el('cd-graph-caption').textContent = step === 0 ? 'Original molecular graph · source atom indices'
       : step === 1 ? 'Colors: GraphBPE motifs · dashed highlights: proposed cuts'
       : step === 2 ? 'Colors: final SAFE fragments · blue dashes: accepted cuts · orange: retained bond'
-      : step === 7 ? 'Target molecular graph · molecular reconstruction verified offline for both codecs'
       : 'Colors: SAFE fragments · accepted cut bonds hidden · gold dashes: selected reconnection guide';
     highlightAtom(null);
   }
@@ -175,150 +169,6 @@
       ? `${p.cross_fragment ? 'Connection' : 'Internal ring'} ${p.label}: F${p.fragments[0] + 1} / atom ${p.atoms[0]} ↔ F${p.fragments[1] + 1} / atom ${p.atoms[1]}. Bond type: ${p.bond_type.toLowerCase()}. ${p.cross_fragment ? 'The label follows each attachment atom; the dot does not specify this bond.' : 'Both occurrences are inside one fragment. The label may be reused after a pair closes.'}`
       : '';
   }
-  const codec = (e, scheme) => e.codecs[budget][scheme];
-  const dictionary = scheme => data.codec_metadata.budgets[budget].dictionary[scheme];
-  function modeText(f) {
-    return f.mode === 'whole_hit' ? 'Complete hit · locked'
-      : f.mode === 'base_hit' ? 'Exact base entry · locked'
-      : f.mode === 'base_fallback' ? 'Miss → base fallback' : 'Miss → substring fallback';
-  }
-  function chooseFragment(i) {
-    pause(); selectedFragment = i; selectedPair = null; selectedToken = null; render();
-  }
-  function chip(scheme, id, fragmentIndex) {
-    const entry = dictionary(scheme)[id];
-    const button = node('button', undefined, `cd-token cd-token-${entry.kind}`);
-    button.type = 'button';
-    button.append(node('code', entry.text), node('small', `ID ${id}`));
-    button.title = `${schemeNames[scheme]}, ${Number(budget).toLocaleString()} entries · ${entry.kind} · ${entry.text} → ${id}`;
-    button.dataset.tokenKey = `${scheme}-${id}`;
-    button.setAttribute('aria-label', `${schemeNames[scheme]} token ${entry.text}, ID ${id}`);
-    button.setAttribute('aria-pressed', String(selectedToken?.scheme === scheme && selectedToken?.id === id));
-    button.addEventListener('click', () => {
-      pause(); selectedToken = {scheme, id}; selectedPair = null;
-      if (fragmentIndex !== null) selectedFragment = fragmentIndex;
-      render();
-    });
-    return button;
-  }
-  function renderLookup(e) {
-    const body = el('cd-lookup-body'); body.replaceChildren();
-    codec(e, 'whole').fragments.forEach((f, i) => {
-      const row = node('tr');
-      if (i === selectedFragment) row.className = 'cd-selected-row';
-      const first = node('td');
-      const button = node('button', `F${i + 1}`);
-      button.type = 'button'; button.dataset.cdFragment = i;
-      button.setAttribute('aria-pressed', String(selectedFragment === i));
-      button.addEventListener('click', () => chooseFragment(i));
-      first.append(button, node('code', f.text)); row.append(first);
-      for (const scheme of ['whole', 'hybrid']) {
-        const fragment = codec(e, scheme).fragments[i], cell = node('td');
-        cell.append(node('strong', modeText(fragment), fragment.lookup_id === null ? 'cd-miss' : 'cd-hit'));
-        cell.append(node('small', fragment.lookup_id === null ? 'No complete entry in this dictionary' : `Actual ID ${fragment.lookup_id} · one token`));
-        row.append(cell);
-      }
-      body.append(row);
-    });
-  }
-  function renderFallback(e) {
-    const picker = el('cd-fragment-picker'); picker.replaceChildren();
-    e.fragments.forEach((_, i) => {
-      const button = node('button', `F${i + 1}`); button.type = 'button'; button.dataset.cdFragment = i;
-      button.style.borderBottom = `3px solid ${color(i)}`;
-      button.setAttribute('aria-pressed', String(selectedFragment === i));
-      button.addEventListener('click', () => chooseFragment(i)); picker.append(button);
-    });
-    const focus = codec(e, 'whole').fragments[selectedFragment];
-    el('cd-focus-fragment').textContent = `F${selectedFragment + 1}: ${focus.text}`;
-    const cards = el('cd-fallback-cards'); cards.replaceChildren();
-    for (const scheme of ['whole', 'hybrid']) {
-      const f = codec(e, scheme).fragments[selectedFragment], card = node('article', undefined, `cd-codec-card cd-${scheme}`);
-      card.append(node('h4', schemeNames[scheme]), node('strong', modeText(f), f.lookup_id === null ? 'cd-miss' : 'cd-hit'));
-      if (f.lookup_id !== null) {
-        card.append(node('p', 'Complete-string match: emit this one ID. Fallback is skipped; this fragment is locked.'));
-      } else {
-        card.append(node('p', scheme === 'whole'
-          ? 'No complete entry. Encode with the existing base tokenizer; bytes are a lossless last resort.'
-          : 'No complete entry. Start from the base-token sequence and apply the frozen BPE merges within this fragment only.'));
-        if (scheme === 'hybrid') {
-          const details = node('details'), summary = node('summary', `Base input: ${f.base_ids.length} tokens → ${f.ids.length} output tokens`);
-          details.append(summary, node('code', f.base_tokens.map((t, j) => `${t} [${f.base_ids[j]}]`).join(' | '), 'cd-base-input'));
-          card.append(details);
-        }
-      }
-      const tokens = node('div', undefined, 'cd-token-list');
-      f.ids.forEach(id => tokens.append(chip(scheme, id, selectedFragment)));
-      card.append(tokens, node('p', `${f.ids.length} model token${f.ids.length === 1 ? '' : 's'} · concatenated payloads equal the fragment exactly`, 'cd-check'));
-      cards.append(card);
-    }
-    const old = codec(e, 'whole').fragments[selectedFragment], mixed = codec(e, 'hybrid').fragments[selectedFragment];
-    el('cd-fallback-note').textContent = old.lookup_id !== null && mixed.lookup_id === null
-      ? 'Why did a complete fragment become several tokens? Hybrid reserves fewer slots for complete fragments, so this string is absent from its complete-fragment dictionary. The old scheme’s hit is not a hit in the new dictionary. Successful hits within either scheme are never split.'
-      : 'The original SAFE fragment remains intact when these text payloads are concatenated. A text token need not be an independently valid chemical motif or SMILES string. Compression and chemical meaningfulness are separate properties.';
-  }
-  function renderSequences(e) {
-    const panel = el('cd-sequences'); panel.replaceChildren();
-    for (const scheme of ['whole', 'hybrid']) {
-      const c = codec(e, scheme), card = node('article', undefined, `cd-codec-card cd-${scheme}`);
-      card.append(node('h4', `${schemeNames[scheme]} · ${c.length} tokens`),
-        node('p', `${c.content_length} fragment-content tokens + ${e.fragments.length - 1} dot tokens (ID ${c.dot_id})`));
-      const list = node('div', undefined, 'cd-token-list');
-      c.fragments.forEach((f, i) => {
-        if (i) list.append(chip(scheme, c.dot_id, null));
-        const group = node('span', undefined, 'cd-token-group');
-        group.style.borderBottomColor = color(i);
-        group.setAttribute('aria-label', `Fragment F${i + 1}`);
-        f.ids.forEach(id => group.append(chip(scheme, id, i)));
-        list.append(group);
-      });
-      const raw = node('details'); raw.append(node('summary', 'Ordered ID array'), node('code', JSON.stringify(c.ids), 'cd-base-input'));
-      card.append(list, raw); panel.append(card);
-    }
-  }
-  function renderInspector() {
-    const box = el('cd-token-inspector'); box.replaceChildren();
-    if (!selectedToken) {
-      box.append(node('p', 'Select any output chip to inspect its actual vocabulary ID, decoded payload and entry type. Text substrings can contain syntax such as “1)”.'));
-      return;
-    }
-    const {scheme, id} = selectedToken, entry = dictionary(scheme)[id];
-    box.append(node('strong', `${schemeNames[scheme]} · K=${Number(budget).toLocaleString()} · ID ${id}`),
-      node('code', entry.text, 'cd-payload'),
-      node('p', `Entry type: ${entry.kind}. UTF-8 payload (hex): ${entry.hex}. This ID is loaded from the frozen vocabulary, not assigned by the page.`));
-    if (entry.kind === 'substring') box.append(node('p', 'This is a learned text substring. Its dictionary membership does not imply that it is an independent chemical motif.', 'cd-miss'));
-  }
-  function renderDecoders(e) {
-    const panel = el('cd-reconstruction'); panel.replaceChildren();
-    for (const scheme of ['whole', 'hybrid']) {
-      const c = codec(e, scheme), n = Math.min(decodeCounts[scheme], c.ids.length);
-      const restored = c.ids.slice(0, n).map(id => dictionary(scheme)[id].text).join('');
-      const complete = n === c.ids.length, equal = complete && restored === e.safe;
-      const card = node('article', undefined, `cd-codec-card cd-${scheme}`);
-      card.append(node('h4', schemeNames[scheme]), node('p', `${n} / ${c.ids.length} token payloads restored`));
-      const controls = node('div', undefined, 'cd-decode-controls');
-      const next = node('button', 'Reveal next token'), all = node('button', 'Restore all'), reset = node('button', 'Reset');
-      next.type = all.type = reset.type = 'button';
-      next.disabled = all.disabled = complete;
-      next.dataset.decodeNext = scheme; all.dataset.decodeAll = scheme; reset.dataset.decodeReset = scheme;
-      next.addEventListener('click', () => {pause(); decodeCounts[scheme] = n + 1; renderDecoders(e); root.querySelector(`[data-decode-${n + 1 === c.ids.length ? 'reset' : 'next'}="${scheme}"]`).focus({preventScroll:true});});
-      all.addEventListener('click', () => {pause(); decodeCounts[scheme] = c.ids.length; renderDecoders(e); root.querySelector(`[data-decode-reset="${scheme}"]`).focus({preventScroll:true});});
-      reset.addEventListener('click', () => {pause(); decodeCounts[scheme] = 0; renderDecoders(e); root.querySelector(`[data-decode-reset="${scheme}"]`).focus({preventScroll:true});});
-      controls.append(next, all, reset); card.append(controls);
-      const slider = node('input'); slider.type = 'range'; slider.min = 0; slider.max = c.ids.length; slider.value = n;
-      slider.setAttribute('aria-label', `${schemeNames[scheme]} restored token count`);
-      slider.dataset.decodeSlider = scheme;
-      slider.addEventListener('change', event => {pause(); decodeCounts[scheme] = Number(event.target.value); renderDecoders(e); el('cd-reconstruction').querySelector(`[data-decode-slider="${scheme}"]`).focus({preventScroll:true});});
-      card.append(slider);
-      card.append(node('p', n ? `Last lookup: ID ${c.ids[n - 1]} → ${JSON.stringify(dictionary(scheme)[c.ids[n - 1]].text)}` : 'Start with the ordered IDs and the shared vocabulary.', 'cd-last-lookup'));
-      const preview = node('code', restored || '(no payloads restored yet)', 'cd-restored');
-      preview.dataset.restored = scheme; card.append(preview);
-      const result = node('p', complete ? (equal ? '✓ Exact SAFE string restored from IDs' : 'ERROR: SAFE text differs') : 'Partial text may contain unmatched labels or brackets. Molecular parsing waits for the complete sequence.', equal ? 'cd-check' : 'subtle');
-      result.dataset.decodeResult = scheme; card.append(result);
-      if (equal) card.append(node('p', '✓ Offline check: SAFE.decode(restored text) matches the source canonical isomeric molecule.'), node('code', c.decoded_smiles, 'cd-base-input'));
-      panel.append(card);
-    }
-  }
   function render() {
     const focused = document.activeElement;
     const restore = focused?.dataset.tokenKey !== undefined ? `[data-token-key="${focused.dataset.tokenKey}"]`
@@ -328,7 +178,7 @@
     const e = sample();
     el('cd-badge').textContent = `${e.bpe_groups.length} GraphBPE motifs → ${e.fragments.length} SAFE fragments · ${e.exact ? 'boundaries preserved' : 'boundaries changed'}`;
     el('cd-badge').classList.toggle('cd-changed', !e.exact);
-    el('cd-source').textContent = `${e.chembl_id} · original input record ${e.record_index.toLocaleString()} · ${Number(budget).toLocaleString()} entries per scheme · ${codec(e, 'whole').length} → ${codec(e, 'hybrid').length} text tokens · ${e.exact ? 'boundary-preserving example' : 'stress example, excluded from the 44,329-record statistics'}`;
+    el('cd-source').textContent = `${e.chembl_id} · original input record ${e.record_index.toLocaleString()} · ${e.exact ? 'boundary-preserving example' : 'stress example, excluded from the 44,329-record statistics'}`;
     el('cd-input').textContent = e.smiles;
     el('cd-step-title').textContent = `${step + 1}. ${labels[step]}`;
     el('cd-step-copy').textContent = descriptions(e)[step];
@@ -339,28 +189,9 @@
       button.setAttribute('aria-pressed', String(i === step));
       button.classList.toggle('cd-complete', i < step);
     });
-    const context = el('cd-context');
-    // The active operation comes first. Repeated graph/SAFE context is optional
-    // during lookup, fallback and reconstruction, rather than masking the change.
-    if (context.dataset.stage !== String(step)) {
-      context.open = step < 4;
-      context.dataset.stage = String(step);
-    }
-    el('cd-context-summary').hidden = step < 4;
-    const content = el('cd-content');
-    content.insertBefore(context, step < 4 ? el('cd-codec-workbench') : root.querySelector('.cd-evidence'));
     el('cd-safe-panel').hidden = step < 3;
     el('cd-partition-panel').hidden = step >= 3;
-    el('cd-codec-workbench').hidden = step < 4;
-    el('cd-lookup').hidden = step !== 4;
-    el('cd-fallback').hidden = step !== 5;
-    el('cd-sequence-panel').hidden = step !== 6;
-    el('cd-decode-panel').hidden = step !== 7;
-    el('cd-token-inspector').hidden = step < 5 || step > 6;
     el('cd-pairs').hidden = el('cd-pair-detail').hidden = el('cd-connection-flow').hidden = step !== 3;
-    root.classList.toggle('cd-codec-step', step >= 4);
-    const meta = data.codec_metadata.budgets[budget];
-    el('cd-budget-note').textContent = `Each dictionary has ${Number(budget).toLocaleString()} IDs, including ${meta.base_entries.toLocaleString()} base/fallback entries. Whole scheme: ${meta.whole_entries.toLocaleString()} added complete fragments. Hybrid: ${meta.hybrid_whole_entries.toLocaleString()} complete fragments + ${meta.hybrid_substring_entries.toLocaleString()} substring entries. Shared IDs are interpreted only within their own dictionary.`;
     const groups = el('cd-group-list'); groups.replaceChildren();
     const sourceGroups = step < 2 ? e.bpe_groups : e.fragments.map(f => f.atoms);
     sourceGroups.forEach((g, i) => {
@@ -377,23 +208,15 @@
       : 'Final fragments, in SAFE serialization order. Membership is checked as atom sets, not by matching fragment order.';
     el('cd-stereo-note').hidden = e.exact || step < 2;
     el('cd-stereo-note').textContent = 'Retained: C11=C12 (STEREOE). The /C=C/ substring remains inside F1. The slashes on neighboring single bonds encode the double-bond geometry. This is the current repository’s stereo-protection policy.';
-    renderText(e); renderLookup(e); renderFallback(e); renderSequences(e); renderInspector(); renderDecoders(e); renderGraph(e);
+    renderText(e); renderGraph(e);
     if (restore) [...root.querySelectorAll(restore)].find(n => n.getClientRects().length)?.focus({preventScroll: true});
   }
   async function init() {
     try {
-      const response = await fetch('connection-demo.json?v=20261109-codecs');
+      const response = await fetch('connection-demo.json?v=20261110-graph-only');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       data = await response.json();
-      if (data.schema_version !== 2) throw new Error('Outdated walkthrough data');
-      // Validate the exported IDs, payloads and exact reconstructions before showing them.
-      for (const e of data.examples) for (const [k, schemes] of Object.entries(e.codecs)) {
-        for (const [scheme, c] of Object.entries(schemes)) {
-          const dict = data.codec_metadata.budgets[k].dictionary[scheme];
-          if (c.length !== c.ids.length || c.ids.some(id => !dict[id]) || c.ids.map(id => dict[id].text).join('') !== e.safe) throw new Error('Invalid codec trace');
-          if (c.fragments.some(f => f.lookup_id !== null && (f.ids.length !== 1 || f.ids[0] !== f.lookup_id))) throw new Error('Complete hit was split');
-        }
-      }
+      if (data.schema_version !== 3) throw new Error('Outdated molecular trace data');
       selectedPair = sample().pairs.find(p => p.cross_fragment)?.id ?? null;
       el('cd-example').replaceChildren();
       data.examples.forEach((e, i) => {
@@ -407,18 +230,14 @@
         el('cd-steps').append(button);
       });
       el('cd-example').addEventListener('change', event => {
-        pause(); exampleIndex = Number(event.target.value); selectedFragment = 0; selectedToken = null;
-        decodeCounts = {whole: 0, hybrid: 0};
+        pause(); exampleIndex = Number(event.target.value); selectedFragment = 0;
         selectedPair = step < 4 ? sample().pairs.find(p => p.cross_fragment)?.id ?? null : null; render();
-      });
-      el('cd-budget').addEventListener('change', event => {
-        pause(); budget = event.target.value; selectedToken = null; decodeCounts = {whole: 0, hybrid: 0}; render();
       });
       el('cd-prev').addEventListener('click', () => {pause(); setStep(step - 1);});
       el('cd-next').addEventListener('click', () => {pause(); setStep(step + 1);});
       el('cd-play').addEventListener('click', () => {
         if (timer) {pause(); return;}
-        if (step === labels.length - 1) {decodeCounts = {whole: 0, hybrid: 0}; setStep(0);}
+        if (step === labels.length - 1) setStep(0);
         el('cd-play').textContent = 'Pause'; el('cd-play').setAttribute('aria-pressed', 'true');
         timer = setInterval(() => setStep(step + 1), 5000);
       });

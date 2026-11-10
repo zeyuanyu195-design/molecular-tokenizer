@@ -1,11 +1,12 @@
 {
   "records": 44329,
-  "scope": "Same boundary-preserving records; includes TRAIN, VALIDATION and TEST. Frozen prior results, no new tokenization run.",
+  "scope": "Same 44,329 boundary-preserving records; includes TRAIN, VALIDATION and TEST. Current A/B and reference tokenizers.",
   "note": "DemoDiff is a node-count reference with connectivity stored in extra edge/attachment tables. Other rows count text including connectivity syntax. Vocabulary budgets differ: the official SAFE checkpoint has 1,880 entries; our schemes have 16k/32k.",
   "sources": {
     "text_summary": "outputs/text_tokenizer_comparison_20261109/summary.json",
     "demodiff": "Previously verified original-SMILES DemoDiff / GraphBPE node-count agreement on the 44,329 exact-boundary records: total 372,957.",
-    "official_safe_commit": "d162d23e3e8c8a77b54c559e88a35d08b3b1d1b5"
+    "official_safe_commit": "d162d23e3e8c8a77b54c559e88a35d08b3b1d1b5",
+    "structural": "structural-comparison.json"
   },
   "methods": [
     {
@@ -39,44 +40,44 @@
       "connectivity": "Included in the text token sequence"
     },
     {
-      "key": "whole_16000",
-      "label": "Whole-fragment scheme · 16k",
-      "label_zh": "完整片段方案 · 16k",
-      "color": "#B57340",
-      "records": 44329,
-      "total": 1555440,
-      "mean": 35.088542489115476,
-      "connectivity": "Included in the text token sequence"
-    },
-    {
-      "key": "hybrid_16000",
-      "label": "Hybrid scheme · 16k",
-      "label_zh": "混合方案 · 16k",
+      "key": "A_16000",
+      "label": "A · Complete syntax blocks · 16k",
+      "label_zh": "A · 完整语法块 · 16k",
       "color": "#24765B",
       "records": 44329,
-      "total": 883006,
-      "mean": 19.91937557806402,
-      "connectivity": "Included in the text token sequence"
+      "total": 1194072,
+      "mean": 26.93658778677615,
+      "connectivity": "Included in the sequence, together with fallback block markers"
     },
     {
-      "key": "whole_32000",
-      "label": "Whole-fragment scheme · 32k",
-      "label_zh": "完整片段方案 · 32k",
-      "color": "#B57340",
+      "key": "B_16000",
+      "label": "B · Protected structures · 16k",
+      "label_zh": "B · 受保护子结构 · 16k",
+      "color": "#68699C",
       "records": 44329,
-      "total": 1214713,
-      "mean": 27.402219765841775,
-      "connectivity": "Included in the text token sequence"
+      "total": 1558697,
+      "mean": 35.16201583613436,
+      "connectivity": "Included in the sequence, together with fallback block markers"
     },
     {
-      "key": "hybrid_32000",
-      "label": "Hybrid scheme · 32k",
-      "label_zh": "混合方案 · 32k",
+      "key": "A_32000",
+      "label": "A · Complete syntax blocks · 32k",
+      "label_zh": "A · 完整语法块 · 32k",
       "color": "#24765B",
       "records": 44329,
-      "total": 806065,
-      "mean": 18.18369464684518,
-      "connectivity": "Included in the text token sequence"
+      "total": 1103396,
+      "mean": 24.89106454014302,
+      "connectivity": "Included in the sequence, together with fallback block markers"
+    },
+    {
+      "key": "B_32000",
+      "label": "B · Protected structures · 32k",
+      "label_zh": "B · 受保护子结构 · 32k",
+      "color": "#68699C",
+      "records": 44329,
+      "total": 1270618,
+      "mean": 28.66335807259356,
+      "connectivity": "Included in the sequence, together with fallback block markers"
     }
   ]
 }
