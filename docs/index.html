@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Molecular tokenization · Results explorer</title>
-  <meta name="description" content="Compare SAFE tokenization using complete syntax blocks (A) and protected structures (B): 44,329 molecules, pseudocode, and real CHEMBL45183 token IDs.">
+  <meta name="description" content="Explore motif variants and connection-label sharing across 899,836 boundary-preserving ChEMBL 35 molecules, alongside earlier SAFE tokenization experiments.">
+  <link rel="stylesheet" href="motif-census.css?v=20261112"><script src="motif-census.js?v=20261112" defer></script>
   <link rel="stylesheet" href="results.css?v=20261103-histograms"><script src="results.js?v=20261103-pseudocode" defer></script>
   <link rel="stylesheet" href="connection-demo.css?v=20261109-stepfix"><script src="connection-demo.js?v=20261110-graph-only" defer></script>
   <link rel="stylesheet" href="vocabulary.css?v=20261109-stepfix">
@@ -11,16 +12,66 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
-<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#structural-comparison">A / B results</a><a href="#sc-process">Process & code</a><a href="#sc-example">Compare token IDs</a><a href="#connection-demo">SAFE walkthrough</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
+<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#motif-census">899k census</a><a href="#structural-comparison">A / B results</a><a href="#sc-example">Compare token IDs</a><a href="#connection-demo">SAFE walkthrough</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
 <main id="main">
   <section class="intro">
-    <div class="eyebrow">UPDATED 10 NOV 2026 / 44,329 BOUNDARY-PRESERVING RECORDS</div>
-    <h1>Keep the structure.<br><span>Measure the trade-off.</span></h1>
-    <p class="lead">Keep the original whole-fragment 16k vocabulary. Append 4k or 8k entries using complete syntax blocks (A) or protected structures (B). Inspect the actual IDs and lossless SAFE reconstruction.</p>
-    <div class="sample-flow"><div><strong>44,329</strong><span>boundary-preserving records only</span></div><div><strong>16k + 4k / 8k</strong><span>20k / 24k total model entries</span></div><div><strong>100%</strong><span>exact SAFE reconstruction in this cohort</span></div></div>
+    <div class="eyebrow">UPDATED 12 NOV 2026 / ChEMBL 35 MOTIF CENSUS</div>
+    <h1>Same motif.<br><span>Different connection labels.</span></h1>
+    <p class="lead">How many SAFE variants can one motif have? How often do two molecules share an exactly labelled fragment? Explore verified results from 899,836 molecules with unchanged NPE boundaries.</p>
+    <p class="subtle">The earlier <a href="#structural-comparison">44,329-molecule A/B experiments</a> and <a href="#connection-demo">SAFE walkthrough</a> remain below, with their original cohorts and vocabularies.</p>
+  </section>
+  <section id="motif-census" aria-labelledby="mc-title">
+    <div class="eyebrow">NEW ANALYSIS / EXACT BOUNDARIES · VERIFIED RECONSTRUCTION</div>
+    <h2 id="mc-title">Connection labels change vocabulary reuse.</h2>
+    <p class="mc-summary">NPE was trained on the first 1,000,000 valid, deduplicated ChEMBL 35 molecules, then used for graph partitioning and SAFE serialization. This analysis selects <strong>only the 899,836 molecules with identical final SAFE and NPE boundaries and successful strict molecular reconstruction</strong>.</p>
+    <div class="mc-metrics"><div class="mc-metric"><strong>899,836</strong><span>molecules in every comparison below</span></div><div class="mc-metric"><strong>3,000</strong><span>trained NPE vocabulary entries · 2,852 IDs observed in this cohort</span></div><div class="mc-metric"><strong>429,934</strong><span>distinct complete SAFE fragment strings with external connection labels</span></div></div>
+    <p><strong>7,603,382 fragment occurrences · 8.449742 fragments per molecule.</strong> These are whole-fragment counts, not A/B text-token lengths. This cohort is part of the NPE training corpus; these are descriptive statistics, not held-out coverage or generation performance.</p>
+    <details><summary>Why 3,000 vocabulary entries, 2,852 observed IDs, and 2,740 analysis groups?</summary><div class="detail-body">
+      <p>The trained vocabulary still has <strong>3,000 original NPE IDs</strong>. Of these, <strong>2,852</strong> occur in this selected cohort. For the variant census only, each observed motif SMILES is parsed and written as canonical isomeric SMILES; equal keys are grouped into <strong>2,740 canonical analysis groups</strong>. This does not retrain, shrink or renumber the NPE vocabulary.</p>
+      <p>There are 2,631 groups containing one observed ID, 106 groups containing two IDs, and 3 groups containing three IDs: 2,631 + 106 × 2 + 3 × 3 = 2,852 IDs, but 2,631 + 106 + 3 = 2,740 groups.</p>
+      <div class="table-scroll"><table class="mc-table"><caption>Actual NPE ring-vocabulary entries, before SAFE serialization</caption><thead><tr><th>Original NPE ID</th><th>Original motif SMILES</th><th>Canonical analysis key</th><th>Occurrences in this cohort</th></tr></thead><tbody><tr><td>2573</td><td><code>C1CCCO1</code></td><td><code>C1CCOC1</code></td><td>123</td></tr><tr><td>2575</td><td><code>C1CCOC1</code></td><td><code>C1CCOC1</code></td><td>5,104</td></tr></tbody></table></div>
+      <p><strong>These are motif SMILES, not SAFE connection variants.</strong> Each pair of <code>1</code> labels closes a ring inside the motif. In contrast, the two labels in <code>CC1.O1</code> connect atoms across two SAFE fragments. NPE training happens before SAFE serialization.</p>
+      <p>The grouping describes standalone motif keys; it does not assert that attachment context or stereochemistry in the complete molecules is interchangeable. All per-motif variant numbers below are explicitly reported per canonical analysis group, not per original ID.</p>
+    </div></details>
+    <p id="mc-loading" role="status">Loading verified variant and sharing statistics…</p>
+    <div id="mc-content" hidden>
+      <div class="mc-block"><h3>Count variants at three levels.</h3>
+        <div class="table-scroll"><table class="mc-table"><caption>Exact census · distinct types across the same 899,836 molecules</caption><thead><tr><th>Representation / comparison key</th><th>All fragments</th><th>Fragments with external connections</th></tr></thead><tbody id="mc-count-body"></tbody></table></div>
+        <p id="mc-variants"></p>
+        <details><summary>What is normalized, and what information remains?</summary><div class="detail-body"><p><strong>Exact labelled SAFE strings:</strong> retain the literal digits, atom order and all syntax. <strong>Label-normalized patterns:</strong> rename internal ring pairs and external connection labels separately, while retaining lexical traversal. <strong>Local connection graphs:</strong> identify fragments in the complete molecular graph, replace each external neighbour with an unnumbered dummy attachment atom, and write canonical SMILES. These retain attachment positions, bond types and locally represented atom/stereo attributes, while discarding global pairing numbers and outside-neighbour identities.</p><p>Local connection graphs are diagnostic keys, <strong>not a lossless replacement encoding</strong>. Different variants can also reflect charge, isotope or stereochemistry. The original NPE single-atom keys inherit upstream element-only semantics. There are 55,056 distinct local connection graphs but 55,058 motif–connection-graph pairs because some local graphs occur under more than one NPE-compatible parent key.</p></div></details>
+      </div>
+      <div class="mc-block"><h3>Inspect a canonical motif group.</h3><p>Search all 2,740 analysis groups. Original NPE IDs remain visible; variant counts combine IDs only when they share the canonical analysis key.</p>
+        <div class="mc-controls"><label class="mc-search">Search motif SMILES or original NPE ID<input id="mc-search" type="search" placeholder="For example: CCO or 2573" autocomplete="off"></label><label class="mc-search">Canonical analysis group<select id="mc-motif"></select></label></div><p id="mc-match-count" class="mc-footnote" role="status"></p>
+        <div id="mc-explorer-detail" class="mc-explorer"><span class="mc-tag">ANALYSIS GROUP · NOT A NEW TOKEN</span><code id="mc-key" class="mc-key"></code><p id="mc-group-info" class="mc-footnote"></p><div id="mc-id-list" class="mc-id-list"></div><div class="mc-values"><div><strong id="mc-literal"></strong><span>literal SAFE variants</span></div><div><strong id="mc-normalized"></strong><span>label-normalized patterns</span></div><div><strong id="mc-ports"></strong><span>local connection graphs</span></div></div><p id="mc-id-note" class="mc-footnote"></p></div>
+      </div>
+      <div class="mc-block"><h3>Different numbers can describe the same local connection.</h3><div class="mc-examples">
+        <div class="mc-example"><span class="label">SAME LOCAL CONNECTION · REAL RECORDS</span><p>CHEMBL440060</p><code>[C@H]%18(C)O</code><p>CHEMBL440249</p><code>[C@H]%10(C)O</code><p>Both have canonical local connection key <code>*[C@@H](C)O</code>. They are distinct literal SAFE entries, but the local attachment pattern is identical.</p></div>
+        <div class="mc-example"><span class="label">DIFFERENT ATTACHMENT POSITION</span><p>CHEMBL501101</p><code>C2CO</code><p>Its local connection key is <code>*CCO</code>. The external bond attaches to the end carbon rather than the middle carbon of the CCO motif. The <code>*</code> is a dummy neighbour for analysis, not a newly generated SAFE token.</p></div>
+      </div></div>
+      <div class="mc-block"><div class="section-head"><h3>Do two different molecules share a labelled fragment?</h3><label class="select-label">Fragment size<select id="mc-size"><option value="all">All sizes, including single atoms</option><option value="multi">At least two real atoms</option></select></label></div>
+        <p>Estimates from <strong>1,000,000 uniformly sampled pairs of distinct molecules</strong>, using the same pairs for every comparison (seed 20261112). Only fragments with an external connection qualify. Intervals quantify Monte Carlo uncertainty within this fixed corpus.</p>
+        <p id="mc-size-note" class="mc-footnote"></p><div id="mc-bars" aria-hidden="true"></div><p class="mc-footnote">Bar scale: 0–25%, fixed for both size settings. Numerical values and 95% intervals are in the accessible table below.</p>
+        <div class="table-scroll"><table class="mc-table"><caption>Probability of sharing at least one qualifying fragment · not the expected number of shared fragments</caption><thead><tr><th>Equality criterion</th><th>Estimated probability</th><th>95% Wilson interval</th></tr></thead><tbody id="mc-share-body"></tbody></table></div>
+        <aside class="note"><strong>Reuse is not the same as random-pair overlap.</strong> Of the 429,934 labelled string types, 241,986 occur in at least two molecules and 187,948 occur in only one. Two random molecules can still have a low chance of sharing exactly the same numbered string.</aside>
+        <details><summary>Shared real fragments and the probability definition</summary><div class="detail-body"><div class="table-scroll"><table class="mc-table"><caption>Frequently shared multiatom fragments with external labels</caption><thead><tr><th>Exact SAFE fragment</th><th>Distinct molecules</th><th>Single-molecule prevalence</th><th>Example molecules</th></tr></thead><tbody id="mc-shared-examples"></tbody></table></div><p>For one fragment type occurring in <code>df</code> different molecules, the exact probability that both members of a random distinct pair contain it is <code>df × (df − 1) / [N × (N − 1)]</code>. Summing across types gives the expected number of shared distinct types, not the probability of sharing at least one. The latter is estimated using sampled molecule pairs. Identical local labels do not require the same external neighbouring motif.</p></div></details>
+      </div>
+      <details class="mc-block"><summary>Vocabulary growth as the analyzed corpus gets larger</summary><div class="detail-body"><p>Prefixes of the selected cohort in source order; this is not a randomized scaling experiment.</p><div class="table-scroll"><table class="mc-growth"><caption>Only fragments with external connections</caption><thead><tr><th>Molecules</th><th>Exact labelled SAFE strings</th><th>Local connection graphs</th></tr></thead><tbody id="mc-growth-body"></tbody></table></div></div></details>
+      <details><summary>Analysis procedure and validation</summary><div class="detail-body"><pre>SELECT records WHERE pipeline_ok AND strict_roundtrip_ok
+                     AND SAFE_partition == saved_NPE_partition
+FOR each selected molecule:
+    parse the COMPLETE SAFE string and track each dot-delimited fragment
+    extract motif keys; verify their multiset against saved NPE IDs
+    collect exact strings, label-normalized patterns and local connection graphs
+    count each type once per molecule for document-frequency statistics
+GROUP motif keys by canonical isomeric SMILES for diagnostic variant counts
+SAMPLE 1,000,000 uniform pairs of DISTINCT molecules (fixed seed)
+COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,836 selected indices and original fragment frequencies were independently checked against the saved outputs. Saved NPE-ID counts agree with canonical-group occurrence counts; no extraction errors or motif-multiset mismatches occurred. Ring-label reuse, fragment order, attachment positions, bond types, charge, isotope and local stereo behavior were tested. This analysis does not rerun NPE merges or learn a new vocabulary.</p><p>Actual total trained vocabulary: 3,000. Observed IDs: 2,852. Canonical analysis groups: 2,740. The grouping operation is separate from the tokenizer and is not a vocabulary-size optimization.</p></div></details>
+      <div class="source-links"><a href="motif-census.json">Verified results & all analysis groups (JSON)</a><a href="motif-census-groups.csv">Per-group statistics (CSV)</a><a href="motif-census-report.txt">Detailed report (Chinese)</a></div>
+    </div>
+    <noscript><p>899,836 molecules; 3,000 trained NPE entries; 2,852 observed IDs; 429,934 labelled SAFE string types. Exact labelled-fragment overlap: 2.4837%, or 0.2919% for multiatom fragments. Read the <a href="motif-census-report.txt">full report</a> or enable JavaScript to explore groups.</p></noscript>
   </section>
   <section id="structural-comparison" aria-labelledby="sc-title">
-    <div class="eyebrow">CURRENT EXPERIMENT / FROZEN 16k + STRUCTURAL ENTRIES</div>
+    <div class="eyebrow">EARLIER EXPERIMENT / 44,329 MOLECULES / FROZEN 16k + STRUCTURAL ENTRIES</div>
     <h2 id="sc-title">Keep complete hits. Compress the misses.</h2>
     <p class="sc-intro">A keeps complete atoms, connection labels and branches together. B additionally protects rings, amides and carboxylic-acid / ester groups inside each original SAFE fragment. Both retain the exact SAFE string and use a shortest-path search for encoding.</p>
     <p id="sc-loading" role="status">Loading verified A / B statistics and real dictionary IDs…</p>
@@ -128,6 +179,6 @@
   </section>
   <section id="scope"><div class="eyebrow">04 / SCOPE & EVIDENCE</div><h2>What these results establish.</h2><div class="scope-grid"><div><h3>Implemented and checked</h3><p>GraphBPE segmentation, SAFE serialization, molecular reconstruction and fixed-boundary motif lookup. The three examples have verified round trips.</p><p>SAFE dots separate fragments. Paired labels, their attachment positions and bond symbols specify cross-fragment connectivity.</p></div><div><h3>Remaining work</h3><p>A reversible model-token sequence decoded from motif IDs alone is not implemented. Reconstruction here retains the complete SAFE string. The full DemoDiff batch has not undergone a complete molecular round-trip check.</p><p>No additional frequency-based fragment vocabulary is trained in these results.</p></div></div><div class="source-links"><a href="results.json" download>Download results & examples (JSON) ↓</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer#readme">Read the report ↗</a><a href="https://github.com/liugangcode/DemoDiff/blob/0acb85ef446c175a3e3a60bbad43de97d97ca76f/downstream/graphbpe.py">DemoDiff source ↗</a></div><details><summary>Source fingerprints</summary><div class="detail-body" id="fingerprints"></div></details></section>
 </details>
-</main><footer><span>Molecular tokenization / Experimental results</span><span>44,329 boundary-preserving records · Complete reversible SAFE encoding</span></footer>
+</main><footer><span>Molecular tokenization / Experimental results</span><span>899,836-molecule census · Earlier 44,329-molecule codec experiments</span></footer>
 </body></html>
 
