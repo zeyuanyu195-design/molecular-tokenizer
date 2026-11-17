@@ -12,13 +12,29 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
-<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#motif-census">899k census</a><a href="#structural-comparison">A / B results</a><a href="#sc-example">Compare token IDs</a><a href="#connection-demo">SAFE walkthrough</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
+<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#mean-comparison">Token lengths</a><a href="#motif-census">899k census</a><a href="#structural-comparison">A / B results</a><a href="#sc-example">Compare token IDs</a><a href="#connection-demo">SAFE walkthrough</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
 <main id="main">
   <section class="intro">
-    <div class="eyebrow">UPDATED 12 NOV 2026 / ChEMBL 35 MOTIF CENSUS</div>
+    <div class="eyebrow">UPDATED 17 NOV 2026 / ChEMBL 35 RESULTS</div>
     <h1>Same motif.<br><span>Different connection labels.</span></h1>
     <p class="lead">How many SAFE variants can one motif have? How often do two molecules share an exactly labelled fragment? Explore verified results from 899,836 molecules with unchanged NPE boundaries.</p>
-    <p class="subtle">The earlier <a href="#structural-comparison">44,329-molecule A/B experiments</a> and <a href="#connection-demo">SAFE walkthrough</a> remain below, with their original cohorts and vocabularies.</p>
+    <p class="subtle">The <a href="#mean-comparison">latest token-length comparison</a> is below. The earlier <a href="#structural-comparison">44,329-molecule A/B experiments</a> and <a href="#connection-demo">SAFE walkthrough</a> remain below, with their original cohorts and vocabularies.</p>
+  </section>
+  <section id="mean-comparison" aria-labelledby="mean-title">
+    <div class="eyebrow">UPDATED 17 NOV 2026 / MEAN TOKEN LENGTH / ChEMBL 35</div>
+    <h2 id="mean-title">Token lengths on the 899,836-molecule cohort.</h2>
+    <p>Seven methods from the latest experiment. Means use the <strong>899,835 commonly encoded records</strong> from this cohort, including TRAIN, VALIDATION and TEST, without filtering by decoding success. Values are rounded to three decimal places.</p>
+    <figure class="mean-figure"><img src="figures/mean-token-lengths-899836.svg?v=20261117" width="1180" height="690" style="display:block;width:100%;height:auto" alt="Mean token lengths: Official BRICS + SAFE 63.632; Original DemoDiff* (node IDs only) 8.732; Whole-fragment scheme · 16k 42.552; A · 16k + 4k 27.410; A · 16k + 8k 26.200; B · 16k + 4k 36.711; B · 16k + 8k 35.772."><figcaption><strong>* DemoDiff counts node IDs only.</strong> Connections are stored in additional edge and attachment-position tables. Other methods include connectivity syntax in their text tokens; these lengths do not measure total storage or computational cost.</figcaption></figure>
+    <div class="table-scroll"><table id="mean-table"><caption>Average token length · latest seven-method comparison</caption><thead><tr><th scope="col">Method</th><th scope="col">Mean token length</th></tr></thead><tbody>
+<tr><th scope="row">Official BRICS + SAFE</th><td>63.632</td></tr>
+<tr><th scope="row">Original DemoDiff* (node IDs only)</th><td>8.732</td></tr>
+<tr><th scope="row">Whole-fragment scheme · 16k</th><td>42.552</td></tr>
+<tr><th scope="row">A · 16k + 4k</th><td>27.410</td></tr>
+<tr><th scope="row">A · 16k + 8k</th><td>26.200</td></tr>
+<tr><th scope="row">B · 16k + 4k</th><td>36.711</td></tr>
+<tr><th scope="row">B · 16k + 8k</th><td>35.772</td></tr>
+</tbody></table></div>
+    <p class="subtle">The whole-fragment vocabulary has 16k entries. A and B append 4k or 8k entries, giving 20k or 24k total. The official SAFE checkpoint has 1,880 entries; DemoDiff has 3,000 node entries plus its edge vocabulary. <a href="mean-comparison.json?v=20261117">Chart data (JSON)</a></p>
   </section>
   <section id="motif-census" aria-labelledby="mc-title">
     <div class="eyebrow">NEW ANALYSIS / EXACT BOUNDARIES · VERIFIED RECONSTRUCTION</div>
@@ -100,23 +116,6 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
     </div>
     <noscript><p>Mean lengths: A 24.355 / 23.470; B 30.367 / 29.634 (16k + 4k / 16k + 8k). Enable JavaScript to inspect actual token IDs.</p></noscript>
   </section>
-  <section id="mean-comparison" aria-labelledby="mean-title">
-    <div class="eyebrow">MEAN TOKEN LENGTH / SAME 44,329 RECORDS</div>
-    <h2 id="mean-title">Current schemes and reference tokenizers.</h2>
-    <p>Saved results on the same boundary-preserving records, including TRAIN, VALIDATION and TEST. Whole-fragment references use 16k/32k; current A/B freeze the 16k dictionary and add 4k/8k, giving 20k/24k total; the official SAFE checkpoint has 1,880 entries.</p>
-    <div class="table-scroll"><table id="mean-table"><caption>Mean token lengths, rounded to three decimal places</caption><thead><tr><th scope="col">Method</th><th scope="col">Mean token length</th></tr></thead><tbody>
-<tr><th scope="row">Atom-wise SMILES (incl. symbols)</th><td>49.798</td></tr>
-<tr><th scope="row">DemoDiff* (node tokens)</th><td>8.413</td></tr>
-<tr><th scope="row">Official BRICS + SAFE tokenizer</th><td>60.223</td></tr>
-<tr><th scope="row">Whole-fragment scheme · 16k</th><td>35.089</td></tr>
-<tr><th scope="row">Whole-fragment scheme · 32k</th><td>27.402</td></tr>
-<tr><th scope="row">A · 16k + 4k (20k total)</th><td>24.355</td></tr>
-<tr><th scope="row">B · 16k + 4k (20k total)</th><td>30.367</td></tr>
-<tr><th scope="row">A · 16k + 8k (24k total)</th><td>23.470</td></tr>
-<tr><th scope="row">B · 16k + 8k (24k total)</th><td>29.634</td></tr>
-</tbody></table></div>
-    <figure class="mean-figure"><img src="figures/mean-token-lengths.svg?v=20261110-append-v4" width="1100" height="770" alt="Mean token lengths on 44,329 records: Atom-wise SMILES (incl. symbols) 49.798; DemoDiff* (node tokens) 8.413; Official BRICS + SAFE tokenizer 60.223; Whole-fragment scheme · 16k 35.089; Whole-fragment scheme · 32k 27.402; A · 16k + 4k (20k total) 24.355; B · 16k + 4k (20k total) 30.367; A · 16k + 8k (24k total) 23.470; B · 16k + 8k (24k total) 29.634. DemoDiff connectivity is stored separately."><figcaption><strong>* DemoDiff counts node tokens only.</strong> Its connectivity is stored in additional edge and attachment-position information. All other rows count text tokens including connectivity syntax. These lengths do not compare total storage or computation cost.</figcaption></figure>
-  </section>
   <section id="connection-demo" aria-labelledby="cd-title">
     <div class="section-head"><div><div class="eyebrow">INTERACTIVE WALKTHROUGH / VERIFIED EXPERIMENT RECORDS</div><h2 id="cd-title">How SAFE preserves connections.</h2></div><label class="select-label">Molecule<select id="cd-example"><option value="0">CHEMBL45183 · boundaries preserved · 8 → 8</option><option value="1">CHEMBL13214 · boundaries preserved · 8 → 8</option><option value="2">CHEMBL55653 · boundaries changed · 4 → 3</option></select></label></div>
     <p>Follow the original molecular graph through GraphBPE partitioning and SAFE connection labels. For current A/B lookup, fallback, actual IDs and reconstruction, use the <a href="#sc-example">CHEMBL45183 comparison above</a>.</p>
@@ -181,4 +180,3 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
 </details>
 </main><footer><span>Molecular tokenization / Experimental results</span><span>899,836-molecule census · Earlier 44,329-molecule codec experiments</span></footer>
 </body></html>
-
