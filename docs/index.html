@@ -9,7 +9,9 @@
   <link rel="stylesheet" href="connection-demo.css?v=20261109-stepfix"><script src="connection-demo.js?v=20261110-graph-only" defer></script>
   <link rel="stylesheet" href="vocabulary.css?v=20261109-stepfix">
   <link rel="stylesheet" href="structural-comparison.css?v=20261110-append-v4"><script src="structural-comparison.js?v=20261110-append-v4" defer></script>
-  <script src="long-examples.js?v=20261118-multi" defer></script>
+  <script src="example-graphs.js?v=1" defer></script>
+  <script src="long-examples.js?v=20261118-graphs" defer></script>
+  <style>#gx-panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:12px 0}#gx-panels article{min-width:0;background:white;padding:14px;border:1px solid var(--line);border-radius:6px}#gx-panels svg{display:block;width:100%;height:auto;aspect-ratio:720/440}#gx-panels select{width:100%}#gx-panels p,#gx-protected{font-size:13px;overflow-wrap:anywhere}#gx-panels button{font:12px var(--mono);text-align:left;padding:5px;background:white;overflow-wrap:anywhere}#gx-panels li{margin:4px 0}@media(max-width:780px){#gx-panels{grid-template-columns:1fr}}</style>
   <style>#long-examples .sc-cards{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:20px}#long-examples select{max-width:100%}#long-examples .sc-card-heading strong{font-size:13px}@media(max-width:1100px){#long-examples .sc-cards{grid-template-columns:1fr}}</style>
 </head>
 <body>
@@ -100,6 +102,10 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
       <div class="sc-controls"><label class="select-label">A/B vocabulary budget<select id="lx-budget"><option value="20000">16k + 4k = 20k</option><option value="24000">16k + 8k = 24k</option></select></label><label class="select-label sc-fragment-picker">Whole molecule or original SAFE fragment<select id="lx-fragment"></select></label></div>
       <p class="subtle">Dots separate adjacent SAFE fragments. Each gold dot token carries ID 11. Choose a numbered fragment to inspect its own split.</p>
       <code id="lx-selected" class="sc-safe"></code>
+      <h3>Where do A and B split the molecular graph?</h3>
+      <label class="select-label">Boundaries to display<select id="gx-view"><option value="encoded">Actual encoded groups</option><option value="allowed">Allowed elementary blocks</option></select></label>
+      <p class="subtle">Atom numbers follow the complete SAFE string, starting at 0. Orange ticks mark bonds between groups inside a fragment. Dashed gray ticks mark bonds between SAFE fragments. A fallback frame counts as one group with multiple IDs. Select a fragment above to zoom in.</p>
+      <p id="gx-status" role="status"></p><div id="gx-panels" hidden><article id="graph-A"></article><article id="graph-B"></article></div><p id="gx-protected"></p>
       <div id="lx-cards" class="sc-cards"></div>
       <p id="lx-inspector" class="sc-inspector" role="status"></p>
       <details><summary>Complete sequences for all three methods, including dot tokens</summary><div id="lx-sequences"></div></details>
@@ -204,3 +210,4 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
 </details>
 </main><footer><span>Molecular tokenization / Experimental results</span><span>899,836-molecule census · Earlier 44,329-molecule codec experiments</span></footer>
 </body></html>
+

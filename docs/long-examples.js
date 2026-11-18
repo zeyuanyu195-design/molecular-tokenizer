@@ -22,6 +22,7 @@
   }
   function render(){
     const models=example.budgets[budget];
+    window.showExampleGraphs(example,budget,fragment);
     $('lx-summary').textContent=`${example.chembl_id} · TEST record ${example.record_index.toLocaleString()} · ${example.fragments.length} original SAFE fragments. All dictionaries were trained in the 899,836-molecule experiment. Each total includes ${example.fragments.length-1} dot tokens.`;
     $('lx-smiles').textContent=example.smiles;$('lx-safe').textContent=example.safe;
     const entire = fragment === -1;
