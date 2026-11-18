@@ -10,7 +10,7 @@ function replay(ids,dictionary,atomOrder,fragmentOrder){
   let nextAtom=0;
   for(const [fi,part] of parts.entries()){
     let atom=null,text='',order='';
-    const before=pending.slice(),atoms=[],actions=[],connections=[],branches=[];
+    const before=pending.slice(),atoms=[],actions=[],connections=[],branches=[],listSizes=[];
     for(const word of part.match(lex)){
       if(word==='{+}' || word.startsWith('{-')){
         let label;
@@ -25,6 +25,7 @@ function replay(ids,dictionary,atomOrder,fragmentOrder){
           connections.push([site.atom,atom,bond]);
           actions.push('Close rank '+rank+': join atom '+atom+' to atom '+site.atom+' by a '+({'=':'double','#':'triple'}[bond]||'single')+' bond.');
         }
+        listSizes.push(pending.length);
         text+=label<10?label:label<100?'%'+label:'%('+label+')';order='';
       }else{
         text+=word;
@@ -37,7 +38,7 @@ function replay(ids,dictionary,atomOrder,fragmentOrder){
         else order='';
       }
     }
-    output.push(text);result.push({before,after:pending.slice(),atoms,actions,connections,text:output.join('.')});
+    output.push(text);result.push({before,after:pending.slice(),atoms,actions,connections,listSizes,text:output.join('.')});
   }
   if(pending.length)throw Error('Unclosed connection');
   return result;
@@ -93,10 +94,15 @@ function row(table,cells){
 }
 function setupComparison(ex){
   const decks=[];
+  el('comparison-decks').replaceChildren();
+  el('event-molecule').textContent=ex.id;
   el('compare-source').textContent=ex.safe;
   el('compare-smiles').textContent=ex.smiles;
   ex.runs.forEach((run,side)=>{
     const frames=replay(run.ids,run.dictionary,run.atomOrder,run.order);
+    const sizes=frames.flatMap(frame=>frame.listSizes);
+    if(Math.max(0,...sizes)!==run.peak)throw Error('Pending peak mismatch');
+    el(side===0?'original-events':'reordered-events').textContent=sizes.join(' → ');
     if(frames.at(-1).text!==run.unified)throw Error('Fragment order replay mismatch');
     const panel=el('order-template').content.firstElementChild.cloneNode(true);
     const at=role=>panel.querySelector('[data-role="'+role+'"]');
@@ -128,7 +134,8 @@ function setupComparison(ex){
       drawStep(at('graph'),ex,frame);
     }
   }
-  selectFragment(3);
+  const firstPeak=decks[0].frames.findIndex(frame=>frame.listSizes.includes(ex.runs[0].peak));
+  selectFragment(ex.id==='CHEMBL43138'?3:ex.runs[0].order[Math.max(0,firstPeak)]);
 } 
 async function start(){
   const res=await fetch('data.json');if(!res.ok)throw Error(res.status);
@@ -139,11 +146,18 @@ async function start(){
   });
   data.examples.forEach((ex,i)=>el('molecule').add(new Option(ex.id+' · '+topics[i],i)));
   el('molecule').onchange=choose;el('prev').onclick=()=>{index--;render();};el('next').onclick=()=>{index++;render();};choose();
-  const response=await fetch('reorder.json');
+  const response=await fetch('reorder.json?v=order-examples');
   if(!response.ok)throw Error(response.status);
   const reordered=await response.json();
   row(el('rows'),['Relative pairing · reordered','30,001',c.mean_tokens,c.median_tokens,'50,000 / 50,000',fmt(reordered.exact)+' / 50,000']);
   row(el('stats'),['Relative pairing · reordered',reordered.stats[0].toFixed(2),reordered.stats[1],fmt(reordered.stats[2])]);
-  setupComparison(reordered.example);
+  const examples=[reordered.example,...reordered.additionalExamples];
+  const picker=el('order-molecule');
+  for(const ex of examples){
+    const [original,ordered]=ex.runs;
+    picker.add(new Option(ex.id+' · '+original.ids.length+' fragments · peak '+original.peak+' → '+ordered.peak,ex.id));
+  }
+  picker.onchange=()=>setupComparison(examples[picker.selectedIndex]);
+  picker.onchange();
 }
 start().catch(e=>el('error').textContent='Unable to load this experiment: '+e.message);
