@@ -9,10 +9,12 @@
   <link rel="stylesheet" href="connection-demo.css?v=20261109-stepfix"><script src="connection-demo.js?v=20261110-graph-only" defer></script>
   <link rel="stylesheet" href="vocabulary.css?v=20261109-stepfix">
   <link rel="stylesheet" href="structural-comparison.css?v=20261110-append-v4"><script src="structural-comparison.js?v=20261110-append-v4" defer></script>
+  <script src="long-examples.js?v=20261118" defer></script>
+  <style>#long-examples .sc-cards{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:20px}#long-examples select{max-width:100%}#long-examples .sc-card-heading strong{font-size:13px}@media(max-width:1100px){#long-examples .sc-cards{grid-template-columns:1fr}}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to results</a>
-<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#mean-comparison">Token lengths</a><a href="#motif-census">899k census</a><a href="#structural-comparison">A / B results</a><a href="#sc-example">Compare token IDs</a><a href="#connection-demo">SAFE walkthrough</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
+<header><a class="brand" href="#">Molecular <strong>tokenization</strong><span class="brand-dot"></span></a><nav aria-label="Sections"><a href="#mean-comparison">Token lengths</a><a href="#motif-census">899k census</a><a href="#structural-comparison">A / B results</a><a href="#long-examples">Compare token IDs</a><a href="#connection-demo">SAFE walkthrough</a><a href="https://github.com/zeyuanyu195-design/molecular-tokenizer">GitHub ↗</a></nav></header>
 <main id="main">
   <section class="intro">
     <div class="eyebrow">UPDATED 17 NOV 2026 / ChEMBL 35 RESULTS</div>
@@ -86,6 +88,29 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
     </div>
     <noscript><p>899,836 molecules; 3,000 trained NPE entries; 2,852 observed IDs; 429,934 labelled SAFE string types. Exact labelled-fragment overlap: 2.4837%, or 0.2919% for multiatom fragments. Read the <a href="motif-census-report.txt">full report</a> or enable JavaScript to explore groups.</p></noscript>
   </section>
+  <section id="long-examples" aria-labelledby="lx-title">
+    <div class="eyebrow">NEW EXAMPLES / 899,836-MOLECULE EXPERIMENT / ACTUAL DICTIONARY IDs</div>
+    <h2 id="lx-title">Whole fragments, A and B: inspect the differences.</h2>
+    <p>Four real TEST molecules with longer unmatched fragments. Selected to illustrate contrasting splits, not to estimate average compression. Complete molecules and original SAFE boundaries are unchanged. The whole-fragment baseline stays at 16k; A/B use 20k or 24k total entries.</p>
+    <p id="lx-loading" role="status">Loading verified examples…</p>
+    <div id="lx-content" hidden>
+      <label class="select-label">Real molecule<select id="lx-molecule"></select></label>
+      <p id="lx-summary"></p>
+      <details><summary>Original SMILES and complete SAFE string</summary><span class="label">SMILES</span><code id="lx-smiles" class="sc-safe"></code><span class="label">SAFE</span><code id="lx-safe" class="sc-safe"></code></details>
+      <div class="sc-controls"><label class="select-label">A/B vocabulary budget<select id="lx-budget"><option value="20000">16k + 4k = 20k</option><option value="24000">16k + 8k = 24k</option></select></label><label class="select-label sc-fragment-picker">Long fragments with contrasting splits<select id="lx-fragment"></select></label></div>
+      <label><input id="lx-all" type="checkbox"> Show all original fragments, including short ones</label>
+      <p class="subtle">The default list highlights longer fragments with different A/B token counts. Hidden short fragments remain part of the molecule and all totals.</p>
+      <code id="lx-selected" class="sc-safe"></code>
+      <div id="lx-cards" class="sc-cards"></div>
+      <p id="lx-inspector" class="sc-inspector" role="status"></p>
+      <details><summary>Complete sequences for all three methods, including dot tokens</summary><div id="lx-sequences"></div></details>
+      <h3>Replay actual ID → SAFE reconstruction.</h3>
+      <label class="select-label">Method<select id="lx-decode"><option value="whole">Whole-fragment · 16k</option><option value="A">Scheme A</option><option value="B">Scheme B</option></select></label>
+      <div class="sc-decode-controls"><label for="lx-range">Decoded IDs</label><input id="lx-range" type="range" min="0" max="120" value="0"><button id="lx-next" type="button">Next ID →</button><button id="lx-complete" type="button">Decode all</button></div>
+      <code id="lx-restored" class="sc-safe"></code><p id="lx-status" role="status"></p>
+      <p class="subtle">Every displayed sequence was regenerated using frozen dictionaries, matched to saved experiment IDs, and checked for exact SAFE and canonical isomeric molecular reconstruction. A/B share the frozen first 16k IDs; appended IDs may differ between schemes. A fallback block can contain multiple model tokens. <a href="long-examples.json?v=20261118">Examples, dictionary excerpts and vocabulary fingerprints (JSON)</a></p>
+    </div>
+  </section>
   <section id="structural-comparison" aria-labelledby="sc-title">
     <div class="eyebrow">EARLIER EXPERIMENT / 44,329 MOLECULES / FROZEN 16k + STRUCTURAL ENTRIES</div>
     <h2 id="sc-title">Keep complete hits. Compress the misses.</h2>
@@ -102,7 +127,7 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
         <div id="sc-flow" class="sc-flow"></div>
         <div id="sc-code-panel" class="code-panel"><div class="code-toolbar"><div role="group" aria-label="Structural algorithm function"><button type="button" data-sc-function="train" aria-pressed="false">train</button><button type="button" data-sc-function="encode" aria-pressed="true">encode</button><button type="button" data-sc-function="decode" aria-pressed="false">decode</button></div><span>PSEUDOCODE</span></div><pre><code id="sc-code"></code></pre></div>
       </div>
-      <div id="sc-example" class="sc-subsection">
+      <div id="sc-example" class="sc-subsection" hidden>
         <div class="eyebrow">CHEMBL45183 / SAME SAFE, TWO SCHEMES</div><h3>Compare the actual splits and IDs.</h3>
         <p id="sc-example-summary"></p><code id="sc-safe" class="sc-safe"></code>
         <div class="sc-controls"><label class="select-label">Vocabulary budget<select id="sc-budget"><option value="20000">16k + 4k = 20,000 entries</option><option value="24000">16k + 8k = 24,000 entries</option></select></label><label class="select-label sc-fragment-picker">Original SAFE fragment<select id="sc-fragment"></select></label></div>
@@ -118,7 +143,7 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
   </section>
   <section id="connection-demo" aria-labelledby="cd-title">
     <div class="section-head"><div><div class="eyebrow">INTERACTIVE WALKTHROUGH / VERIFIED EXPERIMENT RECORDS</div><h2 id="cd-title">How SAFE preserves connections.</h2></div><label class="select-label">Molecule<select id="cd-example"><option value="0">CHEMBL45183 · boundaries preserved · 8 → 8</option><option value="1">CHEMBL13214 · boundaries preserved · 8 → 8</option><option value="2">CHEMBL55653 · boundaries changed · 4 → 3</option></select></label></div>
-    <p>Follow the original molecular graph through GraphBPE partitioning and SAFE connection labels. For current A/B lookup, fallback, actual IDs and reconstruction, use the <a href="#sc-example">CHEMBL45183 comparison above</a>.</p>
+    <p>Follow the original molecular graph through GraphBPE partitioning and SAFE connection labels. For whole-fragment and A/B lookup, fallback, actual IDs and reconstruction, use the <a href="#long-examples">three-method comparison above</a>.</p>
     <p id="cd-loading">Loading verified molecular graph traces…</p>
     <div id="cd-content" hidden>
       <div class="cd-topline"><span id="cd-badge" class="cd-badge"></span><div class="cd-controls" role="group" aria-label="Walkthrough playback"><button id="cd-prev" type="button">← Previous</button><button id="cd-play" type="button" aria-pressed="false">Auto play</button><button id="cd-next" type="button">Next →</button></div></div>
@@ -137,7 +162,7 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
         </div>
       </div>
       </details>
-      <details class="cd-evidence"><summary>Evidence and verified molecular traces</summary><div class="detail-body"><p>All three graphs were replayed from genuine saved records. Source atom groups, proposed/accepted cuts and SAFE strings matched the original records; paired cross-fragment labels were checked against accepted cuts. No intermediate GraphBPE merge history is invented.</p><p>Dots separate fragments; paired labels, their positions after atoms, and bond symbols preserve connectivity. The boundary-change example remains a stress case excluded from the 44,329-record comparison.</p><p><a href="connection-demo.json">Verified molecular graph traces (JSON)</a> · <a href="#sc-example">Current A/B dictionaries and reconstruction</a></p></div></details>
+      <details class="cd-evidence"><summary>Evidence and verified molecular traces</summary><div class="detail-body"><p>All three graphs were replayed from genuine saved records. Source atom groups, proposed/accepted cuts and SAFE strings matched the original records; paired cross-fragment labels were checked against accepted cuts. No intermediate GraphBPE merge history is invented.</p><p>Dots separate fragments; paired labels, their positions after atoms, and bond symbols preserve connectivity. The boundary-change example remains a stress case excluded from the 44,329-record comparison.</p><p><a href="connection-demo.json">Verified molecular graph traces (JSON)</a> · <a href="#long-examples">Current A/B dictionaries and reconstruction</a></p></div></details>
     </div>
   </section>
   <details class="v-legacy"><summary>Historical experiments: BRICS and original DemoDiff</summary><p class="v-legacy-note">Earlier measurements below use different cohorts and often count motif IDs without connectivity. Their implementation limitations apply to those earlier methods, not to the new reversible codecs above.</p>
