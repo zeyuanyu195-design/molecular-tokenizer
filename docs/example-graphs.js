@@ -4,6 +4,8 @@
   const cache = new Map();
   const byId = id => document.getElementById(id);
   let current, request = 0;
+  const painters = {};
+  let selected = {};
 
   function svg(tag, attrs) {
     const element = document.createElementNS(ns, tag);
@@ -33,7 +35,9 @@
       const halo=svg('circle',{cx,cy,r:radius,fill:colors[group%colors.length],opacity:.58});
       figure.append(halo); halos.push([halo,group]);
     }
-    figure.append(svg('image',{x:0,y:0,width:720,height:440,href:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(graph.svg)}));
+    const overlay=svg('g',{'class':'gx-token-highlight'});
+    figure.append(overlay,svg('image',{x:0,y:0,width:720,height:440,href:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(graph.svg)}));
+    const originalBox=figure.getAttribute('viewBox');
     const cuts=[],external=[];
     for(const [a,b] of graph.bonds){
       if(!owner.has(a)&&!owner.has(b))continue;
@@ -58,6 +62,8 @@
     groups.forEach((row,i)=>chooser.add(new Option(`F${row.fi+1} · group ${i+1} · ${row.text}`,String(i))));
     const detail=document.createElement('p');detail.className='gx-detail';
     function highlight(){
+      selected[mode]=null;overlay.replaceChildren();figure.setAttribute('viewBox',originalBox);
+      for(const chip of document.querySelectorAll(`#long-examples [data-scheme="${mode}"][aria-pressed="true"]`))chip.setAttribute('aria-pressed','false');
       const id=chooser.value===''?-1:Number(chooser.value);
       for(const [circle,group] of halos)circle.setAttribute('opacity',id<0||id===group?'.65':'.10');
       const row=groups[id];
@@ -76,7 +82,47 @@
     const bonds=document.createElement('p');bonds.textContent='Within-fragment boundaries: '+(cuts.join(', ')||'none')+'. SAFE inter-fragment bonds: '+(external.join(', ')||'none')+'.';
     legend.append(summary,bonds,list);
     panel.replaceChildren(heading,caption,figure,chooser,detail,legend);
+    painters[mode]=token=>{
+      const {entry,start,end,fi,within}=token;
+      const spans=graph.locations.filter(([lo,hi])=>lo<end && hi>start);
+      const atoms=new Set(spans.filter(s=>s[2]==='atom').flatMap(s=>s[3]));
+      let explanation='', bonds=[];
+      if(entry.kind==='dot'){
+        explanation=`SAFE separator between fragments ${fi+1} and ${fi+2}; it has no atom or bond.`;
+      }else if(entry.kind==='marker'){
+        let offset=0;
+        const frame=graph.layouts[budget][mode][fi].encoded.find(row=>(offset+=row.ids.length)>within);
+        frame.atoms.forEach(a=>atoms.add(a));
+        explanation='Outlined fallback block; the marker itself emits no atom.';
+      }else if(!atoms.size){
+        for(const [, ,kind,ends] of spans){
+          ends.forEach(a=>atoms.add(a));
+          if(kind==='ring'||kind==='bond')bonds.push(ends);
+        }
+        explanation=bonds.length?'Highlighted bond and its endpoints.':'Branch punctuation; highlighted atom is its branch point.';
+      }
+      if(!bonds.length)bonds=graph.bonds.filter(([a,b])=>atoms.has(a)&&atoms.has(b));
+      chooser.value='';overlay.replaceChildren();figure.setAttribute('viewBox',originalBox);
+      if(fragment>=0 && [...atoms].some(a=>!owner.has(a)))figure.setAttribute('viewBox','0 0 720 440');
+      for(const [circle] of halos)circle.setAttribute('opacity',atoms.size?'.12':'.58');
+      for(const [a,b] of bonds){
+        const [x1,y1]=graph.points[a],[x2,y2]=graph.points[b];
+        overlay.append(svg('line',{x1,y1,x2,y2,stroke:'#f3ba38','stroke-width':radius,'stroke-linecap':'round'}));
+      }
+      for(const atom of atoms){
+        const [cx,cy]=graph.points[atom];
+        overlay.append(svg('circle',{cx,cy,r:radius*1.16,fill:'#ffda68',stroke:'#975900','stroke-width':1.5,'data-atom':atom}));
+      }
+      detail.textContent=`Scheme ${mode} · token ${token.index+1} · ${entry.text} (ID ${token.id}). ${explanation}${atoms.size?' Atoms '+[...atoms].join(', ')+'.':''}`;
+      return detail.textContent;
+    };
+    if(selected[mode])painters[mode](selected[mode]);
   }
+  window.highlightExampleToken=(mode,token)=>{
+    if(!current)return '';
+    selected[mode]=token;
+    return painters[mode](token);
+  };
   function render(){
     if(!current)return;
     const {graph,budget,fragment}=current;
@@ -87,12 +133,12 @@
   }
   byId('gx-view').onchange=render;
   window.showExampleGraphs=async function(example,budget,fragment){
-    const version=++request;current=null;
+    const version=++request;current=null;selected={};
     const status=byId('gx-status');status.textContent='Loading molecule…';
     byId('gx-panels').hidden=true;byId('gx-protected').textContent='';
     try{
       if(!cache.has(example.chembl_id)){
-        cache.set(example.chembl_id,fetch('example-graphs/'+example.chembl_id+'.json').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}));
+        cache.set(example.chembl_id,fetch('example-graphs/'+example.chembl_id+'.json?v=token-locations').then(r=>{if(!r.ok)throw Error(r.status);return r.json();}));
       }
       const graph=await cache.get(example.chembl_id);
       if(version!==request)return;

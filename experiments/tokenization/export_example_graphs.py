@@ -38,6 +38,51 @@ def emitted_groups(model, piece):
     return groups
 
 
+def token_locations(safe, mol):
+    """Map SAFE character spans to RDKit atom indices or explicit bond endpoints."""
+    rows, branches, rings = [], [], {}
+    last, next_atom, pending_bond = None, 0, None
+    def assign_bond(indices, a, b):
+        assert mol.GetBondBetweenAtoms(a, b) is not None
+        for index in indices:
+            if index is not None:
+                rows[index][3] = [a, b]
+
+    for match in LEXEME.finditer(safe):
+        word = match.group()
+        index = len(rows)
+        kind, atoms = "syntax", []
+        rows.append([match.start(), match.end(), kind, atoms])
+        if ATOM.fullmatch(word):
+            kind, atoms = "atom", [next_atom]
+            if pending_bond is not None:
+                assign_bond([pending_bond], last, next_atom)
+            last, next_atom, pending_bond = next_atom, next_atom + 1, None
+        elif word == ".":
+            kind, last = "dot", None
+        elif word == "(":
+            branches.append(last)
+            kind, atoms = "branch", [last]
+        elif word == ")":
+            last = branches.pop()
+            kind, atoms = "branch", [last]
+        elif word[0].isdigit() or word.startswith("%"):
+            rows[index][2] = "ring"
+            if word in rings:
+                other, opening, bond = rings.pop(word)
+                assign_bond([index, opening, bond, pending_bond], other, last)
+            else:
+                rings[word] = (last, index, pending_bond)
+            pending_bond = None
+            continue
+        else:
+            kind, pending_bond = "bond", index
+        rows[index][2:] = [kind, atoms]
+    assert next_atom == mol.GetNumAtoms() and not rings and not branches and pending_bond is None
+    assert all(atoms or kind == "dot" for _, _, kind, atoms in rows)
+    return rows
+
+
 def build(example):
     params = Chem.SmilesParserParams()
     params.removeHs = False
@@ -91,7 +136,8 @@ def build(example):
                 records.append(views)
             layouts[budget][mode] = records
     return dict(svg=drawer.GetDrawingText(), points=[[round(p.x,2),round(p.y,2)] for p in points],
-                bonds=bonds, fragments=fragments, protected=protected, layouts=layouts)
+                bonds=bonds, fragments=fragments, protected=protected, layouts=layouts,
+                locations=token_locations(example["safe"], mol))
 
 
 if __name__ == "__main__":
