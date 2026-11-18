@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="connection-demo.css?v=20261109-stepfix"><script src="connection-demo.js?v=20261110-graph-only" defer></script>
   <link rel="stylesheet" href="vocabulary.css?v=20261109-stepfix">
   <link rel="stylesheet" href="structural-comparison.css?v=20261110-append-v4"><script src="structural-comparison.js?v=20261110-append-v4" defer></script>
-  <script src="long-examples.js?v=20261118" defer></script>
+  <script src="long-examples.js?v=20261118-multi" defer></script>
   <style>#long-examples .sc-cards{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:20px}#long-examples select{max-width:100%}#long-examples .sc-card-heading strong{font-size:13px}@media(max-width:1100px){#long-examples .sc-cards{grid-template-columns:1fr}}</style>
 </head>
 <body>
@@ -91,15 +91,14 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
   <section id="long-examples" aria-labelledby="lx-title">
     <div class="eyebrow">NEW EXAMPLES / 899,836-MOLECULE EXPERIMENT / ACTUAL DICTIONARY IDs</div>
     <h2 id="lx-title">Whole fragments, A and B: inspect the differences.</h2>
-    <p>Four real TEST molecules with longer unmatched fragments. Selected to illustrate contrasting splits, not to estimate average compression. Complete molecules and original SAFE boundaries are unchanged. The whole-fragment baseline stays at 16k; A/B use 20k or 24k total entries.</p>
+    <p>Explore three short TEST molecules with two, three and four SAFE fragments, then four longer examples. The whole-fragment baseline stays at 16k; A/B use 20k or 24k total entries.</p>
     <p id="lx-loading" role="status">Loading verified examples…</p>
     <div id="lx-content" hidden>
       <label class="select-label">Real molecule<select id="lx-molecule"></select></label>
       <p id="lx-summary"></p>
       <details><summary>Original SMILES and complete SAFE string</summary><span class="label">SMILES</span><code id="lx-smiles" class="sc-safe"></code><span class="label">SAFE</span><code id="lx-safe" class="sc-safe"></code></details>
-      <div class="sc-controls"><label class="select-label">A/B vocabulary budget<select id="lx-budget"><option value="20000">16k + 4k = 20k</option><option value="24000">16k + 8k = 24k</option></select></label><label class="select-label sc-fragment-picker">Long fragments with contrasting splits<select id="lx-fragment"></select></label></div>
-      <label><input id="lx-all" type="checkbox"> Show all original fragments, including short ones</label>
-      <p class="subtle">The default list highlights longer fragments with different A/B token counts. Hidden short fragments remain part of the molecule and all totals.</p>
+      <div class="sc-controls"><label class="select-label">A/B vocabulary budget<select id="lx-budget"><option value="20000">16k + 4k = 20k</option><option value="24000">16k + 8k = 24k</option></select></label><label class="select-label sc-fragment-picker">Whole molecule or original SAFE fragment<select id="lx-fragment"></select></label></div>
+      <p class="subtle">Dots separate adjacent SAFE fragments. Each gold dot token carries ID 11. Choose a numbered fragment to inspect its own split.</p>
       <code id="lx-selected" class="sc-safe"></code>
       <div id="lx-cards" class="sc-cards"></div>
       <p id="lx-inspector" class="sc-inspector" role="status"></p>
@@ -108,7 +107,7 @@ COMPARE whether each pair shares at least one qualifying type</pre><p>All 899,83
       <label class="select-label">Method<select id="lx-decode"><option value="whole">Whole-fragment · 16k</option><option value="A">Scheme A</option><option value="B">Scheme B</option></select></label>
       <div class="sc-decode-controls"><label for="lx-range">Decoded IDs</label><input id="lx-range" type="range" min="0" max="120" value="0"><button id="lx-next" type="button">Next ID →</button><button id="lx-complete" type="button">Decode all</button></div>
       <code id="lx-restored" class="sc-safe"></code><p id="lx-status" role="status"></p>
-      <p class="subtle">Every displayed sequence was regenerated using frozen dictionaries, matched to saved experiment IDs, and checked for exact SAFE and canonical isomeric molecular reconstruction. A/B share the frozen first 16k IDs; appended IDs may differ between schemes. A fallback block can contain multiple model tokens. <a href="long-examples.json?v=20261118">Examples, dictionary excerpts and vocabulary fingerprints (JSON)</a></p>
+      <p class="subtle">Every displayed sequence was regenerated using frozen dictionaries, matched to saved experiment IDs, and checked for exact SAFE and canonical isomeric molecular reconstruction. A/B share the frozen first 16k IDs; appended IDs may differ between schemes. A fallback block can contain multiple model tokens. <a href="long-examples.json?v=20261118-multi">Examples, dictionary excerpts and vocabulary fingerprints (JSON)</a></p>
     </div>
   </section>
   <section id="structural-comparison" aria-labelledby="sc-title">
