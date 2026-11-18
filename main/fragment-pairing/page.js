@@ -3,7 +3,7 @@ const schemes=['raw','unified','relative'],names=['Original labels','Unified lab
 const topics=['One open site','Close and open in one token','Choose the second pending site','Internal ring and external double bond','Reuse one ID for two methyl groups'];
 let data,molecule,steps,index=0;
 const lex=/\{\+\}|\{-\d+\}|\[[^\]]+\]|Cl|Br|%\(\d+\)|%\d{2}|./g;
-function replay(ids,dictionary){
+function replay(ids,dictionary,atomOrder,fragmentOrder){
   const parts=ids.map(i=>dictionary[i]);
   const reserved=new Set(parts.flatMap(s=>s.match(lex)).filter(s=>/^(\d|%)/.test(s)).map(s=>Number(s.replace(/\D/g,''))));
   const used=new Set(reserved),pending=[],output=[],result=[];
@@ -16,7 +16,7 @@ function replay(ids,dictionary){
         let label;
         if(word==='{+}'){
           label=1;while(used.has(label))label++;
-          used.add(label);pending.push({atom,fragment:fi+1,label,order});
+          used.add(label);pending.push({atom,fragment:fragmentOrder?.[fi] ?? fi+1,label,order});
           actions.push('Open a site at atom '+atom+' (rank '+pending.length+').');
         }else{
           const rank=Number(word.slice(2,-1));if(rank<1||rank>pending.length)throw Error('Invalid closing rank');
@@ -28,7 +28,9 @@ function replay(ids,dictionary){
         text+=label<10?label:label<100?'%'+label:'%('+label+')';order='';
       }else{
         text+=word;
-        if(/^(\[|Cl$|Br$|[BCNOPSFIbcnops*]$)/.test(word)){atom=nextAtom++;atoms.push(atom);order='';}
+        if(/^(\[|Cl$|Br$|[BCNOPSFIbcnops*]$)/.test(word)){
+          atom=atomOrder?.[nextAtom] ?? nextAtom;nextAtom++;atoms.push(atom);order='';
+        }
         else if(word==='(')branches.push(atom);
         else if(word===')')atom=branches.pop();
         else if(/^[=#:/\\-]$/.test(word))order=word;
@@ -45,8 +47,7 @@ function shape(tag,attrs){
   for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);
   return n;
 }
-function render(){
-  const ex=molecule,s=steps[index],svg=el('diagram');
+function drawStep(svg,ex,s){
   svg.replaceChildren();
   const active=new Set(s.atoms);
   for(const [a,b] of ex.bonds){
@@ -62,6 +63,10 @@ function render(){
     svg.append(shape('line',{x1,y1,x2,y2,stroke:'#d76145','stroke-width':9,'stroke-linecap':'round','data-bond':a+'-'+b}));
   }
   svg.append(shape('image',{href:ex.id+'.svg',x:0,y:0,width:540,height:290}));
+}
+function render(){
+  const ex=molecule,s=steps[index];
+  drawStep(el('diagram'),ex,s);
   for(const [i,b] of Array.from(el('tokens').children).entries())b.setAttribute('aria-pressed',String(i===index));
   el('step').textContent='Token '+(index+1)+' of '+steps.length+' · ID '+ex.ids[index];
   el('actions').textContent=s.actions.join(' ')||'Emit this fragment.';
@@ -86,6 +91,45 @@ function choose(){
 function row(table,cells){
   const tr=table.insertRow();for(const v of cells)tr.insertCell().textContent=v;
 }
+function setupComparison(ex){
+  const decks=[];
+  el('compare-source').textContent=ex.safe;
+  el('compare-smiles').textContent=ex.smiles;
+  ex.runs.forEach((run,side)=>{
+    const frames=replay(run.ids,run.dictionary,run.atomOrder,run.order);
+    if(frames.at(-1).text!==run.unified)throw Error('Fragment order replay mismatch');
+    const panel=el('order-template').content.firstElementChild.cloneNode(true);
+    const at=role=>panel.querySelector('[data-role="'+role+'"]');
+    at('title').textContent=side===0?'Original SAFE order':'Reordered fragments';
+    at('peak').textContent='Peak '+run.peak+' pending';
+    at('final').textContent=run.unified;
+    run.ids.forEach((id,i)=>{
+      const btn=document.createElement('button');
+      btn.type='button';btn.textContent=run.dictionary[id];
+      const meta=document.createElement('small');
+      meta.textContent='F'+run.order[i]+' · ID '+id;
+      btn.append(meta);btn.onclick=()=>selectFragment(run.order[i]);at('chips').append(btn);
+    });
+    decks.push({run,frames,at});
+    el('comparison-decks').append(panel);
+  });
+  function selectFragment(fragment){
+    for(const {run,frames,at} of decks){
+      const i=run.order.indexOf(fragment),frame=frames[i];
+      for(const [j,button] of Array.from(at('chips').children).entries()){
+        button.setAttribute('aria-pressed',String(j===i));
+      }
+      at('step').textContent='F'+fragment+' · step '+(i+1)+' of '+run.ids.length;
+      at('actions').textContent=frame.actions.join(' ');
+      for(const key of ['before','after']){
+        at(key).textContent=frame[key].map((site,j)=>'#'+(j+1)+' '+ex.symbols[site.atom]+'('+site.atom+') · F'+site.fragment).join(' | ')||'Empty';
+      }
+      at('partial').textContent=frame.text;
+      drawStep(at('graph'),ex,frame);
+    }
+  }
+  selectFragment(3);
+} 
 async function start(){
   const res=await fetch('data.json');if(!res.ok)throw Error(res.status);
   data=await res.json();const c=data.comparison,fmt=n=>n.toLocaleString('en-US');
@@ -95,5 +139,11 @@ async function start(){
   });
   data.examples.forEach((ex,i)=>el('molecule').add(new Option(ex.id+' · '+topics[i],i)));
   el('molecule').onchange=choose;el('prev').onclick=()=>{index--;render();};el('next').onclick=()=>{index++;render();};choose();
+  const response=await fetch('reorder.json');
+  if(!response.ok)throw Error(response.status);
+  const reordered=await response.json();
+  row(el('rows'),['Relative pairing · reordered','30,001',c.mean_tokens,c.median_tokens,'50,000 / 50,000',fmt(reordered.exact)+' / 50,000']);
+  row(el('stats'),['Relative pairing · reordered',reordered.stats[0].toFixed(2),reordered.stats[1],fmt(reordered.stats[2])]);
+  setupComparison(reordered.example);
 }
 start().catch(e=>el('error').textContent='Unable to load this experiment: '+e.message);
