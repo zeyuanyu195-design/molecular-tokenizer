@@ -1,48 +1,33 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=orders"><link rel="stylesheet" href="search.css"><script src="search.js" defer></script><script src="page.js?v=node-variant" defer></script><script src="carbon.js" defer></script></head>
-<body><header><nav><a href="../">← Molecular tokenization</a><a href="#method-comparison">Method comparison</a><a href="#reordering">Fragment order</a><a href="#node-variants">[a,b] vocabulary</a><a href="#frequency-thresholds">Frequency thresholds</a><a href="#carbon-templates">Carbon templates</a><a href="#distribution">Distributions</a><a href="#walkthrough">Pairing walkthrough</a></nav></header>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=experiment-flow"><link rel="stylesheet" href="search.css"><script src="search.js" defer></script><script src="page.js?v=node-variant" defer></script><script src="carbon.js" defer></script><script src="thresholds.js?v=fragment-pairs" defer></script></head>
+<body><header><nav aria-label="Project"><a href="../">← Molecular tokenization</a></nav></header>
 <main><h1>One fragment, one token</h1>
-<p class="lead">On 45,402 ChEMBL 35 molecules, reordering the same whole fragments reduces the relative-pairing dictionary from 37,373 to 25,646 entries. Both orders average 6.4282 tokens per molecule and recover all 45,402 structures.</p>
-<h2>Vocabulary and recovery</h2><div class="scroll"><table><thead><tr><th>Connection scheme</th><th>Vocabulary entries</th><th>Mean tokens</th><th>Median tokens</th><th>Strict molecule recovery</th></tr></thead><tbody id="rows"></tbody></table></div>
+<p class="lead">Follow a ChEMBL molecule from NPE fragmentation to a recoverable sequence of motif and variant IDs. The experiments measure how connection labels, fragment order and vocabulary choices affect the size of the dictionary.</p>
+<nav class="experiment-nav" id="experiment-flow" aria-label="Experiment steps"><ol><li><a href="#cohort">Cohort and baselines</a></li>
+<li><a href="#walkthrough">Relative pairing</a></li>
+<li><a href="#reordering">Fragment order</a></li>
+<li><a href="#node-variants">Motif and variant IDs</a></li>
+<li><a href="#carbon-templates">Carbon templates</a></li>
+<li><a href="#frequency-thresholds">Frequency and fallback</a></li></ol></nav>
+<section id="cohort"><p class="stage-number">Step 1 of 6</p><h2>Select the molecules and establish the baselines</h2>
 <p>NPE was trained on the initial 50,000 valid, unique ChEMBL 35 molecules with fewer than 100 lexical items in their original SMILES. All results below use the 45,402 molecules whose final SAFE partition matches NPE exactly. They use 2,666 of the 3,000 NPE node IDs, representing 2,579 distinct canonical fragment graphs. Each final SAFE fragment occupies one model position. Dots are inserted during decoding.</p>
 <details><summary>Numbering rules, boundaries and validation</summary><div><p><b>Original labels</b> retain the complete fragment text. <b>Relative pairing</b> records openings and the one-based rank of the pending site to close. Reordering can change label assignments and fragment order.</p><p>Of the initial 50k molecules, 4,592 had adjusted boundaries and 6 used whole-molecule fallback. Both groups were excluded from every comparison here. The three whole-fragment dictionaries and their token IDs were rebuilt on these 45,402 molecules. Coverage is measured in-sample. Saved token IDs and their dictionary were decoded without a per-molecule edge table. Strict recovery compares canonical isomeric SMILES.</p></div></details>
-<section id="method-comparison"><h2>Token length across methods</h2>
+<h3 id="method-comparison">Token length across methods</h3>
 <p>The three whole-fragment encodings share one row. We compared their stored ID sequences for each of the 45,402 molecules and found identical lengths in every case. Each encoding assigns one ID per fragment, for 291,852 tokens in total. BRICS + SAFE counts lexical tokens, including connection symbols. DemoDiff counts NPE node IDs and stores connectivity in a separate edge table. Its node count matches the whole-fragment token count on every selected molecule. Strict molecular recovery on this cohort was 45,402 / 45,402 for BRICS + SAFE and 34,120 / 45,402 for DemoDiff.</p>
 <div class="chart scroll"><img src="method-lengths.svg?v=exact45402" alt="Mean and median tokens per molecule. BRICS plus SAFE: 53.390 and 51. Retrained NPE plus DemoDiff: 6.4282 and 4. Whole-fragment SAFE, shared by all three encodings: 6.4282 and 4."></div>
-<h3>Vocabulary size and single-carbon variants</h3>
-<div class="chart scroll"><img src="reorder-vocabulary.svg?v=exact45402" alt="Original, relative and reordered dictionaries contain 54,857, 37,373 and 25,646 entries. Labelled variants of C number 10,339, 3,642 and 680."></div></section>
-<section id="node-variants"><h2>One fragment, two IDs</h2>
-<p>Each position holds one pair <code>[a,b]</code>. The original NPE node ID <code>a</code> selects the motif. The local ID <code>b</code> selects its complete relative-pairing variant after reordering. Within each motif, variants are numbered from zero by decreasing frequency on these 45,402 molecules, with text order breaking ties.</p>
-<div class="scroll"><table><thead><tr><th>Observed NPE IDs</th><th>Distinct pairs</th><th>Variants per ID · mean</th><th>Median</th><th>Range</th><th>Strict recovery</th></tr></thead><tbody><tr><td>2,666</td><td>25,655</td><td>9.62</td><td>6</td><td>1–681</td><td>45,402 / 45,402</td></tr></tbody></table></div>
-<p>186 node IDs have one variant. Nine complete variant strings each occur under two node IDs, giving 25,655 pairs for 25,646 distinct strings. Across the cohort, the pair sequences contain 291,852 positions (mean 6.4282).</p>
-<details><summary>Why the motif histogram shows a maximum of 680</summary><p>The histogram groups 2,570 canonical motif structures with external connections. Here each original node ID has its own row and includes variants without external connections. Single carbon (a = 2897) has 680 externally labelled variants plus plain C, giving 681 entries.</p></details>
-<p><a href="variants-per-node.csv" download>Variant counts for every NPE node ID (CSV)</a></p></section>
-<section id="frequency-thresholds" aria-labelledby="threshold-heading"><h2 id="threshold-heading">Which complete variants earn a dictionary entry?</h2>
-<p>Scheme 2 counts each reordered variant within its original NPE node ID. A variant seen at least as often as the chosen threshold gets one direct ID. For a rarer variant, the dictionary stores a scaffold under that node. The fragment carries instructions that put its external connections back into the scaffold.</p>
-<div class="scroll"><table><thead><tr><th>Minimum occurrences</th><th>Complete variants</th><th>Fallback scaffolds</th><th>Total entries</th><th>Saved vs. ≥1</th><th>Direct hits</th><th>Mean flat tokens / molecule</th></tr></thead><tbody id="threshold-rows"></tbody></table></div>
-<p>Direct hits are counted over 291,852 fragment occurrences in the same 45,402 molecules used to build the dictionaries. Each fragment still occupies one structured position (mean 6.428 per molecule). The last column counts the individual IDs after expanding fallback instructions.</p>
-<details><summary>How encoding and recovery were checked</summary><p>A direct hit emits one ID. A fallback emits an escape marker, node ID, local scaffold ID and action count. Each action adds a character offset and an operation including any explicit bond; a closure also adds the one-based rank of its partner in the current pending list. Offsets count characters in the scaffold before any insertions. Scanning the actions in order restores the fragment, including repeated actions at the same offset.</p><p>At each threshold, decoding the saved flat IDs with the shared dictionary reproduced every reordered relative-pairing fragment exactly. All 45,402 decoded molecules matched the reference canonical isomeric SMILES, including stereochemistry. Each threshold has its own ID assignments.</p></details>
-<h3>Trace a fragment through lookup and recovery</h3>
-<div class="threshold-controls"><label>Molecule<select id="threshold-case"></select></label><label>Minimum occurrences<select id="threshold-level"></select></label></div>
-<p id="threshold-cost" aria-live="polite"></p>
-<h4 id="threshold-fragment-label">Select a fragment in sequence order</h4><div id="threshold-fragments" role="group" aria-labelledby="threshold-fragment-label"></div>
-<div class="decks" id="threshold-example" aria-live="polite" hidden>
-<article><h4>Selected fragment token [a, b]</h4><code class="block" id="threshold-pair"></code><p id="threshold-node"></p><h4 id="threshold-path"></h4><p id="threshold-payload"></p><div id="threshold-connections"><b>Connection actions in b</b><ol id="threshold-actions"></ol></div>
-<details id="threshold-flat"><summary id="threshold-flat-label">Expanded one-dimensional IDs</summary><code class="block" id="threshold-ids"></code></details></article>
-<article><h4 id="threshold-location"></h4><img class="wide" id="threshold-graph" alt=""><code class="block" id="threshold-word"></code><p id="threshold-decision"></p></article>
-</div>
-<details><summary>Recovered molecule</summary><b>Decoded SAFE</b><code class="block" id="threshold-safe"></code><b>Verified canonical isomeric SMILES</b><code class="block" id="threshold-smiles"></code></details>
-<p id="threshold-error" role="alert"></p></section>
-<script src="thresholds.js?v=fragment-pairs" defer></script>
-<section id="carbon-templates"><h2>Single carbon: 681 variants, 121 templates</h2>
-<p>For NPE node <code>a = 2897</code>, closing ranks can be carried as parameters inside the fragment token. The 121 templates retain atom spelling, bond symbols and the order of openings and closures. All 681 original carbon strings were recovered exactly, across 107,092 carbon positions. All 45,402 molecules passed strict reconstruction. The template count measures shared patterns; the packed code also carries the ranks.</p>
-<label>Choose a real carbon fragment</label><div class="chips carbon-options" id="carbon-options"></div>
-<div class="grid"><div class="figure"><svg id="carbon-graph" viewBox="0 0 540 290" role="img" aria-label="Selected carbon atom highlighted on its molecule"></svg><small id="carbon-location"></small></div>
-<article><div class="stephead"><strong id="carbon-step"></strong><span><button id="carbon-prev" aria-label="Previous carbon step">←</button> <button id="carbon-next" aria-label="Next carbon step">→</button></span></div>
-<div aria-live="polite"><h3 id="carbon-title"></h3><code class="block" id="carbon-math"></code><p id="carbon-note"></p></div></article></div>
-<details id="carbon-result"><summary>Complete reconstruction for this molecule</summary><b>Decoded SAFE</b><code class="block" id="carbon-safe"></code><b>Verified canonical isomeric SMILES</b><code class="block" id="carbon-smiles"></code></details>
-<p id="carbon-error" role="alert"></p></section>
-<section id="reordering"><h2>Compare two fragment orders</h2>
+</section>
+<section id="walkthrough"><p class="stage-number">Step 2 of 6</p><h2>Encode connections with relative pairing</h2><p>Read the original SAFE fragments in sequence. <code>{+}</code> opens a connection; <code>{-k}</code> closes the k-th site in the pending list. The two endpoints can be several fragments apart.</p>
+<p>Choose a molecule, then click a token. Gold marks the atoms in that token. A red line marks a cross-fragment bond completed in the selected step. Atom indices follow SAFE order, starting at 0.</p>
+<label for="molecule">Example molecule</label><select id="molecule"></select>
+<p class="source">Original SAFE <code id="original"></code></p>
+<div id="tokens" aria-label="Whole-fragment token sequence"></div>
+<div class="grid"><div class="figure"><svg id="diagram" viewBox="0 0 540 290" role="img" aria-label="Molecule with selected token atoms highlighted"></svg></div>
+<article aria-live="polite"><div class="stephead"><b id="step"></b><span><button id="prev" aria-label="Previous token">←</button> <button id="next" aria-label="Next token">→</button></span></div><p id="actions"></p>
+<label>Pending sites before</label><div id="before" class="pool"></div><label>Pending sites after</label><div id="after" class="pool"></div></article></div>
+<label>SAFE emitted so far</label><code class="block" id="emitted"></code><p id="outcome" role="status"></p>
+<details><summary>How to read a token</summary><p><code>{+}</code> opens a connection at the current atom. <code>{-2}</code> closes the second site in the current pending list and removes it. Within one token, actions run from left to right. Bond symbols such as <code>=</code> keep their usual meaning; ring labels that pair within the fragment stay literal. The molecular drawings illustrate the replay; decoding the SAFE sequence uses only token IDs and dictionary entries.</p></details>
+</section>
+<section id="reordering"><p class="stage-number">Step 3 of 6</p><h2>Reorder fragments to shorten the pending list</h2>
 <label for="order-molecule">Example molecule · fragment count and pending peak</label><select id="order-molecule"></select>
 <p>Click a token in either sequence to highlight the same fragment in both drawings. F1, F2 and subsequent labels follow the original SAFE string. Gold marks the selected atoms. Red marks a connection closed at that step. Each sequence uses its own dictionary.</p>
 <p class="source">Original SAFE <code id="compare-source"></code></p>
@@ -72,18 +57,45 @@
 <h3>Pending connections across 45,402 molecules</h3><p>A cross-fragment bond is pending from the moment the decoder reads its first endpoint until it reads the second. The peak for one molecule is the largest number pending at once, counting every opening and closure within each token.</p>
 <p>For <b id="event-molecule"></b>, the list sizes after successive connection events are <code id="original-events"></code> in the original order and <code id="reordered-events"></code> after reordering.</p>
 <p>The bars summarize one peak per molecule across all 45,402 molecules. The mean falls from 4.156 to 1.844, the median from 2 to 1, and the largest observed peak from 46 to 16. Reordering lowered the peak for 34,827 molecules.</p>
-<div class="chart scroll"><img src="queue-peaks.svg?v=exact45402" alt="Mean, median and maximum pending peaks changed from 4.156 to 1.844, 2 to 1, and 46 to 16."></div></section>
-<section id="distribution"><h2>How many variants does each motif have?</h2><p>Each of the 2,570 distinct fragment backbones observed with a cross-fragment label contributes once. Backbones are grouped by canonical fragment graph within the exact-boundary cohort. Counts include only variants with an external connection.</p>
+<div class="chart scroll"><img src="queue-peaks.svg?v=exact45402" alt="Mean, median and maximum pending peaks changed from 4.156 to 1.844, 2 to 1, and 46 to 16."></div>
+<h3>Vocabulary and recovery by connection scheme</h3><div class="scroll"><table><thead><tr><th>Connection scheme</th><th>Vocabulary entries</th><th>Mean tokens</th><th>Median tokens</th><th>Strict molecule recovery</th></tr></thead><tbody id="rows"></tbody></table></div>
+<h3>Vocabulary size and single-carbon variants</h3>
+<div class="chart scroll"><img src="reorder-vocabulary.svg?v=exact45402" alt="Original, relative and reordered dictionaries contain 54,857, 37,373 and 25,646 entries. Labelled variants of C number 10,339, 3,642 and 680."></div>
+</section>
+<section id="node-variants"><p class="stage-number">Step 4 of 6</p><h2>Build the [a,b] vocabulary</h2>
+<p>Each position holds one pair <code>[a,b]</code>. The original NPE node ID <code>a</code> selects the motif. The local ID <code>b</code> selects its complete relative-pairing variant after reordering. Within each motif, variants are numbered from zero by decreasing frequency on these 45,402 molecules, with text order breaking ties.</p>
+<div class="scroll"><table><thead><tr><th>Observed NPE IDs</th><th>Distinct pairs</th><th>Variants per ID · mean</th><th>Median</th><th>Range</th><th>Strict recovery</th></tr></thead><tbody><tr><td>2,666</td><td>25,655</td><td>9.62</td><td>6</td><td>1–681</td><td>45,402 / 45,402</td></tr></tbody></table></div>
+<p>186 node IDs have one variant. Nine complete variant strings each occur under two node IDs, giving 25,655 pairs for 25,646 distinct strings. Across the cohort, the pair sequences contain 291,852 positions (mean 6.4282).</p>
+<details><summary>Why the motif histogram shows a maximum of 680</summary><p>The histogram groups 2,570 canonical motif structures with external connections. Here each original node ID has its own row and includes variants without external connections. Single carbon (a = 2897) has 680 externally labelled variants plus plain C, giving 681 entries.</p></details>
+<p><a href="variants-per-node.csv" download>Variant counts for every NPE node ID (CSV)</a></p>
+<div id="distribution"><h3>How many variants does each motif have?</h3><p>Each of the 2,570 distinct fragment backbones observed with a cross-fragment label contributes once. Backbones are grouped by canonical fragment graph within the exact-boundary cohort. Counts include only variants with an external connection.</p>
 <div class="legend"><span class="mean"></span>Mean <span class="median"></span>Median</div><div class="scroll chart"><img src="variants.svg?v=exact45402" alt="Three aligned histograms of labelled variants per motif, with mean and median lines and the full tail above 100. Numeric summaries follow."></div>
 <div class="scroll"><table><thead><tr><th>Scheme</th><th>Mean variants per motif</th><th>Median</th><th>Maximum</th></tr></thead><tbody id="stats"></tbody></table></div>
-<details><summary>Token length distribution across 45,402 molecules</summary><p>All three schemes use the same fragment boundaries. Their token lengths match for every molecule: 291,852 tokens in total.</p><img class="wide" src="lengths.svg?v=exact45402" alt="Token count distribution with mean 6.4282 and median 4."></details></section>
-<section id="walkthrough"><h2>Decode a relative-pairing sequence</h2><p>Choose a molecule, then click a token. Gold marks the atoms in that token. A red line marks a cross-fragment bond completed in the selected step. Atom indices follow SAFE order, starting at 0.</p>
-<label for="molecule">Example molecule</label><select id="molecule"></select>
-<p class="source">Original SAFE <code id="original"></code></p>
-<div id="tokens" aria-label="Whole-fragment token sequence"></div>
-<div class="grid"><div class="figure"><svg id="diagram" viewBox="0 0 540 290" role="img" aria-label="Molecule with selected token atoms highlighted"></svg></div>
-<article aria-live="polite"><div class="stephead"><b id="step"></b><span><button id="prev" aria-label="Previous token">←</button> <button id="next" aria-label="Next token">→</button></span></div><p id="actions"></p>
-<label>Pending sites before</label><div id="before" class="pool"></div><label>Pending sites after</label><div id="after" class="pool"></div></article></div>
-<label>SAFE emitted so far</label><code class="block" id="emitted"></code><p id="outcome" role="status"></p>
-<details><summary>How to read a token</summary><p><code>{+}</code> opens a connection at the current atom. <code>{-2}</code> closes the second site in the current pending list and removes it. Within one token, actions run from left to right. Bond symbols such as <code>=</code> keep their usual meaning; ring labels that pair within the fragment stay literal. The molecular drawings illustrate the replay; decoding the SAFE sequence uses only token IDs and dictionary entries.</p></details>
-</section><p id="error" role="alert"></p></main></body></html>
+<details><summary>Token length distribution across 45,402 molecules</summary><p>All three schemes use the same fragment boundaries. Their token lengths match for every molecule: 291,852 tokens in total.</p><img class="wide" src="lengths.svg?v=exact45402" alt="Token count distribution with mean 6.4282 and median 4."></details></div>
+</section>
+<section id="carbon-templates"><p class="stage-number">Step 5 of 6</p><h2>Parameterize the closing ranks of single carbon</h2>
+<p>For NPE node <code>a = 2897</code>, closing ranks can be carried as parameters inside the fragment token. The 121 templates retain atom spelling, bond symbols and the order of openings and closures. All 681 original carbon strings were recovered exactly, across 107,092 carbon positions. All 45,402 molecules passed strict reconstruction. The template count measures shared patterns; the packed code also carries the ranks.</p>
+<label>Choose a real carbon fragment</label><div class="chips carbon-options" id="carbon-options"></div>
+<div class="grid"><div class="figure"><svg id="carbon-graph" viewBox="0 0 540 290" role="img" aria-label="Selected carbon atom highlighted on its molecule"></svg><small id="carbon-location"></small></div>
+<article><div class="stephead"><strong id="carbon-step"></strong><span><button id="carbon-prev" aria-label="Previous carbon step">←</button> <button id="carbon-next" aria-label="Next carbon step">→</button></span></div>
+<div aria-live="polite"><h3 id="carbon-title"></h3><code class="block" id="carbon-math"></code><p id="carbon-note"></p></div></article></div>
+<details id="carbon-result"><summary>Complete reconstruction for this molecule</summary><b>Decoded SAFE</b><code class="block" id="carbon-safe"></code><b>Verified canonical isomeric SMILES</b><code class="block" id="carbon-smiles"></code></details>
+<p id="carbon-error" role="alert"></p></section>
+<section id="frequency-thresholds" aria-labelledby="threshold-heading"><p class="stage-number">Step 6 of 6</p><h2 id="threshold-heading">Set a frequency threshold and verify recovery</h2>
+<p>This experiment starts from the same 25,655 complete motif–variant pairs built in step 4. Scheme 2 counts each reordered variant within its original NPE node ID. A variant seen at least as often as the chosen threshold gets one direct ID. For a rarer variant, the dictionary stores a scaffold under that node. The fragment carries instructions that put its external connections back into the scaffold.</p>
+<div class="scroll"><table><thead><tr><th>Minimum occurrences</th><th>Complete variants</th><th>Fallback scaffolds</th><th>Total entries</th><th>Saved vs. ≥1</th><th>Direct hits</th><th>Mean flat tokens / molecule</th></tr></thead><tbody id="threshold-rows"></tbody></table></div>
+<p>Direct hits are counted over 291,852 fragment occurrences in the same 45,402 molecules used to build the dictionaries. Each fragment still occupies one structured position (mean 6.428 per molecule). The last column counts the individual IDs after expanding fallback instructions.</p>
+<details><summary>How encoding and recovery were checked</summary><p>A direct hit emits one ID. A fallback emits an escape marker, node ID, local scaffold ID and action count. Each action adds a character offset and an operation including any explicit bond; a closure also adds the one-based rank of its partner in the current pending list. Offsets count characters in the scaffold before any insertions. Scanning the actions in order restores the fragment, including repeated actions at the same offset.</p><p>At each threshold, decoding the saved flat IDs with the shared dictionary reproduced every reordered relative-pairing fragment exactly. All 45,402 decoded molecules matched the reference canonical isomeric SMILES, including stereochemistry. Each threshold has its own ID assignments.</p></details>
+<h3>Trace a fragment through lookup and recovery</h3>
+<div class="threshold-controls"><label>Molecule<select id="threshold-case"></select></label><label>Minimum occurrences<select id="threshold-level"></select></label></div>
+<p id="threshold-cost" aria-live="polite"></p>
+<h4 id="threshold-fragment-label">Select a fragment in sequence order</h4><div id="threshold-fragments" role="group" aria-labelledby="threshold-fragment-label"></div>
+<div class="decks" id="threshold-example" aria-live="polite" hidden>
+<article><h4>Selected fragment token [a, b]</h4><code class="block" id="threshold-pair"></code><p id="threshold-node"></p><h4 id="threshold-path"></h4><p id="threshold-payload"></p><div id="threshold-connections"><b>Connection actions in b</b><ol id="threshold-actions"></ol></div>
+<details id="threshold-flat"><summary id="threshold-flat-label">Expanded one-dimensional IDs</summary><code class="block" id="threshold-ids"></code></details></article>
+<article><h4 id="threshold-location"></h4><img class="wide" id="threshold-graph" alt=""><code class="block" id="threshold-word"></code><p id="threshold-decision"></p></article>
+</div>
+<details><summary>Recovered molecule</summary><b>Decoded SAFE</b><code class="block" id="threshold-safe"></code><b>Verified canonical isomeric SMILES</b><code class="block" id="threshold-smiles"></code></details>
+<p id="threshold-error" role="alert"></p></section>
+<p><a href="#experiment-flow">Back to experiment steps</a></p>
+<p id="error" role="alert"></p></main></body></html>
