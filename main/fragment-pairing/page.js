@@ -1,6 +1,6 @@
 const el=id=>document.getElementById(id);
 const schemes=['Original labels','Relative pairing','Relative pairing · reordered'];
-const topics=['One open site','Close and open in one token','Choose the second pending site','Internal ring and external double bond','Reuse one ID for two methyl groups'];
+const topics=['One open site','Close and open in one token','Choose the second pending site','Internal ring and external double bond','Two occurrences of the same methyl fragment'];
 let data,molecule,steps,index=0;
 const lex=/\{\+\}|\{-\d+\}|\[[^\]]+\]|Cl|Br|%\(\d+\)|%\d{2}|./g;
 function replay(ids,dictionary,atomOrder,fragmentOrder){
@@ -71,7 +71,7 @@ function render(){
   const ex=molecule,s=steps[index];
   drawStep(el('diagram'),ex,s);
   for(const [i,b] of Array.from(el('tokens').children).entries())b.setAttribute('aria-pressed',String(i===index));
-  el('step').textContent='Token '+(index+1)+' of '+steps.length+' · ID '+ex.ids[index];
+  el('step').textContent='Token '+(index+1)+' of '+steps.length;
   el('actions').textContent=s.actions.join(' ')||'Emit this fragment.';
   for(const key of ['before','after']){
     el(key).textContent=s[key].map((v,i)=>'#'+(i+1)+' '+ex.symbols[v.atom]+'('+v.atom+') · F'+v.fragment).join('   |   ')||'Empty';
@@ -87,7 +87,7 @@ function choose(){
   el('original').textContent=molecule.safe;el('tokens').replaceChildren();
   molecule.ids.forEach((id,i)=>{
     const b=document.createElement('button');b.textContent=data.dictionary[id];
-    const sub=document.createElement('small');sub.textContent='F'+(i+1)+' · ID '+id;b.append(sub);
+    const sub=document.createElement('small');sub.textContent='F'+(i+1);b.append(sub);
     b.onclick=()=>{index=i;render();};el('tokens').append(b);
   });render();
 }
@@ -114,11 +114,11 @@ function setupComparison(ex,pairData){
     at('lookup').hidden=!pairs;
     at('peak').textContent='Peak '+run.peak+' pending';
     at('final').textContent=frames.at(-1).text;
-    run.ids.forEach((id,i)=>{
+    parts.forEach((part,i)=>{
       const btn=document.createElement('button');
-      btn.type='button';btn.textContent=parts[i];
+      btn.type='button';btn.textContent=part;
       const meta=document.createElement('small');
-      meta.textContent='F'+run.order[i]+' · '+(pairs?JSON.stringify(pairs[i]):'ID '+id);
+      meta.textContent='F'+run.order[i]+(pairs?' · '+JSON.stringify(pairs[i]):'');
       btn.append(meta);btn.onclick=()=>selectFragment(run.order[i]);at('chips').append(btn);
     });
     decks.push({run,frames,at,pairs,parts});

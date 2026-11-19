@@ -2,16 +2,19 @@
   const el = name => document.getElementById('threshold-' + name);
   const fmt = value => value.toLocaleString('en-US');
   try {
-    const response = await fetch('threshold-results.json?v=fragment-pairs');
+    const response = await fetch('threshold-results.json?v=whole-fragment-count');
     if (!response.ok) throw new Error('Could not load the threshold results.');
-    const {rows, examples} = await response.json();
+    const {cohort, rows, examples} = await response.json();
+    el('length').textContent = 'All four thresholds · ' + fmt(cohort.tokens) + ' fragment tokens across ' +
+      fmt(cohort.molecules) + ' molecules · mean ' + (cohort.tokens / cohort.molecules).toFixed(3) +
+      ' tokens per molecule · median ' + cohort.median;
     const baseline = rows.find(row => row.threshold === 1).dictionary_entries;
     for (const row of rows) {
       const saved = baseline - row.dictionary_entries;
       const tr = el('rows').insertRow();
       const cells = ['≥' + row.threshold, fmt(row.complete_entries), fmt(row.scaffold_entries),
         fmt(row.dictionary_entries), saved ? fmt(saved) + ' (' + (100 * saved / baseline).toFixed(1) + '%)' : 'Baseline',
-        row.direct_hit_percent.toFixed(2) + '%', row.flat_mean.toFixed(3)];
+        row.direct_hit_percent.toFixed(2) + '%'];
       for (const text of cells) tr.insertCell().textContent = text;
       el('level').add(new Option('≥' + row.threshold + ' occurrences', row.threshold));
     }
@@ -39,7 +42,7 @@
       const state = fragment.levels[t];
       const fallback = Array.isArray(state.b);
       Array.from(el('fragments').children).forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
-      el('location').textContent = e.cid + ' · fragment ' + (index + 1) + ' of ' + e.motif_count;
+      el('location').textContent = e.cid + ' · fragment ' + (index + 1) + ' of ' + e.fragments.length;
       el('graph').src = fragment.graph;
       el('graph').alt = 'Structure of ' + e.cid + ' with fragment ' + (index + 1) + ' highlighted in gold';
       el('word').textContent = fragment.word;
@@ -66,11 +69,7 @@
       } else {
         el('payload').textContent = 'b = ' + state.b + ' selects the complete fragment ' + fragment.word + '.';
       }
-      el('ids').textContent = '[' + state.ids.join(', ') + ']';
-      el('flat').open = false;
-      el('flat-label').textContent = 'Expanded one-dimensional IDs · ' + state.ids.length + (state.ids.length === 1 ? ' token' : ' tokens');
-      el('cost').textContent = 'Whole molecule · ' + e.motif_count + ' fragment positions · ' +
-        e.levels[t].flat_length + ' tokens after expansion';
+      el('cost').textContent = 'Whole molecule · ' + e.fragments.length + ' fragment tokens';
       el('safe').textContent = e.safe;
       el('smiles').textContent = e.smiles;
       el('example').hidden = false;
