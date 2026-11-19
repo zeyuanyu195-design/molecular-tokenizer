@@ -77,14 +77,28 @@
       "smiles": "N=c1sc2ccccc2n1CCN1CCC(c2ccc(F)cc2)CC1",
       "levels": {
         "1": {
+          "b": 0,
           "ids": [
             10060
           ],
           "flat_length": 4,
-          "misses": 0,
-          "b": 0
+          "misses": 0
         },
         "3": {
+          "b": [
+            0,
+            [
+              [
+                2,
+                "=CLOSE",
+                1
+              ],
+              [
+                13,
+                "OPEN"
+              ]
+            ]
+          ],
           "ids": [
             2,
             4879,
@@ -96,8 +110,11 @@
             55,
             10
           ],
+          "scaffold": "C1Sc2ccccc2N1",
           "flat_length": 12,
-          "misses": 1,
+          "misses": 1
+        },
+        "5": {
           "b": [
             0,
             [
@@ -112,9 +129,6 @@
               ]
             ]
           ],
-          "scaffold": "C1Sc2ccccc2N1"
-        },
-        "5": {
           "ids": [
             1,
             3636,
@@ -126,8 +140,11 @@
             52,
             6
           ],
+          "scaffold": "C1Sc2ccccc2N1",
           "flat_length": 12,
-          "misses": 1,
+          "misses": 1
+        },
+        "10": {
           "b": [
             0,
             [
@@ -142,9 +159,6 @@
               ]
             ]
           ],
-          "scaffold": "C1Sc2ccccc2N1"
-        },
-        "10": {
           "ids": [
             0,
             2440,
@@ -156,25 +170,207 @@
             49,
             8
           ],
+          "scaffold": "C1Sc2ccccc2N1",
           "flat_length": 12,
-          "misses": 1,
-          "b": [
-            0,
-            [
-              [
-                2,
-                "=CLOSE",
-                1
-              ],
-              [
-                13,
-                "OPEN"
-              ]
-            ]
-          ],
-          "scaffold": "C1Sc2ccccc2N1"
+          "misses": 1
         }
-      }
+      },
+      "fragments": [
+        {
+          "a": 2945,
+          "word": "N={+}",
+          "frequency": 61,
+          "graph": "threshold-CHEMBL405225-f1.svg",
+          "levels": {
+            "1": {
+              "b": 37,
+              "ids": [
+                25390
+              ]
+            },
+            "3": {
+              "b": 37,
+              "ids": [
+                12011
+              ]
+            },
+            "5": {
+              "b": 37,
+              "ids": [
+                8782
+              ]
+            },
+            "10": {
+              "b": 37,
+              "ids": [
+                5823
+              ]
+            }
+          }
+        },
+        {
+          "a": 1613,
+          "word": "C1={-1}Sc2ccccc2N1{+}",
+          "frequency": 1,
+          "graph": "threshold-CHEMBL405225.svg",
+          "levels": {
+            "1": {
+              "b": 0,
+              "ids": [
+                10060
+              ]
+            },
+            "3": {
+              "b": [
+                0,
+                [
+                  [
+                    2,
+                    "=CLOSE",
+                    1
+                  ],
+                  [
+                    13,
+                    "OPEN"
+                  ]
+                ]
+              ],
+              "ids": [
+                2,
+                4879,
+                4,
+                5,
+                44,
+                168,
+                8,
+                55,
+                10
+              ],
+              "scaffold": "C1Sc2ccccc2N1"
+            },
+            "5": {
+              "b": [
+                0,
+                [
+                  [
+                    2,
+                    "=CLOSE",
+                    1
+                  ],
+                  [
+                    13,
+                    "OPEN"
+                  ]
+                ]
+              ],
+              "ids": [
+                1,
+                3636,
+                3,
+                8,
+                42,
+                155,
+                11,
+                52,
+                6
+              ],
+              "scaffold": "C1Sc2ccccc2N1"
+            },
+            "10": {
+              "b": [
+                0,
+                [
+                  [
+                    2,
+                    "=CLOSE",
+                    1
+                  ],
+                  [
+                    13,
+                    "OPEN"
+                  ]
+                ]
+              ],
+              "ids": [
+                0,
+                2440,
+                2,
+                3,
+                41,
+                136,
+                6,
+                49,
+                8
+              ],
+              "scaffold": "C1Sc2ccccc2N1"
+            }
+          }
+        },
+        {
+          "a": 1957,
+          "word": "C{-1}CN1CCC{+}CC1",
+          "frequency": 59,
+          "graph": "threshold-CHEMBL405225-f3.svg",
+          "levels": {
+            "1": {
+              "b": 0,
+              "ids": [
+                13294
+              ]
+            },
+            "3": {
+              "b": 0,
+              "ids": [
+                6283
+              ]
+            },
+            "5": {
+              "b": 0,
+              "ids": [
+                4599
+              ]
+            },
+            "10": {
+              "b": 0,
+              "ids": [
+                3048
+              ]
+            }
+          }
+        },
+        {
+          "a": 2235,
+          "word": "c1{-1}ccc(F)cc1",
+          "frequency": 470,
+          "graph": "threshold-CHEMBL405225-f4.svg",
+          "levels": {
+            "1": {
+              "b": 0,
+              "ids": [
+                16275
+              ]
+            },
+            "3": {
+              "b": 0,
+              "ids": [
+                7606
+              ]
+            },
+            "5": {
+              "b": 0,
+              "ids": [
+                5523
+              ]
+            },
+            "10": {
+              "b": 0,
+              "ids": [
+                3655
+              ]
+            }
+          }
+        }
+      ]
     },
     {
       "cid": "CHEMBL507207",
@@ -187,35 +383,22 @@
       "smiles": "CC[C@H](C)[C@@H](CO)NS(=O)(=O)c1ccc(C(F)(F)F)cc1",
       "levels": {
         "1": {
+          "b": 19,
           "ids": [
             23451
           ],
           "flat_length": 4,
-          "misses": 0,
-          "b": 19
+          "misses": 0
         },
         "3": {
+          "b": 19,
           "ids": [
             10741
           ],
           "flat_length": 4,
-          "misses": 0,
-          "b": 19
+          "misses": 0
         },
         "5": {
-          "ids": [
-            1,
-            7720,
-            98,
-            8,
-            22,
-            10,
-            11,
-            53,
-            6
-          ],
-          "flat_length": 12,
-          "misses": 1,
           "b": [
             4,
             [
@@ -230,22 +413,22 @@
               ]
             ]
           ],
-          "scaffold": "[C@H](CO)N"
+          "ids": [
+            1,
+            7720,
+            98,
+            8,
+            22,
+            10,
+            11,
+            53,
+            6
+          ],
+          "scaffold": "[C@H](CO)N",
+          "flat_length": 12,
+          "misses": 1
         },
         "10": {
-          "ids": [
-            0,
-            5026,
-            97,
-            3,
-            22,
-            5,
-            6,
-            50,
-            8
-          ],
-          "flat_length": 12,
-          "misses": 1,
           "b": [
             7,
             [
@@ -260,9 +443,196 @@
               ]
             ]
           ],
-          "scaffold": "[C@H](CO)N"
+          "ids": [
+            0,
+            5026,
+            97,
+            3,
+            22,
+            5,
+            6,
+            50,
+            8
+          ],
+          "scaffold": "[C@H](CO)N",
+          "flat_length": 12,
+          "misses": 1
         }
-      }
+      },
+      "fragments": [
+        {
+          "a": 2756,
+          "word": "CC[C@@H]{+}C",
+          "frequency": 90,
+          "graph": "threshold-CHEMBL507207-f1.svg",
+          "levels": {
+            "1": {
+              "b": 2,
+              "ids": [
+                22793
+              ]
+            },
+            "3": {
+              "b": 2,
+              "ids": [
+                10453
+              ]
+            },
+            "5": {
+              "b": 2,
+              "ids": [
+                7513
+              ]
+            },
+            "10": {
+              "b": 2,
+              "ids": [
+                4896
+              ]
+            }
+          }
+        },
+        {
+          "a": 2791,
+          "word": "[C@H]{-1}(CO)N{+}",
+          "frequency": 4,
+          "graph": "threshold-CHEMBL507207.svg",
+          "levels": {
+            "1": {
+              "b": 19,
+              "ids": [
+                23451
+              ]
+            },
+            "3": {
+              "b": 19,
+              "ids": [
+                10741
+              ]
+            },
+            "5": {
+              "b": [
+                4,
+                [
+                  [
+                    5,
+                    "CLOSE",
+                    1
+                  ],
+                  [
+                    10,
+                    "OPEN"
+                  ]
+                ]
+              ],
+              "ids": [
+                1,
+                7720,
+                98,
+                8,
+                22,
+                10,
+                11,
+                53,
+                6
+              ],
+              "scaffold": "[C@H](CO)N"
+            },
+            "10": {
+              "b": [
+                7,
+                [
+                  [
+                    5,
+                    "CLOSE",
+                    1
+                  ],
+                  [
+                    10,
+                    "OPEN"
+                  ]
+                ]
+              ],
+              "ids": [
+                0,
+                5026,
+                97,
+                3,
+                22,
+                5,
+                6,
+                50,
+                8
+              ],
+              "scaffold": "[C@H](CO)N"
+            }
+          }
+        },
+        {
+          "a": 2846,
+          "word": "S{-1}{+}(=O)=O",
+          "frequency": 315,
+          "graph": "threshold-CHEMBL507207-f3.svg",
+          "levels": {
+            "1": {
+              "b": 0,
+              "ids": [
+                24306
+              ]
+            },
+            "3": {
+              "b": 0,
+              "ids": [
+                11203
+              ]
+            },
+            "5": {
+              "b": 0,
+              "ids": [
+                8086
+              ]
+            },
+            "10": {
+              "b": 0,
+              "ids": [
+                5273
+              ]
+            }
+          }
+        },
+        {
+          "a": 1466,
+          "word": "c1{-1}ccc(C(F)(F)F)cc1",
+          "frequency": 126,
+          "graph": "threshold-CHEMBL507207-f4.svg",
+          "levels": {
+            "1": {
+              "b": 1,
+              "ids": [
+                8618
+              ]
+            },
+            "3": {
+              "b": 1,
+              "ids": [
+                4266
+              ]
+            },
+            "5": {
+              "b": 1,
+              "ids": [
+                3204
+              ]
+            },
+            "10": {
+              "b": 1,
+              "ids": [
+                2165
+              ]
+            }
+          }
+        }
+      ]
     },
     {
       "cid": "CHEMBL6512",
@@ -275,43 +645,30 @@
       "smiles": "CCCc1nc(Br)cnc1NS(=O)(=O)c1cccc2c(N(C)C)cccc12",
       "levels": {
         "1": {
+          "b": 1,
           "ids": [
             14826
           ],
           "flat_length": 4,
-          "misses": 0,
-          "b": 1
+          "misses": 0
         },
         "3": {
+          "b": 1,
           "ids": [
             6988
           ],
           "flat_length": 4,
-          "misses": 0,
-          "b": 1
+          "misses": 0
         },
         "5": {
+          "b": 1,
           "ids": [
             5105
           ],
           "flat_length": 4,
-          "misses": 0,
-          "b": 1
+          "misses": 0
         },
         "10": {
-          "ids": [
-            0,
-            3379,
-            10,
-            3,
-            41,
-            5,
-            6,
-            34,
-            8
-          ],
-          "flat_length": 12,
-          "misses": 1,
           "b": [
             1,
             [
@@ -326,9 +683,174 @@
               ]
             ]
           ],
-          "scaffold": "c1nc(Br)cnc1"
+          "ids": [
+            0,
+            3379,
+            10,
+            3,
+            41,
+            5,
+            6,
+            34,
+            8
+          ],
+          "scaffold": "c1nc(Br)cnc1",
+          "flat_length": 12,
+          "misses": 1
         }
-      }
+      },
+      "fragments": [
+        {
+          "a": 2818,
+          "word": "CCC{+}",
+          "frequency": 470,
+          "graph": "threshold-CHEMBL6512-f1.svg",
+          "levels": {
+            "1": {
+              "b": 2,
+              "ids": [
+                23795
+              ]
+            },
+            "3": {
+              "b": 2,
+              "ids": [
+                10922
+              ]
+            },
+            "5": {
+              "b": 2,
+              "ids": [
+                7860
+              ]
+            },
+            "10": {
+              "b": 2,
+              "ids": [
+                5121
+              ]
+            }
+          }
+        },
+        {
+          "a": 2105,
+          "word": "c1{-1}nc(Br)cnc1{+}",
+          "frequency": 7,
+          "graph": "threshold-CHEMBL6512.svg",
+          "levels": {
+            "1": {
+              "b": 1,
+              "ids": [
+                14826
+              ]
+            },
+            "3": {
+              "b": 1,
+              "ids": [
+                6988
+              ]
+            },
+            "5": {
+              "b": 1,
+              "ids": [
+                5105
+              ]
+            },
+            "10": {
+              "b": [
+                1,
+                [
+                  [
+                    2,
+                    "CLOSE",
+                    1
+                  ],
+                  [
+                    12,
+                    "OPEN"
+                  ]
+                ]
+              ],
+              "ids": [
+                0,
+                3379,
+                10,
+                3,
+                41,
+                5,
+                6,
+                34,
+                8
+              ],
+              "scaffold": "c1nc(Br)cnc1"
+            }
+          }
+        },
+        {
+          "a": 644,
+          "word": "N{-1}S(=O)(=O)c1cccc2c{+}cccc12",
+          "frequency": 11,
+          "graph": "threshold-CHEMBL6512-f3.svg",
+          "levels": {
+            "1": {
+              "b": 0,
+              "ids": [
+                2740
+              ]
+            },
+            "3": {
+              "b": 0,
+              "ids": [
+                1725
+              ]
+            },
+            "5": {
+              "b": 0,
+              "ids": [
+                1350
+              ]
+            },
+            "10": {
+              "b": 0,
+              "ids": [
+                967
+              ]
+            }
+          }
+        },
+        {
+          "a": 2825,
+          "word": "N{-1}(C)C",
+          "frequency": 174,
+          "graph": "threshold-CHEMBL6512-f4.svg",
+          "levels": {
+            "1": {
+              "b": 1,
+              "ids": [
+                24097
+              ]
+            },
+            "3": {
+              "b": 1,
+              "ids": [
+                11066
+              ]
+            },
+            "5": {
+              "b": 1,
+              "ids": [
+                7974
+              ]
+            },
+            "10": {
+              "b": 1,
+              "ids": [
+                5188
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
