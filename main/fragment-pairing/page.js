@@ -157,7 +157,14 @@ async function start(){
     const [original,ordered]=ex.runs;
     picker.add(new Option(ex.id+' · '+original.ids.length+' fragments · peak '+original.peak+' → '+ordered.peak,ex.id));
   }
-  picker.onchange=()=>setupComparison(examples[picker.selectedIndex]);
+  const searchResponse=await fetch('search-traces.json');
+  if(!searchResponse.ok)throw Error(searchResponse.status);
+  const traces=await searchResponse.json();
+  picker.onchange=()=>{
+    const ex=examples[picker.selectedIndex];
+    setupComparison(ex);
+    setupSearch(ex,traces[ex.id]);
+  };
   picker.onchange();
 }
 start().catch(e=>el('error').textContent='Unable to load this experiment: '+e.message);
