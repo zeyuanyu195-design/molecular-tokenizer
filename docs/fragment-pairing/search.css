@@ -1,0 +1,9 @@
+#order-search{margin:18px 0 28px;padding:clamp(12px,2.5vw,28px);border:1px solid #cbdad3;border-radius:9px;background:white}
+#order-search h3{margin-top:0}
+.search-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.search-tools label{margin:0}
+.search-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:center;margin:18px 0}
+#search-map{width:100%;min-height:140px;background:#f5f8f4;border-radius:8px;font:600 15px Consolas,monospace}
+.search-key{font-size:14px;color:#465d58}.search-key span:first-child{color:#246b5c}.search-key span:nth-child(2){color:#985511}
+.search-grid code{margin:4px 0 8px}#search-local tr:first-child{background:#eaf3ea;font-weight:650}
+#order-search details p{font-size:15px}#search-ranking th:first-child{min-width:250px}
+@media(max-width:730px){.search-grid{grid-template-columns:1fr;gap:8px}}

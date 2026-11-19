@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=orders"><script src="page.js?v=order-examples" defer></script></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=orders"><link rel="stylesheet" href="search.css"><script src="search.js" defer></script><script src="page.js?v=search" defer></script></head>
 <body><header><nav><a href="../">← Molecular tokenization</a><a href="#method-comparison">Method comparison</a><a href="#reordering">Fragment order</a><a href="#distribution">Distributions</a><a href="#walkthrough">Pairing walkthrough</a></nav></header>
 <main><h1>One fragment, one token</h1>
 <p class="lead">On 50,000 ChEMBL 35 molecules, reordering the same whole fragments reduces the relative-pairing dictionary from 42,608 to 30,001 entries. Both orders average 6.2993 tokens per molecule and recover all 50,000 structures.</p>
@@ -15,6 +15,16 @@
 <label for="order-molecule">Example molecule · fragment count and pending peak</label><select id="order-molecule"></select>
 <p>Click a token in either sequence to highlight the same fragment in both drawings. F1, F2 and subsequent labels follow the original SAFE string. Gold marks the selected atoms. Red marks a connection closed at that step. Each sequence uses its own dictionary.</p>
 <p class="source">Original SAFE <code id="compare-source"></code></p>
+<section id="order-search" aria-labelledby="search-heading">
+<h3 id="search-heading">How the encoder chooses an order</h3>
+<p>Try a starting fragment, then step through the greedy search. Each circle is one complete SAFE fragment. Each line is a bond between two fragments.</p>
+<div class="search-tools"><label>Start at <select id="search-seed"></select></label><button id="search-prev" type="button">← Previous</button><button id="search-next" type="button">Next →</button><b id="search-step" aria-live="polite"></b></div>
+<div class="search-grid"><div><svg id="search-map" viewBox="0 0 540 235" role="img" aria-label="Fragment graph after the selected step"></svg><div class="search-key"><span>● Read</span> · <span>◉ Current</span> · Orange dashed bond = pending</div></div>
+<div><b>Reading order so far</b><code class="block" id="search-path"></code><b>Pending bonds before → after</b><code class="block" id="search-queue"></code><b>Actions inside this fragment</b><code class="block" id="search-ops"></code></div></div>
+<details open><summary>Why this fragment was chosen</summary><p id="search-rule"></p><div class="scroll"><table><thead><tr><th>Eligible fragment</th><th>Left open</th><th>Step peak</th><th>Closing rank sum</th><th>List length sum</th></tr></thead><tbody id="search-local"></tbody></table></div></details>
+<h4>Which complete order wins?</h4><p id="search-result"></p>
+<details><summary>Compare candidate orders and scores</summary><p>All five examples have at most 12 fragments, so each fragment is tried as a start. The encoder also scores the original order, the greedy orders and their reversals, counting each distinct order once. It compares the three score columns from left to right. Equal scores among improving candidates are resolved by fragment order.</p><div class="scroll"><table><thead><tr><th>Complete order</th><th>Peak</th><th>List length sum</th><th>Closing rank sum</th></tr></thead><tbody id="search-ranking"></tbody></table></div></details></section>
+<h3>Decode both ID sequences</h3>
 <div id="comparison-decks" class="decks"></div>
 <template id="order-template"><article class="order-card">
 <header><h3 data-role="title"></h3><strong data-role="peak"></strong></header>
