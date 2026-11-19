@@ -4,7 +4,9 @@ const topics=['One open site','Close and open in one token','Choose the second p
 let data,molecule,steps,index=0;
 const lex=/\{\+\}|\{-\d+\}|\[[^\]]+\]|Cl|Br|%\(\d+\)|%\d{2}|./g;
 function replay(ids,dictionary,atomOrder,fragmentOrder){
-  const parts=ids.map(i=>dictionary[i]);
+  return replayFragments(ids.map(i=>dictionary[i]),atomOrder,fragmentOrder);
+}
+function replayFragments(parts,atomOrder,fragmentOrder){
   const reserved=new Set(parts.flatMap(s=>s.match(lex)).filter(s=>/^(\d|%)/.test(s)).map(s=>Number(s.replace(/\D/g,''))));
   const used=new Set(reserved),pending=[],output=[],result=[];
   let nextAtom=0;
@@ -92,45 +94,59 @@ function choose(){
 function row(table,cells){
   const tr=table.insertRow();for(const v of cells)tr.insertCell().textContent=v;
 }
-function setupComparison(ex){
+function setupComparison(ex,pairData){
   const decks=[];
   el('comparison-decks').replaceChildren();
   el('event-molecule').textContent=ex.id;
   el('compare-source').textContent=ex.safe;
   el('compare-smiles').textContent=ex.smiles;
   ex.runs.forEach((run,side)=>{
-    const frames=replay(run.ids,run.dictionary,run.atomOrder,run.order);
+    const pairs=side===1?pairData.sequences[ex.id]:null;
+    const parts=pairs?pairs.map(([a,b])=>pairData.motifs[a].variants[b]):run.ids.map(id=>run.dictionary[id]);
+    const frames=replayFragments(parts,run.atomOrder,run.order);
     const sizes=frames.flatMap(frame=>frame.listSizes);
     if(Math.max(0,...sizes)!==run.peak)throw Error('Pending peak mismatch');
     el(side===0?'original-events':'reordered-events').textContent=sizes.join(' → ');
     if(frames.at(-1).text!==run.unified)throw Error('Fragment order replay mismatch');
     const panel=el('order-template').content.firstElementChild.cloneNode(true);
     const at=role=>panel.querySelector('[data-role="'+role+'"]');
-    at('title').textContent=side===0?'Original SAFE order':'Reordered fragments';
+    at('title').textContent=side===0?'Original SAFE order':'Reordered · [a,b] pairs';
+    at('lookup').hidden=!pairs;
     at('peak').textContent='Peak '+run.peak+' pending';
-    at('final').textContent=run.unified;
+    at('final').textContent=frames.at(-1).text;
     run.ids.forEach((id,i)=>{
       const btn=document.createElement('button');
-      btn.type='button';btn.textContent=run.dictionary[id];
+      btn.type='button';btn.textContent=parts[i];
       const meta=document.createElement('small');
-      meta.textContent='F'+run.order[i]+' · ID '+id;
+      meta.textContent='F'+run.order[i]+' · '+(pairs?JSON.stringify(pairs[i]):'ID '+id);
       btn.append(meta);btn.onclick=()=>selectFragment(run.order[i]);at('chips').append(btn);
     });
-    decks.push({run,frames,at});
+    decks.push({run,frames,at,pairs,parts});
     el('comparison-decks').append(panel);
   });
   function selectFragment(fragment){
-    for(const {run,frames,at} of decks){
+    for(const {run,frames,at,pairs,parts} of decks){
       const i=run.order.indexOf(fragment),frame=frames[i];
       for(const [j,button] of Array.from(at('chips').children).entries()){
         button.setAttribute('aria-pressed',String(j===i));
       }
       at('step').textContent='F'+fragment+' · step '+(i+1)+' of '+run.ids.length;
+      if(pairs){
+        const [a,b]=pairs[i],motif=pairData.motifs[a];
+        at('raw').textContent=ex.safe.split('.')[fragment-1];
+        at('motif-label').textContent='a = '+a+' · original NPE motif';
+        at('motif').textContent=motif.motif;
+        at('variant-label').textContent='b = '+b+' · lookup in '+motif.count+' local variants';
+        at('variant').textContent=parts[i];
+      }
       at('actions').textContent=frame.actions.join(' ');
       for(const key of ['before','after']){
         at(key).textContent=frame[key].map((site,j)=>'#'+(j+1)+' '+ex.symbols[site.atom]+'('+site.atom+') · F'+site.fragment).join(' | ')||'Empty';
       }
       at('partial').textContent=frame.text;
+      if(pairs && i===frames.length-1){
+        at('actions').textContent+=' All sites paired. This complete SAFE string was verified against the original canonical isomeric SMILES shown below.';
+      }
       drawStep(at('graph'),ex,frame);
     }
   }
@@ -158,9 +174,12 @@ async function start(){
   const searchResponse=await fetch('search-traces.json');
   if(!searchResponse.ok)throw Error(searchResponse.status);
   const traces=await searchResponse.json();
+  const pairResponse=await fetch('pair-examples.json');
+  if(!pairResponse.ok)throw Error(pairResponse.status);
+  const pairData=await pairResponse.json();
   picker.onchange=()=>{
     const ex=examples[picker.selectedIndex];
-    setupComparison(ex);
+    setupComparison(ex,pairData);
     setupSearch(ex,traces[ex.id]);
   };
   picker.onchange();
