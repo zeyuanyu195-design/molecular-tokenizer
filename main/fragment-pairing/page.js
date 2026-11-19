@@ -1,5 +1,5 @@
 const el=id=>document.getElementById(id);
-const schemes=['raw','unified','relative'],names=['Original labels','Unified labels','Relative pairing'];
+const schemes=[['raw','Original labels',0],['relative','Relative pairing',2]];
 const topics=['One open site','Close and open in one token','Choose the second pending site','Internal ring and external double bond','Reuse one ID for two methyl groups'];
 let data,molecule,steps,index=0;
 const lex=/\{\+\}|\{-\d+\}|\[[^\]]+\]|Cl|Br|%\(\d+\)|%\d{2}|./g;
@@ -140,16 +140,16 @@ function setupComparison(ex){
 async function start(){
   const res=await fetch('data.json');if(!res.ok)throw Error(res.status);
   data=await res.json();const c=data.comparison,fmt=n=>n.toLocaleString('en-US');
-  schemes.forEach((scheme,i)=>{
-    row(el('rows'),[names[i],fmt(c.vocabulary_sizes.all[scheme]),c.mean_tokens,c.median_tokens,fmt(c.strict_isomeric_molecule_roundtrips[scheme])+' / 50,000',fmt(c.original_SAFE_text_roundtrips[scheme])+' / 50,000']);
-    row(el('stats'),[names[i],data.stats[i][0].toFixed(2),data.stats[i][1],fmt(data.stats[i][2])]);
+  schemes.forEach(([scheme,name,i])=>{
+    row(el('rows'),[name,fmt(c.vocabulary_sizes.all[scheme]),c.mean_tokens,c.median_tokens,fmt(c.strict_isomeric_molecule_roundtrips[scheme])+' / 50,000']);
+    row(el('stats'),[name,data.stats[i][0].toFixed(2),data.stats[i][1],fmt(data.stats[i][2])]);
   });
   data.examples.forEach((ex,i)=>el('molecule').add(new Option(ex.id+' · '+topics[i],i)));
   el('molecule').onchange=choose;el('prev').onclick=()=>{index--;render();};el('next').onclick=()=>{index++;render();};choose();
   const response=await fetch('reorder.json?v=order-examples');
   if(!response.ok)throw Error(response.status);
   const reordered=await response.json();
-  row(el('rows'),['Relative pairing · reordered','30,001',c.mean_tokens,c.median_tokens,'50,000 / 50,000',fmt(reordered.exact)+' / 50,000']);
+  row(el('rows'),['Relative pairing · reordered','30,001',c.mean_tokens,c.median_tokens,'50,000 / 50,000']);
   row(el('stats'),['Relative pairing · reordered',reordered.stats[0].toFixed(2),reordered.stats[1],fmt(reordered.stats[2])]);
   const examples=[reordered.example,...reordered.additionalExamples];
   const picker=el('order-molecule');
