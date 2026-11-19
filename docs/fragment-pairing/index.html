@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=experiment-flow"><link rel="stylesheet" href="search.css"><script src="search.js" defer></script><script src="page.js?v=fragment-labels" defer></script><script src="carbon.js?v=forward-calculation" defer></script><script src="thresholds.js?v=octal-actions-v1" defer></script></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=digit-reader"><link rel="stylesheet" href="search.css"><script src="search.js" defer></script><script src="page.js?v=fragment-labels" defer></script><script src="carbon.js?v=forward-calculation" defer></script><script src="octal-reader.js" defer></script><script src="thresholds.js?v=digit-reader" defer></script></head>
 <body><header><nav aria-label="Project"><a href="../">← Molecular tokenization</a></nav></header>
 <main><h1>One fragment, one token</h1>
 <p class="lead">Follow a ChEMBL molecule from NPE fragmentation to a recoverable sequence of motif and variant IDs. The experiments measure how connection labels, fragment order and vocabulary choices affect the size of the dictionary.</p>
@@ -107,6 +107,12 @@
 </article>
 <article><h4 id="threshold-location"></h4><img class="wide" id="threshold-graph" alt=""><code class="block" id="threshold-word"></code><p id="threshold-decision"></p></article>
 </div>
+<article id="octal-reader" hidden aria-labelledby="octal-heading">
+<h3 id="octal-heading">Read the two connection actions in CHEMBL405225</h3>
+<p id="octal-source"></p><div class="octal-tape" id="octal-tape" aria-label="Octal digits in reading order"></div>
+<div class="octal-controls"><button id="octal-prev" type="button">Previous digit</button><button id="octal-next" type="button">Next digit</button></div>
+<div aria-live="polite" aria-atomic="true"><strong id="octal-position"></strong><p id="octal-note"></p></div>
+</article>
 <details><summary>Recovered molecule</summary><b>Decoded SAFE</b><code class="block" id="threshold-safe"></code><b>Verified canonical isomeric SMILES</b><code class="block" id="threshold-smiles"></code></details>
 <p id="threshold-error" role="alert"></p></section>
 <p><a href="#experiment-flow">Back to experiment steps</a></p>

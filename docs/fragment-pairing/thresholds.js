@@ -42,6 +42,9 @@
       const fragment = e.fragments[index];
       const state = fragment.levels[t];
       const fallback = BigInt(state.b) >= BigInt(state.D);
+      const reader = document.getElementById('octal-reader');
+      reader.hidden = !(fallback && e.cid === 'CHEMBL405225' && index === e.position - 1);
+      if (!reader.hidden) showOctalReader(state, packing, fragment.word);
       Array.from(el('fragments').children).forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
       el('location').textContent = e.cid + ' · fragment ' + (index + 1) + ' of ' + e.fragments.length;
       el('graph').src = fragment.graph;
@@ -99,6 +102,7 @@
     el('case').addEventListener('change', selectMolecule);
     el('level').addEventListener('change', render);
     selectMolecule();
+    if (location.hash === '#octal-reader') document.getElementById('octal-reader').scrollIntoView();
   } catch (error) {
     el('error').textContent = 'Threshold comparison unavailable. ' + error.message;
   }
