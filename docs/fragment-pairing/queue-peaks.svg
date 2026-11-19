@@ -128,8 +128,8 @@ L 533.960682 3.00024
    </g>
    <g id="patch_3">
     <path d="M 71.365865 9.336546 
-L 113.193277 9.336546 
-L 113.193277 24.468024 
+L 114.087094 9.336546 
+L 114.087094 24.468024 
 L 71.365865 24.468024 
 z
 " clip-path="url(#p989d181b5d)" style="fill: #287d6e"/>
@@ -152,8 +152,8 @@ z
    </g>
    <g id="patch_6">
     <path d="M 71.365865 26.359459 
-L 90.050584 26.359459 
-L 90.050584 41.490937 
+L 90.324851 26.359459 
+L 90.324851 41.490937 
 L 71.365865 41.490937 
 z
 " clip-path="url(#p989d181b5d)" style="fill: #594f89"/>
@@ -168,8 +168,8 @@ z
    </g>
    <g id="patch_8">
     <path d="M 71.365865 120.931195 
-L 246.123907 120.931195 
-L 246.123907 136.062672 
+L 235.844022 120.931195 
+L 235.844022 136.062672 
 L 71.365865 136.062672 
 z
 " clip-path="url(#p989d181b5d)" style="fill: #594f89"/>
@@ -185,7 +185,7 @@ L 616.19976 142.398979
 " style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
    <g id="text_9">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="117.193277" y="19.240176" transform="rotate(-0 117.193277 19.240176)">4.069</text>
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="118.087094" y="19.240176" transform="rotate(-0 118.087094 19.240176)">4.156</text>
    </g>
    <g id="text_10">
     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="95.925635" y="66.526044" transform="rotate(-0 95.925635 66.526044)">2</text>
@@ -194,13 +194,13 @@ L 616.19976 142.398979
     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="548.240566" y="113.811912" transform="rotate(-0 548.240566 113.811912)">46</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="94.050584" y="36.263088" transform="rotate(-0 94.050584 36.263088)">1.818</text>
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="94.324851" y="36.263088" transform="rotate(-0 94.324851 36.263088)">1.844</text>
    </g>
    <g id="text_13">
     <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="85.64575" y="83.548956" transform="rotate(-0 85.64575 83.548956)">1</text>
    </g>
    <g id="text_14">
-    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="250.123907" y="130.834824" transform="rotate(-0 250.123907 130.834824)">17</text>
+    <text style="font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start" x="239.844022" y="130.834824" transform="rotate(-0 239.844022 130.834824)">16</text>
    </g>
    <g id="legend_1">
     <g id="patch_11">
