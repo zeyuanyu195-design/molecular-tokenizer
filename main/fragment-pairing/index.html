@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=experiment-flow"><link rel="stylesheet" href="search.css"><script src="search.js" defer></script><script src="page.js?v=fragment-labels" defer></script><script src="carbon.js" defer></script><script src="thresholds.js?v=whole-fragment-count" defer></script></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whole-fragment pairing · Molecular tokenization</title><link rel="stylesheet" href="page.css?v=experiment-flow"><link rel="stylesheet" href="search.css"><script src="search.js" defer></script><script src="page.js?v=fragment-labels" defer></script><script src="carbon.js?v=forward-calculation" defer></script><script src="thresholds.js?v=whole-fragment-count" defer></script></head>
 <body><header><nav aria-label="Project"><a href="../">← Molecular tokenization</a></nav></header>
 <main><h1>One fragment, one token</h1>
 <p class="lead">Follow a ChEMBL molecule from NPE fragmentation to a recoverable sequence of motif and variant IDs. The experiments measure how connection labels, fragment order and vocabulary choices affect the size of the dictionary.</p>
@@ -76,6 +76,13 @@
 <section id="carbon-templates"><p class="stage-number">Step 5 of 6</p><h2>Parameterize the closing ranks of single carbon</h2>
 <p>For NPE node <code>a = 2897</code>, closing ranks can be carried as parameters inside the fragment token. The 121 templates retain atom spelling, bond symbols and the order of openings and closures. All 681 original carbon strings were recovered exactly, across 107,092 carbon positions. All 45,402 molecules passed strict reconstruction. The template count measures shared patterns; the packed code also carries the ranks.</p>
 <label>Choose a real carbon fragment</label><div class="chips carbon-options" id="carbon-options"></div>
+<article aria-labelledby="carbon-calculation-heading"><h3 id="carbon-calculation-heading">How this fragment gives b</h3>
+<div aria-live="polite"><p>Template lookup · <code id="carbon-lookup"></code></p>
+<p>Closing ranks, left to right · <code id="carbon-ranks"></code></p>
+<code class="block" id="carbon-forward" style="white-space:pre-wrap"></code></div>
+<details><summary>Where do the template ID and weights come from?</summary>
+<p>Replace each closing rank with <code>k</code> and look up the resulting template. Template IDs start at zero, in decreasing order of observed template frequency, with ties sorted by template text. Each rank is the one-based position in the pending list at that closure. An opening stays in the template and contributes no rank.</p>
+<p>The largest observed carbon closing rank is 7, so base 8 can store one rank per digit. From left to right, the weights are 1, 8, 64, and so on. With no closures, the rank value <code>p</code> is zero. With 121 templates, <code>b = t + 121 × p</code> leaves the template ID <code>t</code> as the remainder when dividing by 121.</p></details></article>
 <div class="grid"><div class="figure"><svg id="carbon-graph" viewBox="0 0 540 290" role="img" aria-label="Selected carbon atom highlighted on its molecule"></svg><small id="carbon-location"></small></div>
 <article><div class="stephead"><strong id="carbon-step"></strong><span><button id="carbon-prev" aria-label="Previous carbon step">←</button> <button id="carbon-next" aria-label="Next carbon step">→</button></span></div>
 <div aria-live="polite"><h3 id="carbon-title"></h3><code class="block" id="carbon-math"></code><p id="carbon-note"></p></div></article></div>

@@ -33,6 +33,24 @@ async function startCarbon(){
   }
   function choose(choice){
     current=choice;stage=0;
+    const {mol,i,b}=choice;
+    const ranks=[];
+    const word=choice.v.word;
+    const template=word.replace(/\{-(\d+)\}/g,(_,rank)=>{
+      ranks.push(Number(rank));
+      return '{-k}';
+    });
+    const t=templates.indexOf(template);
+    const p=ranks.reduce((sum,rank,j)=>sum+rank*base**j,0);
+    if(t<0||t+N*p!==b)throw Error('Forward calculation disagrees with stored pair');
+    const terms=ranks.map((rank,j)=>rank+' × '+base**j);
+    el('carbon-lookup').textContent=word+' → '+template+' → t = '+t;
+    el('carbon-ranks').textContent='['+ranks.join(', ')+']';
+    el('carbon-forward').textContent=[
+      'p = '+(terms.length?terms.join(' + ')+' = ':'')+p,
+      'b = t + '+N+' × p = '+t+' + '+N+' × '+p+' = '+b,
+      '[a, b] = ['+mol.pairs[i][0]+', '+b+']'
+    ].join('\n');
     el('carbon-result').open=false;
     for(const c of choices)c.button.setAttribute('aria-pressed',String(c===choice));
     draw(); 
