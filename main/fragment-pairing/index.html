@@ -23,14 +23,17 @@
 <p>Direct hits are counted over 291,852 fragment occurrences in the same 45,402 molecules used to build the dictionaries. Each fragment still occupies one structured position (mean 6.428 per molecule). The last column counts the individual IDs after expanding fallback instructions.</p>
 <details><summary>How encoding and recovery were checked</summary><p>A direct hit emits one ID. A fallback emits an escape marker, node ID, local scaffold ID and action count. Each action adds a character offset and an operation including any explicit bond; a closure also adds the one-based rank of its partner in the current pending list. Offsets count characters in the scaffold before any insertions. Scanning the actions in order restores the fragment, including repeated actions at the same offset.</p><p>At each threshold, decoding the saved flat IDs with the shared dictionary reproduced every reordered relative-pairing fragment exactly. All 45,402 decoded molecules matched the reference canonical isomeric SMILES, including stereochemistry. Each threshold has its own ID assignments.</p></details>
 <h3>Trace a fragment through lookup and recovery</h3>
-<div class="threshold-controls"><label>Molecule and selected fragment<select id="threshold-case"></select></label><label>Minimum occurrences<select id="threshold-level"></select></label></div>
+<div class="threshold-controls"><label>Molecule<select id="threshold-case"></select></label><label>Minimum occurrences<select id="threshold-level"></select></label></div>
+<p id="threshold-cost" aria-live="polite"></p>
+<h4 id="threshold-fragment-label">Select a fragment in sequence order</h4><div id="threshold-fragments" role="group" aria-labelledby="threshold-fragment-label"></div>
 <div class="decks" id="threshold-example" aria-live="polite" hidden>
+<article><h4>Selected fragment token [a, b]</h4><code class="block" id="threshold-pair"></code><p id="threshold-node"></p><h4 id="threshold-path"></h4><p id="threshold-payload"></p><div id="threshold-connections"><b>Connection actions in b</b><ol id="threshold-actions"></ol></div>
+<details id="threshold-flat"><summary id="threshold-flat-label">Expanded one-dimensional IDs</summary><code class="block" id="threshold-ids"></code></details></article>
 <article><h4 id="threshold-location"></h4><img class="wide" id="threshold-graph" alt=""><code class="block" id="threshold-word"></code><p id="threshold-decision"></p></article>
-<article><h4 id="threshold-path"></h4><p id="threshold-payload"></p><ol id="threshold-actions"></ol><b>Emitted flat token IDs</b><code class="block" id="threshold-ids"></code><p id="threshold-cost"></p></article>
 </div>
 <details><summary>Recovered molecule</summary><b>Decoded SAFE</b><code class="block" id="threshold-safe"></code><b>Verified canonical isomeric SMILES</b><code class="block" id="threshold-smiles"></code></details>
 <p id="threshold-error" role="alert"></p></section>
-<script src="thresholds.js" defer></script>
+<script src="thresholds.js?v=fragment-pairs" defer></script>
 <section id="carbon-templates"><h2>Single carbon: 681 variants, 121 templates</h2>
 <p>For NPE node <code>a = 2897</code>, closing ranks can be carried as parameters inside the fragment token. The 121 templates retain atom spelling, bond symbols and the order of openings and closures. All 681 original carbon strings were recovered exactly, across 107,092 carbon positions. All 45,402 molecules passed strict reconstruction. The template count measures shared patterns; the packed code also carries the ranks.</p>
 <label>Choose a real carbon fragment</label><div class="chips carbon-options" id="carbon-options"></div>
