@@ -37,6 +37,10 @@
 .sid-method h3,.sid-worked h3{margin:0 0 .35rem;color:#174f47}
 .sid-method p:last-child,.sid-worked p:last-child{margin-bottom:0}
 .sid-worked{border-left:3px solid #538878;background:#eff4ef;padding:.8rem 1rem;margin:1rem 0}
+.sid-history h3{color:#174f47}.sid-history table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.sid-history th,.sid-history td{border-bottom:1px solid #d4e0d9;padding:.55rem .65rem;text-align:right;vertical-align:top}
+.sid-history th{background:#edf3ee}.sid-history :is(th,td):first-child{text-align:left}.sid-history td:not(:first-child){white-space:nowrap}
+@media(max-width:600px){.sid-history th,.sid-history td{padding:.45rem .3rem}.sid-history th{font-size:.85rem}}
 @media(max-width:740px){.sid-method{grid-template-columns:1fr}}
 @media(max-width:740px){.sid-grid{grid-template-columns:1fr}.sid-nav button,.sid-events button{padding:.35rem .6rem}.sid-picker label{display:block}.sid select{width:100%}}
 </style><main><header><small>MOLECULAR TOKENIZATION</small><h1>From molecular graph to fragment tokens</h1><p>Each complete NPE fragment occupies one model position. In the [a,b] walkthrough, the token carries the original motif ID and the information needed to reconstruct that occurrence from a shared graph.</p><a class="jump" href="#single-id">Decode a single-ID sequence · 9,463 entries</a><a class="jump" href="#stages">Explore a molecule</a><a class="jump" id="calcLink" href="#calculate-b">How is b calculated?</a><a class="jump" href="#graph-results">Compare the two vocabularies</a><a class="jump" href="#shared-templates">Explore shared connection templates [a,t]</a></header>
@@ -57,9 +61,28 @@
 <section id="single-id" class="panel sid" aria-labelledby="sid-title">
   <h2 id="sid-title">One integer ID per fragment</h2>
   <p>Each complete NPE fragment occupies one sequence position. Compression reduces how many different IDs the model needs by letting several connection variants share a rule.</p>
+  <section class="sid-history" aria-labelledby="sid-history-title">
+    <h3 id="sid-history-title">From 22,634 observed motif–variant pairs to 9,463 single IDs</h3>
+    <p>The earlier SAFE experiment counted <b>25,655</b> distinct pairs of NPE motif ID and reordered fragment spelling. Its NPE vocabulary was trained on 50,000 molecules. On the 45,402 selected molecules it yielded 2,666 motif IDs and 291,852 positions. Retraining the original NPE on the selected 45,402 yielded <b>2,617 motif IDs and 296,661 positions</b>. Every row below uses this second segmentation.</p>
+    <table aria-labelledby="sid-history-title">
+      <thead><tr><th scope="col">What one entry represents</th><th scope="col">Entries</th><th scope="col">Fewer than previous</th></tr></thead>
+      <tbody>
+        <tr><td><b>Complete variant.</b> Give each observed pair of motif ID and complete connection template its own entry. The same motif at a different attachment site can require a second entry.</td><td>22,634</td><td>—</td></tr>
+        <tr><td><b>Default connections and exceptions.</b> Each motif lists possible sites by bond type. Use the first eligible partner, bond and site according to the decoder’s rules. Store a different ID when an exception or a different atom state or stereochemistry is needed.</td><td>19,228</td><td>3,406</td></tr>
+        <tr><td><b>Remove redundant site choices.</b> Try omitting a site correction in its molecule. Keep the simpler encoding when it recovers the same canonical isomeric SMILES. Count the IDs actually emitted.</td><td>18,981</td><td>247</td></tr>
+        <tr><td><b>Reuse an existing site choice.</b> Replace one ID with another for the same motif when the substitution preserves every affected molecule.</td><td>18,302</td><td>679</td></tr>
+        <tr><td><b>Share a site-selection rule.</b> Two entries may select different atom numbers yet both mean “take the first available site.” Group them if a shared rule selects the recorded site at every occurrence.</td><td>16,776</td><td>1,526</td></tr>
+        <tr><td><b>Share other connection rules.</b> Use sequence context to infer how many bonds go to earlier fragments, which partners they reach, and their bond types and directions.</td><td>14,161</td><td>2,615</td></tr>
+        <tr><td><b>Normalize stereochemistry.</b> Account for neighbor order, equivalent sites and whether a center is stereogenic after assembly. Retain distinctions needed to recover different stereoisomers.</td><td>13,991</td><td>170</td></tr>
+        <tr><td><b>Use the partner to choose the site.</b> Include the partner’s structural class and candidate counts when choosing the local atom, and the candidate partners’ classes when choosing a partner. Group compatible entries greedily.</td><td>9,482</td><td>4,509</td></tr>
+        <tr><td><b>Find the smallest compatible grouping.</b> Revisit the 13,991 entries and allow earlier group assignments to change. Exact search saves 19 more IDs with the same rules.</td><td><b>9,463</b></td><td>19</td></tr>
+      </tbody>
+    </table>
+    <p><b>13,171 fewer entries (58.2%).</b> Each of the 296,661 positions still holds one complete fragment. The decoder recovered all 45,402 molecules using their single-ID sequences and the shared dictionary.</p>
+  </section>
   <div class="sid-method" aria-label="Dictionary construction and decoding">
     <div>
-      <h3>How 13,991 entries became 9,463</h3>
+      <h3>Which entries can share the final ID?</h3>
       <p>First group entries that share an NPE motif and the same instructions for atom states, stereochemistry, bond count, bond order and bond direction. For every occurrence, record which earlier fragment it joins and which local atom it uses at each end.</p>
       <p>For each decision, list the rules that reproduce the recorded choice. Entries can share an ID if, in every observed context, at least one rule works for all of them. Greedy grouping used <b>9,482 IDs</b>. Reassigning the original entries to the fewest compatible groups saved another <b>19</b>.</p>
     </div>
@@ -71,7 +94,7 @@
   </div>
   <div class="sid-worked">
     <h3>When can two attachment sites share an ID?</h3>
-    <p><b>ID 250</b> has candidate atoms <b>N 12</b> and <b>C 8</b>. In CHEMBL34520 the partner is iodine, so the halogen rule selects C 8. In CHEMBL35420 the partner is a side chain, so the default selects N 12. Both molecules can use ID 250 because the partner is already known from the sequence.</p>
+    <p>The same NPE motif <b>251</b> originally used <b>[251, 79]</b> in CHEMBL34520 and <b>[251, 146]</b> in CHEMBL35420. Both now use <b>ID 250</b>. When the partner is iodine in the first molecule, the halogen rule selects local carbon 8. When the partner is a side chain in the second, the default selects local nitrogen 12. The partner is visible in the sequence, so one entry recovers both attachment sites.</p>
     <p>In CHEMBL12722 and CHEMBL12892 both partners are fluorine. The ring therefore retains two IDs, <b>3869</b> and <b>3867</b>, to distinguish the meta and ortho attachment sites.</p>
   </div>
   <dl id="sid-metrics" class="st-metrics"></dl>
